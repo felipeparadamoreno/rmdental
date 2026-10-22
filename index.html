@@ -214,6 +214,11 @@ button,input,select,textarea{font:inherit;color:inherit}
 .btn{display:inline-flex;align-items:center;justify-content:center;gap:.5rem;border:1.5px solid transparent;border-radius:10px;padding:.8rem 1.25rem;font-weight:600;cursor:pointer;text-decoration:none;line-height:1.2;transition:transform .15s,background .15s}
 .btn-cta{background:var(--cta);color:var(--cta-fg)}
 .btn-cta:hover{transform:translateY(-1px)}
+.btn.is-loading{cursor:progress}
+.btn.is-loading::before{content:"";width:1.05em;height:1.05em;flex:none;border-radius:50%;border:2.5px solid currentColor;border-right-color:transparent;animation:rm-spin .75s linear infinite}
+.btn.is-loading[disabled]{opacity:.92;cursor:progress;transform:none}
+@keyframes rm-spin{to{transform:rotate(360deg)}}
+@media (prefers-reduced-motion:reduce){.btn.is-loading::before{animation-duration:2.4s}}
 .btn-ghost{border-color:var(--line);background:var(--surface)}
 .btn-ghost:hover{border-color:var(--accent)}
 .btn[disabled]{opacity:.45;cursor:not-allowed;transform:none}
@@ -877,6 +882,10 @@ dialog::backdrop{background:rgba(6,18,22,.62)}
       if(/^Solicitud de hora/.test((p&&p.subject)||""))window.fbq("track","Schedule",{},{eventID:id+"s"});
     }catch(e){}
   }
+  function setBusy(b,on){
+    if(on){b.dataset.label=b.textContent;b.textContent="Enviando solicitud…";b.classList.add("is-loading");b.setAttribute("aria-busy","true");b.disabled=true}
+    else{if(b.dataset.label)b.textContent=b.dataset.label;b.classList.remove("is-loading");b.removeAttribute("aria-busy");b.disabled=false}
+  }
   function sendLead(payload){
     if(!FORM_ENDPOINT)return Promise.resolve(false);
     return fetch(FORM_ENDPOINT,{method:"POST",headers:{"Content-Type":"application/json","Accept":"application/json"},body:JSON.stringify(Object.assign({_subject:payload.subject,_template:"table",_captcha:"false"},payload))}).then(function(r){if(r.ok)metaTrack(payload);return r.ok}).catch(function(){return false});
@@ -913,10 +922,10 @@ dialog::backdrop{background:rgba(6,18,22,.62)}
     var msg="Hola, soy "+name+". Quiero reservar una hora en "+CFG.clinic+".\nMotivo: "+$("reason").value+"\nFecha: "+when+"\nMi teléfono: "+phone+(email?"\nMi correo: "+email:"");
     var subject="Solicitud de hora · "+$("reason").value;
     var detail=$("reason").value+", "+when+".";
-    var sbtn=$("book-form").querySelector("button[type=submit]");sbtn.disabled=true;
+    var sbtn=$("book-form").querySelector("button[type=submit]");setBusy(sbtn,true);
     var payload={subject:subject,message:msg,name:name,phone:phone};if(email)payload.email=email;
     sendLead(payload).then(function(ok){
-      sbtn.disabled=false;
+      setBusy(sbtn,false);
       renderDone($("book-done"),ok,subject,msg,detail+" Recibimos tu solicitud. La clínica te contactará para confirmar la hora e indicarte cómo pagar para reservarla.",detail+" Envía el correo y la clínica te confirma la hora e indica cómo pagar para reservarla.");
       $("book-form").hidden=true;
     });

@@ -30,6 +30,3 @@ Sitio estático (HTML) listo para GitHub Pages.
 
 ## Google Calendar
 Las horas ocupadas se leen de tu calendario con `calendario-rm-dental.gs` (se instala en script.google.com, aparte del sitio). Pega la URL `/exec` en `CAL_URL` dentro de `index.html`. Sin esa URL, todas las horas aparecen libres.
-
-## Panel de administración (solo local)
-`panel-admin/` contiene `admin.js` y `admin.html`, el panel para gestionar pacientes, citas, tratamientos y radiografías. **No es parte del sitio público: no lo subas a GitHub.** Cópialos a la carpeta de la API (donde están `server.js` y el `.env`), agrega `ADMIN_PASS` al `.env` y ejecuta `node admin.js` (o `pm2 start admin.js --name rmdental-admin`). Se abre en `http://localhost:3100` y no debe agregarse al túnel de Cloudflare.
