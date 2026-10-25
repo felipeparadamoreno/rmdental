@@ -354,3 +354,11 @@ button.band[aria-pressed="true"] span{color:var(--on-accent)}
 /* Sin mapa: la lista de profesionales ocupa todo el ancho de su columna. */
 .rm-mapwrap{grid-template-columns:minmax(0,1fr)}
 .rm-team .lead{margin-bottom:0}
+
+/* Menú móvil: los enlaces de la barra pasan al menú desplegable */
+.menu-list .ml{display:none}
+@media (max-width:760px){
+  .menu-list .ml{display:block}
+  .menu-list{max-height:calc(100vh - 90px);max-height:calc(100dvh - 90px);overflow-y:auto}
+  .menu-list .ml-sep{margin:.5rem 0 0;padding:.6rem .8rem 0;border-top:1px solid var(--line);font-size:.72rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+}

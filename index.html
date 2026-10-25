@@ -477,6 +477,12 @@ dialog::backdrop{background:rgba(6,18,22,.62)}
       <details class="menu" id="svc-menu">
         <summary aria-label="Servicios y páginas"><span class="txt">Servicios</span><svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg><svg class="ham" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg></summary>
         <div class="menu-list">
+          <a class="ml" href="#dentistas"><b>Encuentra un dentista</b></a>
+          <a class="ml" href="#presupuesto"><b>Presupuestos</b></a>
+          <a class="ml" href="#nosotros"><b>Nosotros</b></a>
+          <a class="ml" href="#consulta"><b>Contacto</b></a>
+          <a class="ml" href="portal-pacientes.html"><b>Mi cuenta</b></a>
+          <p class="ml-sep ml">Servicios</p>
           <a href="mantencion-implantes.html"><b>Mantención de implantes</b><span>Limpieza y control periódico para tus implantes</span></a>
           <a href="mejora-presupuesto.html"><b>Segunda opinión y presupuesto</b><span>Te entregamos una oferta por escrito</span></a>
           <a href="cambio-amalgamas.html"><b>Cambio de amalgamas</b><span>Evaluación para renovar por resinas estéticas</span></a>
@@ -493,6 +499,7 @@ dialog::backdrop{background:rgba(6,18,22,.62)}
     </nav>
   </div>
 </header>
+<script>(function(){var m=document.getElementById("svc-menu");if(!m)return;m.addEventListener("click",function(e){if(e.target.closest(".menu-list a"))m.removeAttribute("open")})})();</script>
 
 <main id="inicio">
   <section class="hero">
