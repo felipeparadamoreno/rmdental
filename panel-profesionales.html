@@ -42,6 +42,17 @@ input:focus,select:focus,textarea:focus{outline:2px solid var(--teal);border-col
 fieldset{border:1px solid var(--line);border-radius:12px;margin:16px 0;padding:6px 16px 16px}
 legend{font-weight:700;padding:0 8px;color:var(--teal-d)}
 .chk{display:flex;gap:10px;align-items:flex-start;font-weight:400;color:var(--ink);font-size:14px;margin-top:16px}.chk input{width:auto;margin-top:4px}
+.slots{display:grid;grid-template-columns:repeat(auto-fill,minmax(78px,1fr));gap:8px;margin-top:6px}
+.slot{padding:9px 0;border:1px solid var(--line);background:var(--bg);border-radius:9px;font:inherit;font-weight:700;color:var(--ink);cursor:pointer}
+.slot:hover:not(:disabled){border-color:var(--teal)}.slot.on{background:var(--teal);border-color:var(--teal);color:#fff}
+.slot:disabled{opacity:.35;cursor:not-allowed;text-decoration:line-through}
+.res{display:grid;gap:6px;margin-top:8px}
+.res button,.chip{text-align:left;padding:9px 12px;border:1px solid var(--line);background:var(--card);border-radius:9px;font:inherit;color:var(--ink);cursor:pointer}
+.res button:hover{border-color:var(--teal)}.chip{display:flex;justify-content:space-between;gap:10px;align-items:center;cursor:default;background:rgba(23,169,184,.1);border-color:var(--teal)}
+.chip button{border:0;background:none;color:var(--teal-d);font:inherit;font-weight:700;cursor:pointer}
+.citaI{display:flex;justify-content:space-between;align-items:center;gap:10px;border:1px solid var(--line);border-radius:10px;padding:10px 12px;margin-top:8px}
+.citaI small{color:var(--mut)}.tg{font-size:12px;font-weight:700;border-radius:99px;padding:2px 9px;background:rgba(23,169,184,.15);color:var(--teal-d)}
+.tg.cancelada{background:#eee;color:#666}.tg.realizada{background:rgba(23,116,59,.15);color:var(--ok)}
 /* Hoja del documento */
 .sheet{background:#fff;color:#111;border:1px solid var(--line);border-radius:6px;padding:34px 38px;font:14px/1.55 Arial,Helvetica,sans-serif;min-height:560px;display:flex;flex-direction:column}
 .sheet .hd{display:flex;justify-content:space-between;align-items:center;gap:16px;border-bottom:3px solid var(--teal);padding-bottom:12px}
@@ -88,6 +99,7 @@ legend{font-weight:700;padding:0 8px;color:var(--teal-d)}
   <p class="lead">Elige una opción para comenzar.</p>
   <div class="menu">
     <button class="opt" data-go="docs"><div class="ic">📄</div><b>Emisión de documentos clínicos</b><span>Informes, certificados, indicaciones, órdenes de examen y consentimientos, con el logo de la Red.</span></button>
+    <button class="opt" data-go="agenda"><div class="ic">📅</div><b>Agendar hora a un paciente</b><span>Elige paciente, día y hora. La cita aparece de inmediato en su perfil.</span></button>
     <button class="opt" data-go="ficha"><div class="ic">🦷</div><b>Agregar ficha de paciente</b><span>Registra antecedentes clínicos y da de alta al paciente en la Red, con acceso a su perfil.</span></button>
   </div>
   <p style="margin-top:22px"><a class="btn sec" href="segunda-opinion.html">Emitir segunda opinión</a>
@@ -107,6 +119,31 @@ legend{font-weight:700;padding:0 8px;color:var(--teal-d)}
       <div class="fin noprint"><button class="btn" id="b-print" type="button">Imprimir / guardar como PDF</button></div>
       <p class="msg noprint" id="d-msg"></p>
     </div>
+  </div>
+</section>
+
+<!-- AGENDA -->
+<section id="v-agenda" hidden class="noprint">
+  <button class="back" data-go="menu">← Volver al inicio</button>
+  <h1>Agendar hora a un paciente</h1>
+  <p class="lead">La hora queda en el perfil del paciente y se le puede avisar por correo. ¿Paciente nuevo? Primero créalo en “Agregar ficha de paciente”.</p>
+  <div class="split">
+    <form class="card" id="f-agenda" autocomplete="off">
+      <label for="a-q">Paciente (nombre o RUT) *</label>
+      <input id="a-q" placeholder="Escribe al menos 2 letras o el RUT">
+      <div class="res" id="a-res"></div>
+      <div class="chip" id="a-sel" hidden><span id="a-selt"></span><button type="button" id="a-cambiar">Cambiar</button></div>
+      <label for="a-fecha">Fecha *</label>
+      <input id="a-fecha" type="date" required>
+      <label>Hora * <span style="font-weight:400">(30 minutos)</span></label>
+      <div class="slots" id="a-slots"><span class="empty" style="grid-column:1/-1">Elige una fecha.</span></div>
+      <label for="a-motivo">Motivo</label>
+      <select id="a-motivo"><option>Control</option><option>Evaluación</option><option>Limpieza</option><option>Mantención de implantes</option><option>Revisión de presupuesto</option><option>Control sano infantil</option><option>Urgencia</option><option>Otro</option></select>
+      <label class="chk"><input type="checkbox" id="a-avisar" checked> <span>Enviar confirmación por correo al paciente</span></label>
+      <p class="msg" id="a-msg" role="alert"></p>
+      <button class="btn" id="a-btn" type="submit">Agendar hora</button>
+    </form>
+    <div class="card"><h2 style="margin-top:0">Citas del paciente</h2><div id="a-list"><span class="empty">Elige un paciente.</span></div></div>
   </div>
 </section>
 
@@ -181,7 +218,7 @@ function rutOk(r){
 
 /* Vistas */
 function show(v){
-  ["login","menu","docs","ficha"].forEach(n=>$("v-"+n).hidden=n!==v);
+  ["login","menu","docs","ficha","agenda"].forEach(n=>$("v-"+n).hidden=n!==v);
   window.scrollTo(0,0);
 }
 document.addEventListener("click",e=>{const b=e.target.closest("[data-go]");if(b)show(b.dataset.go)});
@@ -295,6 +332,85 @@ $("f-ficha").addEventListener("submit",async e=>{
   if(!r.ok){m.className="msg err";m.textContent=r.d.error||"No se pudo guardar.";return}
   m.className="msg ok";m.textContent=r.d.nuevo?"Ficha guardada. Se envió la invitación al paciente.":"Ficha agregada a un paciente ya existente.";
   $("f-ficha").reset();
+});
+/* Agenda de horas */
+let selPac=null,selHora=null,qT;
+const HORARIO={ // inicios de bloque de 30 min (atención 09–14 y 15–19; sábado 09–13)
+  sem:["09:00","09:30","10:00","10:30","11:00","11:30","12:00","12:30","13:00","13:30","15:00","15:30","16:00","16:30","17:00","17:30","18:00","18:30"],
+  sab:["09:00","09:30","10:00","10:30","11:00","11:30","12:00","12:30"]};
+const TZC="America/Santiago";
+function fmtCita(iso){
+  return new Intl.DateTimeFormat("es-CL",{timeZone:TZC,weekday:"short",day:"numeric",month:"short",year:"numeric",hour:"2-digit",minute:"2-digit",hourCycle:"h23"}).format(new Date(iso));
+}
+function hoyCL(){const p={};new Intl.DateTimeFormat("en-CA",{timeZone:TZC,year:"numeric",month:"2-digit",day:"2-digit"}).formatToParts(new Date()).forEach(x=>p[x.type]=x.value);return p.year+"-"+p.month+"-"+p.day}
+function ahoraCL(){const p={};new Intl.DateTimeFormat("en-GB",{timeZone:TZC,hour:"2-digit",minute:"2-digit",hourCycle:"h23"}).formatToParts(new Date()).forEach(x=>p[x.type]=x.value);return p.hour+":"+p.minute}
+document.addEventListener("click",e=>{if(e.target.closest('[data-go="agenda"]'))initAgenda()});
+function initAgenda(){
+  $("a-fecha").min=hoyCL();if(!$("a-fecha").value)$("a-fecha").value=hoyCL();
+  loadSlots();
+}
+$("a-q").addEventListener("input",()=>{
+  clearTimeout(qT);const q=$("a-q").value.trim(),box=$("a-res");
+  if(q.length<2){box.innerHTML="";return}
+  qT=setTimeout(async()=>{
+    const r=await api("/pro/pacientes?q="+encodeURIComponent(q));
+    if(r.status===401)return sesionVencida();
+    box.innerHTML="";
+    if(!r.ok||!r.d.pacientes.length){box.innerHTML='<span class="empty">Sin resultados.</span>';return}
+    r.d.pacientes.forEach(p=>{const b=document.createElement("button");b.type="button";b.textContent=p.nombre+" · "+p.rut;b.onclick=()=>pickPac(p);box.appendChild(b)});
+  },250);
+});
+function pickPac(p){
+  selPac=p;$("a-res").innerHTML="";$("a-q").hidden=true;$("a-q").value="";
+  $("a-selt").textContent=p.nombre+" · "+p.rut;$("a-sel").hidden=false;loadCitas();
+}
+$("a-cambiar").addEventListener("click",()=>{selPac=null;$("a-sel").hidden=true;$("a-q").hidden=false;$("a-q").focus();$("a-list").innerHTML='<span class="empty">Elige un paciente.</span>'});
+function sesionVencida(){try{sessionStorage.removeItem(SESION)}catch(e){}setMe(null);show("login")}
+$("a-fecha").addEventListener("change",()=>{selHora=null;loadSlots()});
+async function loadSlots(){
+  const f=$("a-fecha").value,box=$("a-slots");selHora=null;
+  if(!f){box.innerHTML='<span class="empty" style="grid-column:1/-1">Elige una fecha.</span>';return}
+  const dow=new Date(f+"T12:00:00").getDay();
+  if(dow===0){box.innerHTML='<span class="empty" style="grid-column:1/-1">Domingo: sin atención.</span>';return}
+  const r=await api("/pro/citas/ocupadas?fecha="+f);
+  if(r.status===401)return sesionVencida();
+  const busy=new Set(r.ok?r.d.horas:[]),hoy=f===hoyCL(),now=ahoraCL();
+  box.innerHTML="";
+  (dow===6?HORARIO.sab:HORARIO.sem).forEach(h=>{
+    const b=document.createElement("button");b.type="button";b.className="slot";b.textContent=h;
+    if(busy.has(h)||(hoy&&h<=now))b.disabled=true;
+    b.onclick=()=>{selHora=h;box.querySelectorAll(".slot").forEach(x=>x.classList.toggle("on",x===b))};
+    box.appendChild(b);
+  });
+}
+async function loadCitas(){
+  const box=$("a-list");if(!selPac)return;
+  const r=await api("/pro/citas?paciente_id="+selPac.id);
+  if(r.status===401)return sesionVencida();
+  box.innerHTML="";
+  if(!r.ok||!r.d.citas.length){box.innerHTML='<span class="empty">Este paciente aún no tiene citas.</span>';return}
+  r.d.citas.forEach(c=>{
+    const d=document.createElement("div");d.className="citaI";
+    d.innerHTML='<div><b>'+esc(fmtCita(c.inicio))+'</b><br><small>'+esc(c.motivo||"")+'</small></div><div><span class="tg '+esc(c.estado)+'">'+esc(c.estado)+'</span></div>';
+    if(c.estado==="agendada"&&new Date(c.inicio)>new Date()){
+      const x=document.createElement("button");x.type="button";x.className="btn sec";x.style.padding="6px 12px";x.textContent="Cancelar";
+      x.onclick=async()=>{if(!confirm("¿Cancelar esta cita?"))return;await api("/pro/citas/"+c.id+"/cancelar",{});loadCitas();loadSlots()};
+      d.lastChild.appendChild(document.createTextNode(" "));d.lastChild.appendChild(x);
+    }
+    box.appendChild(d);
+  });
+}
+$("f-agenda").addEventListener("submit",async e=>{
+  e.preventDefault();const m=$("a-msg"),b=$("a-btn");
+  if(!selPac){m.className="msg err";m.textContent="Elige un paciente.";return}
+  if(!selHora){m.className="msg err";m.textContent="Elige una hora.";return}
+  b.disabled=true;m.className="msg";m.textContent="Agendando…";
+  const r=await api("/pro/citas",{paciente_id:selPac.id,fecha:$("a-fecha").value,hora:selHora,motivo:$("a-motivo").value,avisar:$("a-avisar").checked});
+  b.disabled=false;
+  if(r.status===401)return sesionVencida();
+  if(!r.ok){m.className="msg err";m.textContent=r.d.error||"No se pudo agendar.";if(r.status===409)loadSlots();return}
+  m.className="msg ok";m.textContent="Hora agendada para "+selPac.nombre+": "+$("a-fecha").value.split("-").reverse().join("/")+" a las "+selHora+".";
+  loadSlots();loadCitas();
 });
 boot();
 </script>
