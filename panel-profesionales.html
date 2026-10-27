@@ -100,6 +100,7 @@ legend{font-weight:700;padding:0 8px;color:var(--teal-d)}
   <div class="menu">
     <button class="opt" data-go="docs"><div class="ic">📄</div><b>Emisión de documentos clínicos</b><span>Informes, certificados, indicaciones, órdenes de examen y consentimientos, con el logo de la Red.</span></button>
     <button class="opt" data-go="agenda"><div class="ic">📅</div><b>Agendar hora a un paciente</b><span>Elige paciente, día y hora. La cita aparece de inmediato en su perfil.</span></button>
+    <button class="opt" data-go="trat"><div class="ic">🩻</div><b>Tratamiento y radiografías</b><span>Registra hallazgos, tratamiento, sesiones restantes, valor y sube radiografías. El paciente lo ve en su perfil.</span></button>
     <button class="opt" data-go="ficha"><div class="ic">🦷</div><b>Agregar ficha de paciente</b><span>Registra antecedentes clínicos y da de alta al paciente en la Red, con acceso a su perfil.</span></button>
   </div>
   <p style="margin-top:22px"><a class="btn sec" href="segunda-opinion.html">Emitir segunda opinión</a>
@@ -182,6 +183,49 @@ legend{font-weight:700;padding:0 8px;color:var(--teal-d)}
     <button class="btn" id="k-btn" type="submit">Guardar ficha e invitar al paciente</button>
   </form>
 </section>
+
+<!-- TRATAMIENTO -->
+<section id="v-trat" hidden class="noprint">
+  <button class="back" data-go="menu">← Volver al inicio</button>
+  <h1>Tratamiento y radiografías</h1>
+  <p class="lead">Lo que guardes aquí aparece en el perfil del paciente. ¿Paciente nuevo? Primero créalo en “Agregar ficha de paciente”.</p>
+  <div class="card">
+    <label for="t-q">Paciente (nombre o RUT) *</label>
+    <input id="t-q" placeholder="Escribe al menos 2 letras o el RUT" autocomplete="off">
+    <div class="res" id="t-res"></div>
+    <div class="chip" id="t-sel" hidden><span id="t-selt"></span><button type="button" id="t-cambiar">Cambiar</button></div>
+  </div>
+  <div id="t-body" hidden>
+    <div class="split">
+      <form class="card" id="f-trat" autocomplete="off">
+        <h2 style="margin-top:0" id="t-ftitle">Nuevo tratamiento</h2>
+        <label for="t-nombre">Tratamiento *</label><input id="t-nombre" placeholder="Ej. Endodoncia pieza 36" required>
+        <label for="t-hall">Hallazgos</label><textarea id="t-hall" placeholder="Hallazgos clínicos o radiográficos"></textarea>
+        <div class="row2">
+          <div><label for="t-tot">Sesiones totales</label><input id="t-tot" type="number" min="0" max="500" inputmode="numeric"></div>
+          <div><label for="t-rest">Sesiones restantes</label><input id="t-rest" type="number" min="0" max="500" inputmode="numeric"></div>
+          <div><label for="t-valor">Valor del tratamiento (CLP)</label><input id="t-valor" type="number" min="0" inputmode="numeric" placeholder="Ej. 180000"></div>
+        </div>
+        <label for="t-nota">Nota para el paciente</label><textarea id="t-nota" placeholder="Indicaciones o comentarios que verá en su perfil"></textarea>
+        <p class="msg" id="t-msg" role="alert"></p>
+        <button class="btn" id="t-btn" type="submit">Guardar tratamiento</button>
+        <button class="btn sec" id="t-cancel" type="button" hidden style="margin-left:8px">Cancelar edición</button>
+      </form>
+      <div class="card"><h2 style="margin-top:0">Tratamientos del paciente</h2><div id="t-list"><span class="empty">Elige un paciente.</span></div></div>
+    </div>
+    <div class="split" style="margin-top:16px">
+      <form class="card" id="f-rx" autocomplete="off">
+        <h2 style="margin-top:0">Agregar radiografía</h2>
+        <label for="x-file">Imagen (JPG, PNG o WEBP, máx. 12 MB) *</label><input id="x-file" type="file" accept="image/jpeg,image/png,image/webp" required>
+        <label for="x-fecha">Fecha</label><input id="x-fecha" type="date">
+        <label for="x-desc">Descripción</label><input id="x-desc" placeholder="Ej. Panorámica, retroalveolar 36" maxlength="160">
+        <p class="msg" id="x-msg" role="alert"></p>
+        <button class="btn" id="x-btn" type="submit">Subir radiografía</button>
+      </form>
+      <div class="card"><h2 style="margin-top:0">Radiografías del paciente</h2><div id="x-list"><span class="empty">Elige un paciente.</span></div></div>
+    </div>
+  </div>
+</section>
 </main>
 
 <script>
@@ -218,7 +262,7 @@ function rutOk(r){
 
 /* Vistas */
 function show(v){
-  ["login","menu","docs","ficha","agenda"].forEach(n=>$("v-"+n).hidden=n!==v);
+  ["login","menu","docs","ficha","agenda","trat"].forEach(n=>$("v-"+n).hidden=n!==v);
   window.scrollTo(0,0);
 }
 document.addEventListener("click",e=>{const b=e.target.closest("[data-go]");if(b)show(b.dataset.go)});
@@ -411,6 +455,97 @@ $("f-agenda").addEventListener("submit",async e=>{
   if(!r.ok){m.className="msg err";m.textContent=r.d.error||"No se pudo agendar.";if(r.status===409)loadSlots();return}
   m.className="msg ok";m.textContent="Hora agendada para "+selPac.nombre+": "+$("a-fecha").value.split("-").reverse().join("/")+" a las "+selHora+".";
   loadSlots();loadCitas();
+});
+/* Tratamiento, sesiones, valor y radiografías */
+let tPac=null,tEdit=null,tT=null;
+const clp=n=>n==null?"—":"$"+Number(n).toLocaleString("es-CL");
+function tReset(){tEdit=null;$("f-trat").reset();$("t-ftitle").textContent="Nuevo tratamiento";$("t-btn").textContent="Guardar tratamiento";$("t-cancel").hidden=true}
+document.addEventListener("click",e=>{if(e.target.closest('[data-go="trat"]')){$("x-fecha").value=hoyCL()}});
+$("t-q").addEventListener("input",()=>{
+  clearTimeout(tT);const q=$("t-q").value.trim(),box=$("t-res");
+  if(q.length<2){box.innerHTML="";return}
+  tT=setTimeout(async()=>{
+    const r=await api("/pro/pacientes?q="+encodeURIComponent(q));
+    if(r.status===401)return sesionVencida();
+    box.innerHTML="";
+    if(!r.ok||!r.d.pacientes.length){box.innerHTML='<span class="empty">Sin resultados.</span>';return}
+    r.d.pacientes.forEach(p=>{const b=document.createElement("button");b.type="button";b.textContent=p.nombre+" · "+p.rut;b.onclick=()=>tPick(p);box.appendChild(b)});
+  },250);
+});
+function tPick(p){
+  tPac=p;tReset();$("t-res").innerHTML="";$("t-q").hidden=true;$("t-q").value="";
+  $("t-selt").textContent=p.nombre+" · "+p.rut;$("t-sel").hidden=false;$("t-body").hidden=false;tLoad();
+}
+$("t-cambiar").addEventListener("click",()=>{tPac=null;tReset();$("t-sel").hidden=true;$("t-body").hidden=true;$("t-q").hidden=false;$("t-q").focus()});
+$("t-cancel").addEventListener("click",tReset);
+async function tLoad(){
+  if(!tPac)return;
+  const r=await api("/pro/tratamientos?paciente_id="+tPac.id);
+  if(r.status===401)return sesionVencida();
+  const tl=$("t-list"),xl=$("x-list");tl.innerHTML="";xl.innerHTML="";
+  if(!r.ok){tl.innerHTML='<span class="empty">No se pudo cargar.</span>';return}
+  if(!r.d.tratamientos.length)tl.innerHTML='<span class="empty">Sin tratamientos registrados.</span>';
+  r.d.tratamientos.forEach(t=>{
+    const d=document.createElement("div");d.className="citaI";
+    const ses=t.sesiones_total!=null?(t.sesiones_restantes==null?"?":t.sesiones_restantes)+" de "+t.sesiones_total+" sesiones restantes":"Sesiones no informadas";
+    d.innerHTML='<div><b>'+esc(t.nombre)+'</b><br><small>'+esc(ses)+' · Valor: '+esc(clp(t.valor))+' · Avance: '+esc(t.avance==null?0:t.avance)+'%</small>'+(t.hallazgos?'<br><small>'+esc(t.hallazgos)+'</small>':'')+'</div><div></div>';
+    const act=d.lastChild;
+    if(t.sesiones_restantes>0){
+      const s=document.createElement("button");s.type="button";s.className="btn sec";s.style.padding="6px 12px";s.textContent="Sesión realizada";
+      s.onclick=async()=>{s.disabled=true;const q=await api("/pro/tratamientos/"+t.id+"/sesion",{});if(q.status===401)return sesionVencida();tLoad()};
+      act.appendChild(s);act.appendChild(document.createTextNode(" "));
+    }
+    const ed=document.createElement("button");ed.type="button";ed.className="btn sec";ed.style.padding="6px 12px";ed.textContent="Editar";
+    ed.onclick=()=>{tEdit=t.id;$("t-nombre").value=t.nombre||"";$("t-hall").value=t.hallazgos||"";$("t-tot").value=t.sesiones_total==null?"":t.sesiones_total;
+      $("t-rest").value=t.sesiones_restantes==null?"":t.sesiones_restantes;$("t-valor").value=t.valor==null?"":t.valor;$("t-nota").value=t.nota||"";
+      $("t-ftitle").textContent="Editar tratamiento";$("t-btn").textContent="Guardar cambios";$("t-cancel").hidden=false;$("t-nombre").focus()};
+    act.appendChild(ed);tl.appendChild(d);
+  });
+  if(!r.d.radiografias.length)xl.innerHTML='<span class="empty">Sin radiografías.</span>';
+  r.d.radiografias.forEach(x=>{
+    const d=document.createElement("div");d.className="citaI";
+    d.innerHTML='<div><b>'+esc(x.descripcion||"Radiografía")+'</b><br><small>'+esc(fechaL(String(x.fecha).slice(0,10)))+'</small></div><div></div>';
+    const v=document.createElement("button");v.type="button";v.className="btn sec";v.style.padding="6px 12px";v.textContent="Ver";
+    v.onclick=async()=>{
+      const w=window.open("","_blank");const s=sesion();
+      try{
+        const q=await fetch(API+"/pro/radiografias/"+x.id+"/archivo",{headers:{Authorization:"Bearer "+(s&&s.token)}});
+        if(!q.ok)throw 0;const u=URL.createObjectURL(await q.blob());
+        if(w)w.location=u;else location.href=u;
+      }catch(err){if(w)w.close();alert("No se pudo abrir la radiografía.")}
+    };
+    d.lastChild.appendChild(v);xl.appendChild(d);
+  });
+}
+$("f-trat").addEventListener("submit",async e=>{
+  e.preventDefault();const m=$("t-msg"),b=$("t-btn");
+  if(!tPac){m.className="msg err";m.textContent="Elige un paciente.";return}
+  const tot=$("t-tot").value,rest=$("t-rest").value;
+  if(tot!==""&&rest!==""&&+rest>+tot){m.className="msg err";m.textContent="Las sesiones restantes no pueden superar el total.";return}
+  b.disabled=true;m.className="msg";m.textContent="Guardando…";
+  const body={paciente_id:tPac.id,nombre:$("t-nombre").value,hallazgos:$("t-hall").value,sesiones_total:tot,sesiones_restantes:rest,valor:$("t-valor").value,nota:$("t-nota").value};
+  const r=await api(tEdit?"/pro/tratamientos/"+tEdit:"/pro/tratamientos",body);
+  b.disabled=false;
+  if(r.status===401)return sesionVencida();
+  if(!r.ok){m.className="msg err";m.textContent=r.d.error||"No se pudo guardar.";return}
+  m.className="msg ok";m.textContent="Guardado. Ya está en el perfil del paciente.";tReset();tLoad();
+});
+$("f-rx").addEventListener("submit",async e=>{
+  e.preventDefault();const m=$("x-msg"),b=$("x-btn"),f=$("x-file").files[0];
+  if(!tPac){m.className="msg err";m.textContent="Elige un paciente.";return}
+  if(!f){m.className="msg err";m.textContent="Elige una imagen.";return}
+  if(f.size>12*1024*1024){m.className="msg err";m.textContent="La imagen supera los 12 MB.";return}
+  b.disabled=true;m.className="msg";m.textContent="Subiendo…";
+  const s=sesion();let r;
+  try{
+    const q=await fetch(API+"/pro/radiografias?paciente_id="+tPac.id+"&fecha="+encodeURIComponent($("x-fecha").value)+"&descripcion="+encodeURIComponent($("x-desc").value),
+      {method:"POST",headers:{"Content-Type":"application/octet-stream",Authorization:"Bearer "+(s&&s.token)},body:f});
+    r={ok:q.ok,status:q.status,d:await q.json().catch(()=>({}))};
+  }catch(err){r={ok:false,status:0,d:{error:"No se pudo conectar con el servidor."}}}
+  b.disabled=false;
+  if(r.status===401)return sesionVencida();
+  if(!r.ok){m.className="msg err";m.textContent=r.d.error||"No se pudo subir.";return}
+  m.className="msg ok";m.textContent="Radiografía subida. El paciente ya la ve en su perfil.";$("x-file").value="";$("x-desc").value="";tLoad();
 });
 boot();
 </script>

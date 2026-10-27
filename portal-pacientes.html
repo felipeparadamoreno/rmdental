@@ -283,6 +283,14 @@ function renderTr(list){
     var pg=el("div","prog");pg.appendChild(el("h3",null,x.nombre||"Tratamiento"));
     var bo=el("div","bar-o");bo.setAttribute("role","progressbar");bo.setAttribute("aria-valuenow",pct);bo.setAttribute("aria-valuemin","0");bo.setAttribute("aria-valuemax","100");bo.setAttribute("aria-label","Avance del tratamiento");
     var bi=el("div","bar-i");bi.style.width=pct+"%";bo.appendChild(bi);pg.appendChild(bo);pg.appendChild(el("p","fine",pct+"% del tratamiento"));
+    if(x.sesiones_total!=null&&x.sesiones_restantes!=null){
+      var sr=Number(x.sesiones_restantes),st=Number(x.sesiones_total);
+      var sl=el("p",null,sr<=0?"Sesiones completadas ("+st+" de "+st+")":"Sesiones restantes: "+sr+" de "+st);
+      sl.style.marginTop=".7rem";sl.style.fontWeight="600";pg.appendChild(sl)}
+    if(x.valor!=null&&x.valor!==""){
+      var vl=el("p",null,"Valor del tratamiento: $"+Number(x.valor).toLocaleString("es-CL"));
+      vl.style.marginTop=".4rem";vl.style.fontWeight="600";pg.appendChild(vl)}
+    if(x.hallazgos){pg.appendChild(el("p","sub-h","Hallazgos"));var hl=el("p",null,x.hallazgos);hl.style.whiteSpace="pre-line";pg.appendChild(hl)}
     if(x.nota){var n=el("p",null,x.nota);n.style.marginTop=".7rem";pg.appendChild(n)}
     box.appendChild(pg);
   });
