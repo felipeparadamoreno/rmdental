@@ -70,6 +70,22 @@ legend{font-weight:700;padding:0 8px;color:var(--teal-d)}
 table.tb{width:100%;border-collapse:collapse;font-size:14px}table.tb th,table.tb td{text-align:left;padding:8px 6px;border-bottom:1px solid var(--line)}
 table.tb td.n,table.tb th.n{text-align:right;font-variant-numeric:tabular-nums}
 .tbwrap{overflow-x:auto}
+.ev{position:relative;border-left:2px solid var(--line);margin-left:6px;padding:0 0 18px 16px}
+.ev:last-child{padding-bottom:0}
+.ev::before{content:"";position:absolute;left:-6px;top:4px;width:10px;height:10px;border-radius:50%;background:var(--teal)}
+.ev.old{opacity:.6}.ev.old::before{background:var(--line)}
+.ev h3{margin:0;font-size:15px}.ev .meta{font-size:13px;color:var(--mut);margin:2px 0 6px}
+.ev p{margin:4px 0;font-size:14px;white-space:pre-wrap}
+.ev .lb{font-size:11px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--mut)}
+.tg.warn{background:#fff6dc;color:#6b4e00}
+.clave-box{border:1px dashed var(--teal);background:rgba(23,169,184,.08);border-radius:10px;padding:12px 14px;margin:12px 0}
+.clave-box code{font:700 18px/1.4 ui-monospace,Menlo,Consolas,monospace;letter-spacing:.06em;user-select:all;word-break:break-all}
+.urow{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:8px 12px;align-items:center;border:1px solid var(--line);border-radius:10px;padding:10px 12px;margin-top:8px}
+.urow.off{opacity:.55}.urow small{color:var(--mut)}
+.urow .acts{display:flex;flex-wrap:wrap;gap:6px;align-items:center;justify-content:flex-end}
+.urow select{width:auto;padding:6px 8px}
+.btn.mini{padding:5px 10px;font-size:12px}
+@media(max-width:560px){.urow{grid-template-columns:1fr}.urow .acts{justify-content:flex-start}}
 .pay{margin:0 0 18px;padding-bottom:16px;border-bottom:1px solid var(--line)}
 .pay h3{margin:0 0 6px;font-size:15px}
 .pay svg{display:block;width:100%;max-width:420px;height:auto}
@@ -130,10 +146,13 @@ table.tb td.n,table.tb th.n{text-align:right;font-variant-numeric:tabular-nums}
     <button class="opt" data-go="trat"><div class="ic">🩻</div><b>Tratamiento y radiografías</b><span>Registra hallazgos, tratamiento, sesiones restantes, valor y sube radiografías. El paciente lo ve en su perfil.</span></button>
     <button class="opt" data-go="ficha"><div class="ic">🦷</div><b>Agregar ficha de paciente</b><span>Registra antecedentes clínicos y da de alta al paciente en la Red, con acceso a su perfil.</span></button>
     <button class="opt" data-go="trib"><div class="ic">🧾</div><b>Documentos tributarios</b><span>Guarda boletas, facturas y comprobantes de pago de cada paciente y consúltalos cuando los necesites.</span></button>
+    <button class="opt" data-go="aten" id="m-aten"><div class="ic">📋</div><b>Historial de atención</b><span>Qué se le hizo al paciente en cada visita: procedimiento, piezas dentales e indicaciones.</span></button>
+    <button class="opt" data-go="usu" id="m-usu" hidden><div class="ic">👥</div><b>Usuarios</b><span>Crea cuentas para profesionales y secretaría, asigna roles, genera claves y desactiva accesos.</span></button>
     <button class="opt" data-go="fin"><div class="ic">💳</div><b>Finanzas del paciente</b><span>Cuánto debe, cuánto ha pagado y cuánto le falta, con su historial de cargos y pagos.</span></button>
     <button class="opt" data-go="dueno" id="m-dueno" hidden><div class="ic">📊</div><b>Panel del dueño</b><span>Cuánto dinero ha entrado, cuánto falta por entrar y quiénes tienen deuda.</span></button>
   </div>
   <p style="margin-top:22px"><a class="btn sec" href="segunda-opinion.html">Emitir segunda opinión</a>
+  <button class="btn sec" data-go="clave" type="button" style="margin-left:8px">Cambiar mi clave</button>
   <button class="btn sec" id="b-out" type="button" style="margin-left:8px">Cerrar sesión</button></p>
 </section>
 
@@ -352,6 +371,71 @@ table.tb td.n,table.tb th.n{text-align:right;font-variant-numeric:tabular-nums}
   </div>
   <div class="card" style="margin-top:16px"><h2 style="margin-top:0">Mayores deudas</h2><div class="tbwrap" id="d-deud"></div></div>
 </section>
+<!-- HISTORIAL DE ATENCIÓN -->
+<section id="v-aten" hidden class="noprint">
+  <button class="back" data-go="menu">← Volver al inicio</button>
+  <h1>Historial de atención</h1>
+  <p class="lead">Lo que se hizo en cada visita. Los registros no se borran: si hay un error, se agrega una corrección y queda el original a la vista.</p>
+  <div class="card">
+    <label for="h-q">Paciente (nombre o RUT) *</label>
+    <input id="h-q" placeholder="Escribe al menos 2 letras o el RUT" autocomplete="off">
+    <div class="res" id="h-res"></div>
+    <div class="chip" id="h-sel" hidden><span id="h-selt"></span><button type="button" id="h-cambiar">Cambiar</button></div>
+    <div id="h-risk"></div>
+  </div>
+  <div id="h-body" hidden>
+    <div class="split" style="margin-top:16px">
+      <form class="card" id="f-aten" autocomplete="off">
+        <h2 style="margin-top:0" id="h-ftitle">Registrar atención</h2>
+        <p class="msg" id="h-corr" style="margin:0 0 8px" hidden></p>
+        <div class="row2"><div><label for="h-fecha">Fecha *</label><input id="h-fecha" type="date" required></div>
+        <div><label for="h-piezas">Piezas (FDI)</label><input id="h-piezas" maxlength="80" placeholder="Ej. 16, 26, 36"></div></div>
+        <label for="h-motivo">Motivo *</label><input id="h-motivo" maxlength="160" placeholder="Ej. Dolor en molar inferior" required>
+        <label for="h-real">Lo realizado *</label><textarea id="h-real" rows="5" required placeholder="Procedimiento, materiales, hallazgos"></textarea>
+        <label for="h-indic">Indicaciones al paciente</label><textarea id="h-indic" rows="3" placeholder="Cuidados, medicamentos, próxima cita"></textarea>
+        <p class="msg" id="h-msg" role="alert"></p>
+        <button class="btn" id="h-btn" type="submit">Guardar atención</button>
+        <button class="btn sec" id="h-cancel" type="button" hidden style="margin-left:8px">Cancelar corrección</button>
+      </form>
+      <div class="card"><h2 style="margin-top:0">Atenciones del paciente</h2><div id="h-list"><span class="empty">Elige un paciente.</span></div></div>
+    </div>
+  </div>
+</section>
+<!-- USUARIOS -->
+<section id="v-usu" hidden class="noprint">
+  <button class="back" data-go="menu">← Volver al inicio</button>
+  <h1>Usuarios</h1>
+  <p class="lead">Quién puede entrar al panel y qué puede hacer. Solo el dueño ve esta sección.</p>
+  <div class="split">
+    <form class="card" id="f-usu" autocomplete="off">
+      <h2 style="margin-top:0">Agregar usuario</h2>
+      <label for="u-nombre">Nombre completo *</label><input id="u-nombre" maxlength="120" required>
+      <div class="row2"><div><label for="u-rut">RUT *</label><input id="u-rut" placeholder="12.345.678-5" required></div>
+      <div><label for="u-rol">Rol *</label><select id="u-rol"><option value="profesional">Profesional</option><option value="secretaria">Secretaría</option><option value="dueno">Dueño</option></select></div></div>
+      <div class="row2"><div><label for="u-esp">Especialidad</label><input id="u-esp" maxlength="120"></div>
+      <div><label for="u-correo">Correo</label><input id="u-correo" type="email" maxlength="120"></div></div>
+      <label for="u-clave">Clave inicial * <span style="font-weight:400">(mínimo 8 caracteres)</span></label>
+      <div style="display:flex;gap:8px"><input id="u-clave" minlength="8" maxlength="72" required style="flex:1"><button class="btn sec" type="button" id="u-gen">Generar</button></div>
+      <p class="msg" id="u-msg" role="alert"></p>
+      <div id="u-claveout"></div>
+      <button class="btn" type="submit" id="u-btn">Crear usuario</button>
+    </form>
+    <div class="card"><h2 style="margin-top:0">Usuarios de la clínica</h2><div id="u-clave-nueva"></div><div id="u-list"><span class="empty">Cargando…</span></div></div>
+  </div>
+</section>
+
+<!-- CAMBIAR MI CLAVE -->
+<section id="v-clave" hidden class="noprint">
+  <button class="back" data-go="menu">← Volver al inicio</button>
+  <h1>Cambiar mi clave</h1>
+  <form class="card" id="f-clave" autocomplete="off" style="max-width:460px">
+    <label for="c-act">Clave actual *</label><input id="c-act" type="password" autocomplete="current-password" required>
+    <label for="c-nue">Clave nueva * <span style="font-weight:400">(mínimo 8 caracteres)</span></label><input id="c-nue" type="password" autocomplete="new-password" minlength="8" maxlength="72" required>
+    <label for="c-rep">Repite la clave nueva *</label><input id="c-rep" type="password" autocomplete="new-password" required>
+    <p class="msg" id="c-msg" role="alert"></p>
+    <button class="btn" type="submit" id="c-btn">Guardar clave</button>
+  </form>
+</section>
 </main>
 
 <script>
@@ -388,7 +472,7 @@ function rutOk(r){
 
 /* Vistas */
 function show(v){
-  ["login","menu","docs","ficha","agenda","trat","trib","fin","dueno"].forEach(n=>$("v-"+n).hidden=n!==v);
+  ["login","menu","docs","ficha","agenda","trat","trib","fin","dueno","aten","usu","clave"].forEach(n=>$("v-"+n).hidden=n!==v);
   window.scrollTo(0,0);
 }
 document.addEventListener("click",e=>{const b=e.target.closest("[data-go]");if(b)show(b.dataset.go)});
@@ -747,6 +831,8 @@ function rol(){return (ME&&ME.rol)||"profesional"}   // profesional | secretaria
 function puedeEditarFin(){return rol()==="secretaria"||rol()==="dueno"}
 function aplicarRol(){
   const m=$("m-dueno");if(m)m.hidden=rol()!=="dueno";
+  const mu=$("m-usu");if(mu)mu.hidden=rol()!=="dueno";
+  const a=$("m-aten");if(a)a.hidden=rol()==="secretaria";
 }
 /* El servidor vuelve a revisar el rol en cada ruta: esto solo evita mostrar botones que no corresponden. */
 
@@ -870,6 +956,145 @@ async function dLoad(){
 }
 $("d-meses").addEventListener("change",dLoad);
 document.addEventListener("click",e=>{if(e.target.closest('[data-go="dueno"]'))dLoad()});
+
+/* ===== Historial de atención ===== */
+let hPac=null,hT,hCorrige=null;
+document.addEventListener("click",e=>{if(e.target.closest('[data-go="aten"]')){$("h-fecha").value=hoyCL();$("h-fecha").max=hoyCL()}});
+$("h-q").addEventListener("input",()=>{
+  clearTimeout(hT);const q=$("h-q").value.trim(),box=$("h-res");
+  if(q.length<2){box.innerHTML="";return}
+  hT=setTimeout(async()=>{
+    const r=await api("/pro/pacientes?q="+encodeURIComponent(q));
+    if(r.status===401)return sesionVencida();
+    box.innerHTML="";
+    if(!r.ok||!r.d.pacientes.length){box.innerHTML='<span class="empty">Sin resultados.</span>';return}
+    r.d.pacientes.forEach(p=>{const b=document.createElement("button");b.type="button";b.textContent=p.nombre+" · "+p.rut;b.onclick=()=>hPick(p);box.appendChild(b)});
+  },250);
+});
+function hPick(p){
+  hPac=p;hReset();$("h-res").innerHTML="";$("h-q").hidden=true;$("h-q").value="";
+  $("h-selt").textContent=p.nombre+" · "+p.rut;$("h-sel").hidden=false;$("h-risk").innerHTML=riesgoBadge(p);$("h-body").hidden=false;hLoad();
+}
+$("h-cambiar").addEventListener("click",()=>{hPac=null;hReset();$("h-risk").innerHTML="";$("h-sel").hidden=true;$("h-body").hidden=true;$("h-q").hidden=false;$("h-q").focus()});
+function hReset(){
+  hCorrige=null;$("f-aten").reset();$("h-fecha").value=hoyCL();
+  $("h-ftitle").textContent="Registrar atención";$("h-btn").textContent="Guardar atención";$("h-cancel").hidden=true;$("h-corr").hidden=true;
+}
+$("h-cancel").addEventListener("click",hReset);
+async function hLoad(){
+  if(!hPac)return;
+  const box=$("h-list");box.innerHTML='<span class="empty">Cargando…</span>';
+  const r=await api("/pro/atenciones?paciente_id="+hPac.id);
+  if(r.status===401)return sesionVencida();
+  if(r.status===403){box.innerHTML='<span class="empty">No tienes permiso para ver el historial clínico.</span>';return}
+  if(!r.ok){box.innerHTML='<span class="empty">No se pudo cargar.</span>';return}
+  const L=r.d.atenciones;box.innerHTML="";
+  if(!L.length){box.innerHTML='<span class="empty">Sin atenciones registradas.</span>';return}
+  L.forEach(a=>{
+    const d=document.createElement("div");d.className="ev"+(a.corregida?" old":"");
+    d.innerHTML='<h3>'+esc(a.motivo)+(a.corregida?' <span class="tg warn">Corregida</span>':'')+(a.corrige_id?' <span class="tg">Corrección</span>':'')+'</h3>'+
+      '<div class="meta">'+esc(fechaL(a.fecha))+' · '+esc(a.profesional||"Profesional")+(a.piezas?' · Piezas '+esc(a.piezas):'')+'</div>'+
+      '<span class="lb">Realizado</span><p>'+esc(a.realizado)+'</p>'+
+      (a.indicaciones?'<span class="lb">Indicaciones</span><p>'+esc(a.indicaciones)+'</p>':'');
+    if(!a.corregida&&(a.profesional_id===(ME&&ME.id)||rol()==="dueno")){
+      const b=document.createElement("button");b.type="button";b.className="btn sec";b.style.cssText="padding:4px 10px;font-size:12px";b.textContent="Corregir";
+      b.onclick=()=>{
+        hCorrige=a.id;$("h-fecha").value=a.fecha;$("h-piezas").value=a.piezas||"";$("h-motivo").value=a.motivo;$("h-real").value=a.realizado;$("h-indic").value=a.indicaciones||"";
+        $("h-ftitle").textContent="Corregir atención";$("h-btn").textContent="Guardar corrección";$("h-cancel").hidden=false;
+        const c=$("h-corr");c.className="msg";c.textContent="Se guardará como un registro nuevo. El original queda visible, marcado como corregido.";c.hidden=false;
+        $("h-real").focus();window.scrollTo({top:$("f-aten").offsetTop-80,behavior:"smooth"});
+      };
+      d.appendChild(b);
+    }
+    box.appendChild(d);
+  });
+}
+$("f-aten").addEventListener("submit",async e=>{
+  e.preventDefault();const m=$("h-msg"),b=$("h-btn");
+  if(!hPac){m.className="msg err";m.textContent="Elige un paciente.";return}
+  b.disabled=true;m.className="msg";m.textContent="Guardando…";
+  const body={paciente_id:hPac.id,fecha:$("h-fecha").value,piezas:$("h-piezas").value,motivo:$("h-motivo").value,realizado:$("h-real").value,indicaciones:$("h-indic").value};
+  if(hCorrige)body.corrige_id=hCorrige;
+  const r=await api("/pro/atenciones",body);
+  b.disabled=false;
+  if(r.status===401)return sesionVencida();
+  if(!r.ok){m.className="msg err";m.textContent=r.d.error||"No se pudo guardar.";return}
+  m.className="msg ok";m.textContent=hCorrige?"Corrección guardada.":"Atención guardada.";hReset();hLoad();
+});
+
+/* ===== Usuarios (solo dueño) y cambio de clave ===== */
+const ROL_TXT={profesional:"Profesional",secretaria:"Secretaría",dueno:"Dueño"};
+function claveAleatoria(){
+  const A="ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnpqrstuvwxyz23456789",b=new Uint32Array(12);crypto.getRandomValues(b);
+  return Array.from(b,x=>A[x%A.length]).join("");
+}
+function cajaClave(el,titulo,clave){
+  el.innerHTML='<div class="clave-box"><b>'+esc(titulo)+'</b><br><code>'+esc(clave)+'</code><br><small>Cópiala y entrégasela por un canal privado. No se vuelve a mostrar.</small> <button type="button" class="btn sec mini" id="cb-copy">Copiar</button></div>';
+  $("cb-copy").onclick=async()=>{try{await navigator.clipboard.writeText(clave);$("cb-copy").textContent="Copiada"}catch(e){const r=document.createRange();r.selectNodeContents(el.querySelector("code"));const s=getSelection();s.removeAllRanges();s.addRange(r)}};
+}
+document.addEventListener("click",e=>{if(e.target.closest('[data-go="usu"]')){$("u-clave-nueva").innerHTML="";$("u-claveout").innerHTML="";uLoad()}});
+$("u-gen").addEventListener("click",()=>{$("u-clave").value=claveAleatoria()});
+async function uLoad(){
+  const box=$("u-list");box.innerHTML='<span class="empty">Cargando…</span>';
+  const r=await api("/pro/usuarios");
+  if(r.status===401)return sesionVencida();
+  if(r.status===403){box.innerHTML='<span class="empty">Solo el dueño puede gestionar usuarios.</span>';return}
+  if(!r.ok){box.innerHTML='<span class="empty">No se pudo cargar.</span>';return}
+  box.innerHTML="";
+  r.d.usuarios.forEach(u=>{
+    const d=document.createElement("div");d.className="urow"+(u.activo?"":" off");
+    d.innerHTML='<div><b>'+esc(u.nombre)+(u.yo?' <span class="tg">Tú</span>':'')+(u.activo?'':' <span class="tg warn">Desactivado</span>')+'</b>'+
+      '<br><small>'+esc(u.rut)+(u.especialidad?' · '+esc(u.especialidad):'')+(u.correo?' · '+esc(u.correo):'')+'</small></div><div class="acts"></div>';
+    const acts=d.querySelector(".acts");
+    const sel=document.createElement("select");sel.setAttribute("aria-label","Rol de "+u.nombre);sel.disabled=u.yo;
+    Object.keys(ROL_TXT).forEach(k=>{const o=document.createElement("option");o.value=k;o.textContent=ROL_TXT[k];if(k===u.rol)o.selected=true;sel.appendChild(o)});
+    sel.onchange=async()=>{const q=await api("/pro/usuarios/"+u.id+"/rol",{rol:sel.value});if(q.status===401)return sesionVencida();if(!q.ok){alert(q.d.error||"No se pudo cambiar el rol.")}uLoad()};
+    const kb=document.createElement("button");kb.type="button";kb.className="btn sec mini";kb.textContent="Nueva clave";
+    kb.onclick=async()=>{
+      if(!confirm("¿Generar una clave nueva para "+u.nombre+"? La anterior dejará de funcionar."))return;
+      const c=claveAleatoria(),q=await api("/pro/usuarios/"+u.id+"/clave",{clave:c});
+      if(q.status===401)return sesionVencida();
+      if(!q.ok){alert(q.d.error||"No se pudo cambiar la clave.");return}
+      cajaClave($("u-clave-nueva"),"Clave nueva de "+u.nombre,c);window.scrollTo({top:0,behavior:"smooth"});
+    };
+    acts.appendChild(sel);acts.appendChild(kb);
+    if(!u.yo){
+      const ab=document.createElement("button");ab.type="button";ab.className="btn sec mini";ab.textContent=u.activo?"Desactivar":"Activar";
+      ab.onclick=async()=>{
+        if(u.activo&&!confirm("¿Desactivar a "+u.nombre+"? No podrá entrar al panel."))return;
+        const q=await api("/pro/usuarios/"+u.id+"/activo",{activo:u.activo?0:1});
+        if(q.status===401)return sesionVencida();
+        if(!q.ok){alert(q.d.error||"No se pudo actualizar.");return}
+        uLoad();
+      };
+      acts.appendChild(ab);
+    }
+    box.appendChild(d);
+  });
+}
+$("f-usu").addEventListener("submit",async e=>{
+  e.preventDefault();const m=$("u-msg"),b=$("u-btn");
+  if(!rutOk($("u-rut").value)){m.className="msg err";m.textContent="El RUT no es válido.";return}
+  b.disabled=true;m.className="msg";m.textContent="Creando…";
+  const clave=$("u-clave").value,nombre=$("u-nombre").value;
+  const r=await api("/pro/usuarios",{rut:$("u-rut").value,nombre:nombre,especialidad:$("u-esp").value,correo:$("u-correo").value,rol:$("u-rol").value,clave:clave});
+  b.disabled=false;
+  if(r.status===401)return sesionVencida();
+  if(!r.ok){m.className="msg err";m.textContent=r.d.error||"No se pudo crear.";return}
+  m.className="msg ok";m.textContent="Usuario creado.";
+  cajaClave($("u-claveout"),"Clave de "+nombre,clave);
+  ["u-nombre","u-rut","u-esp","u-correo","u-clave"].forEach(i=>$(i).value="");uLoad();
+});
+$("f-clave").addEventListener("submit",async e=>{
+  e.preventDefault();const m=$("c-msg"),b=$("c-btn");
+  if($("c-nue").value!==$("c-rep").value){m.className="msg err";m.textContent="Las claves nuevas no coinciden.";return}
+  b.disabled=true;m.className="msg";m.textContent="Guardando…";
+  const r=await api("/pro/mi-clave",{actual:$("c-act").value,nueva:$("c-nue").value});
+  b.disabled=false;
+  if(r.status===401&&!(r.d&&r.d.error))return sesionVencida();
+  if(!r.ok){m.className="msg err";m.textContent=r.d.error||"No se pudo cambiar la clave.";return}
+  m.className="msg ok";m.textContent="Clave cambiada.";["c-act","c-nue","c-rep"].forEach(i=>$(i).value="");
+});
 </script>
 </body>
 </html>
