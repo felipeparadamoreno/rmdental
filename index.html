@@ -456,6 +456,7 @@ dialog::backdrop{background:rgba(6,18,22,.62)}
 .contact .fine{color:var(--muted);font-size:.8rem;margin:0}
 </style>
 <link rel="stylesheet" href="tema.css">
+<script src="rut.js" defer></script>
 </head>
 <body>
 <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
@@ -692,8 +693,9 @@ dialog::backdrop{background:rgba(6,18,22,.62)}
           <p class="fine" id="cal-status" hidden style="color:var(--muted);font-size:.8rem"></p>
           <div class="form-grid">
             <div class="field"><label for="k-name">Nombre</label><input id="k-name" autocomplete="name" placeholder="Tu nombre y apellido"></div>
+            <div class="field"><label for="k-rut">RUT</label><input id="k-rut" data-rut inputmode="text" autocomplete="off" placeholder="12.345.678-5" maxlength="12"></div>
             <div class="field"><label for="k-phone">Teléfono o WhatsApp</label><input id="k-phone" type="tel" autocomplete="tel" placeholder="+56 9 ..."></div>
-            <div class="field full"><label for="k-email">Correo <span class="opt">(opcional)</span></label><input id="k-email" type="email" inputmode="email" autocomplete="email" placeholder="tu@correo.cl"></div>
+            <div class="field"><label for="k-email">Correo</label><input id="k-email" type="email" inputmode="email" autocomplete="email" placeholder="tu@correo.cl"></div>
           </div>
           <div class="submit-row">
             <button class="btn btn-cta" type="submit">Solicitar esta hora</button>
@@ -980,15 +982,16 @@ dialog::backdrop{background:rgba(6,18,22,.62)}
     var name=$("k-name").value.trim(),phone=$("k-phone").value.trim(),email=$("k-email").value.trim(),err=$("k-err");
     if(selDay===null||selBand===null){err.textContent="Elige un día y un horario.";return}
     if(!name){err.textContent="Escribe tu nombre.";$("k-name").focus();return}
+    var rut=RMRut.format($("k-rut").value);if(!RMRut.valid(rut)){err.textContent="Escribe un RUT válido (con dígito verificador).";$("k-rut").focus();return}
     if(!validPhone(phone)){err.textContent="Escribe un teléfono válido para confirmarte la hora.";$("k-phone").focus();return}
-    if(email&&!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){err.textContent="Revisa tu correo (debe llevar @) o déjalo en blanco.";$("k-email").focus();return}
+    if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){err.textContent="Escribe un correo válido (debe llevar @).";$("k-email").focus();return}
     err.textContent="";
     var when=longDate(days[selDay].date)+", "+bandWhen(selBand);
-    var msg="Hola, soy "+name+". Quiero reservar una hora en "+CFG.clinic+".\nMotivo: "+$("reason").value+"\nFecha: "+when+"\nMi teléfono: "+phone+(email?"\nMi correo: "+email:"");
+    var msg="Hola, soy "+name+". Quiero reservar una hora en "+CFG.clinic+".\nMotivo: "+$("reason").value+"\nFecha: "+when+"\nMi RUT: "+rut+"\nMi teléfono: "+phone+"\nMi correo: "+email;
     var subject="Solicitud de hora · "+$("reason").value;
     var detail=$("reason").value+", "+when+".";
     var sbtn=$("book-form").querySelector("button[type=submit]");setBusy(sbtn,true);
-    var payload={subject:subject,message:msg,name:name,phone:phone};if(email)payload.email=email;
+    var payload={subject:subject,message:msg,name:name,phone:phone,rut:rut,email:email};
     sendLead(payload).then(function(ok){
       setBusy(sbtn,false);
       renderDone($("book-done"),ok,subject,msg,detail+" Recibimos tu solicitud. La clínica te contactará para confirmar la hora e indicarte cómo pagar para reservarla.",detail+" Envía el correo y la clínica te confirma la hora e indica cómo pagar para reservarla.");

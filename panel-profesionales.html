@@ -209,7 +209,7 @@ table.tb td.n,table.tb th.n{text-align:right;font-variant-numeric:tabular-nums}
         <div><label for="p-rut">RUT *</label><input id="p-rut" required placeholder="12.345.678-5"></div>
         <div><label for="p-nombre">Nombre completo *</label><input id="p-nombre" required></div>
         <div><label for="p-email">Correo electrónico *</label><input id="p-email" type="email" required></div>
-        <div><label for="p-tel">Teléfono</label><input id="p-tel" type="tel" placeholder="+56 9 …"></div>
+        <div><label for="p-tel">Teléfono *</label><input id="p-tel" type="tel" required placeholder="+56 9 …"></div>
         <div><label for="p-nac">Fecha de nacimiento</label><input id="p-nac" type="date"></div>
       </div>
     </fieldset>
@@ -576,6 +576,7 @@ $("f-ficha").addEventListener("submit",async e=>{
   if(!rutOk($("p-rut").value)){m.className="msg err";m.textContent="El RUT del paciente no es válido.";return}
   const email=$("p-email").value.trim();
   if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){m.className="msg err";m.textContent="Revisa el correo: debe incluir @.";return}
+  if($("p-tel").value.replace(/\D/g,"").length<8){m.className="msg err";m.textContent="El teléfono es obligatorio (mínimo 8 dígitos).";return}
   b.disabled=true;m.className="msg";m.textContent="Guardando…";
   const g=id=>$(id).value.trim();
   const r=await api("/pro/pacientes",{paciente:{rut:g("p-rut"),nombre:g("p-nombre"),email,telefono:g("p-tel"),fecha_nac:g("p-nac")||null},

@@ -431,6 +431,7 @@ button,input,select{font:inherit;color:inherit}
 </style>
 <link rel="stylesheet" href="agenda.css">
 <link rel="stylesheet" href="tema.css">
+<script src="rut.js" defer></script>
 </head>
 <body>
 <header class="top" id="top">
@@ -461,7 +462,9 @@ button,input,select{font:inherit;color:inherit}
         <p class="sub">Déjanos tus datos y te confirmamos la hora.</p>
         <form class="form" id="lead-form" novalidate>
           <div class="field"><label for="f-name">Nombre</label><input id="f-name" autocomplete="name" placeholder="Tu nombre y apellido"></div>
+          <div class="field"><label for="f-rut">RUT</label><input id="f-rut" data-rut inputmode="text" autocomplete="off" placeholder="12.345.678-5" maxlength="12"></div>
           <div class="field"><label for="f-phone">Teléfono o WhatsApp</label><input id="f-phone" type="tel" autocomplete="tel" placeholder="+56 9 ..."></div>
+          <div class="field"><label for="f-email">Correo</label><input id="f-email" type="email" inputmode="email" autocomplete="email" placeholder="tu@correo.cl"></div>
           <div class="field"><div id="sched"></div></div>
           <button class="btn btn-cta btn-block" type="submit">Agendar evaluación</button>
           <p class="err" id="f-err" role="alert"></p>
@@ -681,13 +684,15 @@ button,input,select{font:inherit;color:inherit}
     e.preventDefault();
     var name=$("f-name").value.trim(),phone=$("f-phone").value.trim(),err=$("f-err");
     if(!name){err.textContent="Escribe tu nombre.";$("f-name").focus();return}
+    var rut=RMRut.format($("f-rut").value);if(!RMRut.valid(rut)){err.textContent="Escribe un RUT válido (con dígito verificador).";$("f-rut").focus();return}
     if(phone.replace(/\D/g,"").length<8){err.textContent="Escribe un teléfono válido para confirmarte la hora.";$("f-phone").focus();return}
+    var email=$("f-email").value.trim();if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){err.textContent="Escribe un correo válido (debe llevar @).";$("f-email").focus();return}
     var pick=sch.value();if(!pick){err.textContent="Elige un día y un horario.";sch.focus();return}
     err.textContent="";
-    var msg="Hola, soy "+name+". Quiero agendar una evaluación para cambiar mis amalgamas por resinas en "+CFG.clinic+".\nFecha y hora: "+pick.when+"\nMi teléfono: "+phone;
+    var msg="Hola, soy "+name+". Quiero agendar una evaluación para cambiar mis amalgamas por resinas en "+CFG.clinic+".\nFecha y hora: "+pick.when+"\nMi RUT: "+rut+"\nMi teléfono: "+phone+"\nMi correo: "+email;
     var subject="Solicitud de hora · cambio de amalgamas por resinas";
     var sbtn=$("lead-form").querySelector("button[type=submit]");setBusy(sbtn,true);
-    sendLead({subject:subject,message:msg,name:name,phone:phone}).then(function(ok){
+    sendLead({subject:subject,message:msg,name:name,phone:phone,rut:rut,email:email}).then(function(ok){
       setBusy(sbtn,false);
       renderDone($("lead-done"),ok,subject,msg,"Recibimos tu solicitud. La clínica te contactará para confirmar la hora de tu evaluación.","Envía el correo y la clínica te confirma la hora de tu evaluación.");
       $("lead-form").hidden=true;trackConversion();
