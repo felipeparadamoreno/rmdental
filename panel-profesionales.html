@@ -50,6 +50,33 @@ legend{font-weight:700;padding:0 8px;color:var(--teal-d)}
 .res button,.chip{text-align:left;padding:9px 12px;border:1px solid var(--line);background:var(--card);border-radius:9px;font:inherit;color:var(--ink);cursor:pointer}
 .res button:hover{border-color:var(--teal)}.chip{display:flex;justify-content:space-between;gap:10px;align-items:center;cursor:default;background:rgba(23,169,184,.1);border-color:var(--teal)}
 .chip button{border:0;background:none;color:var(--teal-d);font:inherit;font-weight:700;cursor:pointer}
+.risk{display:flex;flex-wrap:wrap;gap:4px 10px;align-items:baseline;margin-top:10px;padding:10px 12px;border-radius:10px;border:1px solid;font-size:14px}
+.risk b{font-weight:700}
+.risk.leve{background:#fff6dc;border-color:#ecd48a;color:#6b4e00}
+.risk.grave{background:#fde8e8;border-color:#f0b0b0;color:#8f1a1a}
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin:12px 0 4px}
+.kpi{border:1px solid var(--line);border-radius:12px;padding:12px 14px;background:var(--card)}
+.kpi small{display:block;color:var(--mut);font-size:12px;font-weight:700;letter-spacing:.04em;text-transform:uppercase}
+.kpi b{display:block;font-size:22px;margin-top:2px;font-variant-numeric:tabular-nums}
+.kpi i{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:6px}
+.k-rojo i{background:#d64545}.k-ama i{background:#f2b705}.k-ver i{background:#2e9e5b}
+.chartbox svg{display:block;width:100%;max-width:520px;height:auto}
+.chartbox .lbl{fill:var(--ink);font:600 12px Arial,Helvetica,sans-serif}
+.chartbox .val{fill:var(--ink);font:700 12px Arial,Helvetica,sans-serif}
+.chartbox .ax{stroke:var(--line);stroke-width:1}
+.mov .m-m{font-weight:700;font-variant-numeric:tabular-nums;white-space:nowrap}
+.mov.anul{opacity:.55}.mov.anul b{text-decoration:line-through}
+.tg.cargo{background:#fde8e8;color:#8f1a1a}.tg.pago{background:#e1f4e8;color:#17743b}
+table.tb{width:100%;border-collapse:collapse;font-size:14px}table.tb th,table.tb td{text-align:left;padding:8px 6px;border-bottom:1px solid var(--line)}
+table.tb td.n,table.tb th.n{text-align:right;font-variant-numeric:tabular-nums}
+.tbwrap{overflow-x:auto}
+.pay{margin:0 0 18px;padding-bottom:16px;border-bottom:1px solid var(--line)}
+.pay h3{margin:0 0 6px;font-size:15px}
+.pay svg{display:block;width:100%;max-width:420px;height:auto}
+.pay .lbl{fill:var(--ink);font:600 13px Arial,Helvetica,sans-serif}
+.pay .val{fill:var(--ink);font:700 13px Arial,Helvetica,sans-serif}
+.pay .ax{stroke:var(--line);stroke-width:1}
+.pay .note{font-size:13px;color:var(--mut);margin:6px 0 0}
 .citaI{display:flex;justify-content:space-between;align-items:center;gap:10px;border:1px solid var(--line);border-radius:10px;padding:10px 12px;margin-top:8px}
 .citaI small{color:var(--mut)}.tg{font-size:12px;font-weight:700;border-radius:99px;padding:2px 9px;background:rgba(23,169,184,.15);color:var(--teal-d)}
 .tg.cancelada{background:#eee;color:#666}.tg.realizada{background:rgba(23,116,59,.15);color:var(--ok)}
@@ -102,6 +129,9 @@ legend{font-weight:700;padding:0 8px;color:var(--teal-d)}
     <button class="opt" data-go="agenda"><div class="ic">📅</div><b>Agendar hora a un paciente</b><span>Elige paciente, día y hora. La cita aparece de inmediato en su perfil.</span></button>
     <button class="opt" data-go="trat"><div class="ic">🩻</div><b>Tratamiento y radiografías</b><span>Registra hallazgos, tratamiento, sesiones restantes, valor y sube radiografías. El paciente lo ve en su perfil.</span></button>
     <button class="opt" data-go="ficha"><div class="ic">🦷</div><b>Agregar ficha de paciente</b><span>Registra antecedentes clínicos y da de alta al paciente en la Red, con acceso a su perfil.</span></button>
+    <button class="opt" data-go="trib"><div class="ic">🧾</div><b>Documentos tributarios</b><span>Guarda boletas, facturas y comprobantes de pago de cada paciente y consúltalos cuando los necesites.</span></button>
+    <button class="opt" data-go="fin"><div class="ic">💳</div><b>Finanzas del paciente</b><span>Cuánto debe, cuánto ha pagado y cuánto le falta, con su historial de cargos y pagos.</span></button>
+    <button class="opt" data-go="dueno" id="m-dueno" hidden><div class="ic">📊</div><b>Panel del dueño</b><span>Cuánto dinero ha entrado, cuánto falta por entrar y quiénes tienen deuda.</span></button>
   </div>
   <p style="margin-top:22px"><a class="btn sec" href="segunda-opinion.html">Emitir segunda opinión</a>
   <button class="btn sec" id="b-out" type="button" style="margin-left:8px">Cerrar sesión</button></p>
@@ -134,6 +164,7 @@ legend{font-weight:700;padding:0 8px;color:var(--teal-d)}
       <input id="a-q" placeholder="Escribe al menos 2 letras o el RUT">
       <div class="res" id="a-res"></div>
       <div class="chip" id="a-sel" hidden><span id="a-selt"></span><button type="button" id="a-cambiar">Cambiar</button></div>
+      <div id="a-risk"></div>
       <label for="a-fecha">Fecha *</label>
       <input id="a-fecha" type="date" required>
       <label>Hora * <span style="font-weight:400">(30 minutos)</span></label>
@@ -194,6 +225,7 @@ legend{font-weight:700;padding:0 8px;color:var(--teal-d)}
     <input id="t-q" placeholder="Escribe al menos 2 letras o el RUT" autocomplete="off">
     <div class="res" id="t-res"></div>
     <div class="chip" id="t-sel" hidden><span id="t-selt"></span><button type="button" id="t-cambiar">Cambiar</button></div>
+    <div id="t-risk"></div>
   </div>
   <div id="t-body" hidden>
     <div class="split">
@@ -225,6 +257,100 @@ legend{font-weight:700;padding:0 8px;color:var(--teal-d)}
       <div class="card"><h2 style="margin-top:0">Radiografías del paciente</h2><div id="x-list"><span class="empty">Elige un paciente.</span></div></div>
     </div>
   </div>
+</section>
+<!-- DOCUMENTOS TRIBUTARIOS -->
+<section id="v-trib" hidden class="noprint">
+  <button class="back" data-go="menu">← Volver al inicio</button>
+  <h1>Documentos tributarios</h1>
+  <p class="lead">Boletas, facturas y comprobantes del paciente, guardados en la ficha de la Red. El paciente no los ve en su perfil.</p>
+  <div class="card">
+    <label for="tb-q">Paciente (nombre o RUT) *</label>
+    <input id="tb-q" placeholder="Escribe al menos 2 letras o el RUT" autocomplete="off">
+    <div class="res" id="tb-res"></div>
+    <div class="chip" id="tb-sel" hidden><span id="tb-selt"></span><button type="button" id="tb-cambiar">Cambiar</button></div>
+    <div id="tb-risk"></div>
+  </div>
+  <div id="tb-body" hidden>
+    <div class="split" style="margin-top:16px">
+      <form class="card" id="f-tb" autocomplete="off">
+        <h2 style="margin-top:0">Agregar documento</h2>
+        <label for="tb-tipo">Tipo *</label>
+        <select id="tb-tipo"><option>Boleta</option><option>Factura</option><option>Boleta de honorarios</option><option>Nota de crédito</option><option>Comprobante de pago</option><option>Otro</option></select>
+        <div class="row2">
+          <div><label for="tb-num">N° de documento</label><input id="tb-num" maxlength="30" inputmode="numeric" placeholder="Ej. 10452"></div>
+          <div><label for="tb-fecha">Fecha de emisión *</label><input id="tb-fecha" type="date" required></div>
+          <div><label for="tb-monto">Monto (CLP)</label><input id="tb-monto" type="number" min="0" inputmode="numeric" placeholder="Ej. 60000"></div>
+        </div>
+        <label for="tb-file">Archivo (PDF, JPG, PNG o WEBP, máx. 12 MB) *</label>
+        <input id="tb-file" type="file" accept="application/pdf,image/jpeg,image/png,image/webp" required>
+        <label for="tb-notas">Nota interna</label><input id="tb-notas" maxlength="200" placeholder="Ej. Abono 1 de 3, tratamiento de endodoncia">
+        <p class="msg" id="tb-msg" role="alert"></p>
+        <button class="btn" id="tb-btn" type="submit">Guardar documento</button>
+      </form>
+      <div class="card"><h2 style="margin-top:0">Documentos del paciente</h2><div id="tb-sum" class="note" style="font-size:13px;color:var(--mut);margin-bottom:8px"></div><div id="tb-list"><span class="empty">Elige un paciente.</span></div></div>
+    </div>
+  </div>
+</section>
+<!-- FINANZAS DEL PACIENTE -->
+<section id="v-fin" hidden class="noprint">
+  <button class="back" data-go="menu">← Volver al inicio</button>
+  <h1>Finanzas del paciente</h1>
+  <p class="lead">Historial de cargos y pagos. Solo lo ve el personal de la clínica.</p>
+  <div class="card">
+    <label for="f-q">Paciente (nombre o RUT) *</label>
+    <input id="f-q" placeholder="Escribe al menos 2 letras o el RUT" autocomplete="off">
+    <div class="res" id="f-res"></div>
+    <div class="chip" id="f-sel" hidden><span id="f-selt"></span><button type="button" id="f-cambiar">Cambiar</button></div>
+    <div id="f-risk"></div>
+  </div>
+  <div id="f-body" hidden>
+    <div class="card" style="margin-top:16px">
+      <div class="kpis" id="f-kpis"></div>
+      <div class="chartbox" id="f-chart"></div>
+      <p class="msg" id="f-estado"></p>
+    </div>
+    <div class="split" style="margin-top:16px">
+      <div id="f-forms" hidden>
+        <form class="card" id="f-cargo" autocomplete="off">
+          <h2 style="margin-top:0">Agregar cargo</h2>
+          <label for="fc-conc">Concepto *</label><input id="fc-conc" maxlength="160" placeholder="Ej. Endodoncia pieza 36" required>
+          <div class="row2"><div><label for="fc-monto">Monto (CLP) *</label><input id="fc-monto" type="number" min="1" inputmode="numeric" required></div>
+          <div><label for="fc-fecha">Fecha *</label><input id="fc-fecha" type="date" required></div></div>
+          <p class="msg" id="fc-msg" role="alert"></p>
+          <button class="btn" type="submit" id="fc-btn">Guardar cargo</button>
+        </form>
+        <form class="card" id="f-pago" autocomplete="off" style="margin-top:16px">
+          <h2 style="margin-top:0">Registrar pago</h2>
+          <div class="row2"><div><label for="fp-monto">Monto (CLP) *</label><input id="fp-monto" type="number" min="1" inputmode="numeric" required></div>
+          <div><label for="fp-fecha">Fecha *</label><input id="fp-fecha" type="date" required></div></div>
+          <label for="fp-medio">Medio de pago *</label>
+          <select id="fp-medio"><option>Efectivo</option><option>Transferencia</option><option>Débito</option><option>Crédito</option><option>Cheque</option><option>Otro</option></select>
+          <label for="fp-nota">Nota</label><input id="fp-nota" maxlength="200" placeholder="Ej. Abono 1 de 3">
+          <p class="msg" id="fp-msg" role="alert"></p>
+          <button class="btn" type="submit" id="fp-btn">Guardar pago</button>
+        </form>
+      </div>
+      <div class="card" id="f-histcard"><h2 style="margin-top:0">Historial</h2><div id="f-list"><span class="empty">Elige un paciente.</span></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- PANEL DEL DUEÑO -->
+<section id="v-dueno" hidden class="noprint">
+  <button class="back" data-go="menu">← Volver al inicio</button>
+  <h1>Panel del dueño</h1>
+  <p class="lead">Dinero que ha entrado, dinero que falta por entrar y pacientes con deuda.</p>
+  <div class="card">
+    <label for="d-meses">Período</label>
+    <select id="d-meses"><option value="1">Este mes</option><option value="3">Últimos 3 meses</option><option value="6" selected>Últimos 6 meses</option><option value="12">Últimos 12 meses</option></select>
+    <div class="kpis" id="d-kpis"></div>
+    <p class="msg" id="d-msg" role="alert"></p>
+  </div>
+  <div class="split" style="margin-top:16px">
+    <div class="card"><h2 style="margin-top:0">Ingresos por mes</h2><div class="chartbox" id="d-ing"></div></div>
+    <div class="card"><h2 style="margin-top:0">Por cobrar según antigüedad</h2><div class="chartbox" id="d-ant"></div></div>
+  </div>
+  <div class="card" style="margin-top:16px"><h2 style="margin-top:0">Mayores deudas</h2><div class="tbwrap" id="d-deud"></div></div>
 </section>
 </main>
 
@@ -262,12 +388,12 @@ function rutOk(r){
 
 /* Vistas */
 function show(v){
-  ["login","menu","docs","ficha","agenda","trat"].forEach(n=>$("v-"+n).hidden=n!==v);
+  ["login","menu","docs","ficha","agenda","trat","trib","fin","dueno"].forEach(n=>$("v-"+n).hidden=n!==v);
   window.scrollTo(0,0);
 }
 document.addEventListener("click",e=>{const b=e.target.closest("[data-go]");if(b)show(b.dataset.go)});
 function setMe(me){
-  ME=me;const w=$("who");
+  ME=me;aplicarRol();const w=$("who");
   if(me){w.hidden=false;w.innerHTML="<b>"+esc(me.nombre)+"</b><br>"+esc(me.especialidad||"")}else w.hidden=true;
 }
 function boot(){
@@ -404,11 +530,12 @@ $("a-q").addEventListener("input",()=>{
     r.d.pacientes.forEach(p=>{const b=document.createElement("button");b.type="button";b.textContent=p.nombre+" · "+p.rut;b.onclick=()=>pickPac(p);box.appendChild(b)});
   },250);
 });
+function riesgoBadge(p){const r=p&&p.riesgo;if(!r||!r.nivel||r.nivel==="ninguno")return"";const n=r.nivel==="grave"?"grave":"leve";const f=(r.factores||[]).map(esc).join(", ");return'<div class="risk '+n+'" role="note"><b>Riesgo '+n+'</b>'+(f?'<span>'+f+'</span>':"")+'</div>'}
 function pickPac(p){
   selPac=p;$("a-res").innerHTML="";$("a-q").hidden=true;$("a-q").value="";
-  $("a-selt").textContent=p.nombre+" · "+p.rut;$("a-sel").hidden=false;loadCitas();
+  $("a-selt").textContent=p.nombre+" · "+p.rut;$("a-sel").hidden=false;$("a-risk").innerHTML=riesgoBadge(p);loadCitas();
 }
-$("a-cambiar").addEventListener("click",()=>{selPac=null;$("a-sel").hidden=true;$("a-q").hidden=false;$("a-q").focus();$("a-list").innerHTML='<span class="empty">Elige un paciente.</span>'});
+$("a-cambiar").addEventListener("click",()=>{selPac=null;$("a-risk").innerHTML="";$("a-sel").hidden=true;$("a-q").hidden=false;$("a-q").focus();$("a-list").innerHTML='<span class="empty">Elige un paciente.</span>'});
 function sesionVencida(){try{sessionStorage.removeItem(SESION)}catch(e){}setMe(null);show("login")}
 $("a-fecha").addEventListener("change",()=>{selHora=null;loadSlots()});
 async function loadSlots(){
@@ -474,9 +601,9 @@ $("t-q").addEventListener("input",()=>{
 });
 function tPick(p){
   tPac=p;tReset();$("t-res").innerHTML="";$("t-q").hidden=true;$("t-q").value="";
-  $("t-selt").textContent=p.nombre+" · "+p.rut;$("t-sel").hidden=false;$("t-body").hidden=false;tLoad();
+  $("t-selt").textContent=p.nombre+" · "+p.rut;$("t-sel").hidden=false;$("t-risk").innerHTML=riesgoBadge(p);$("t-body").hidden=false;tLoad();
 }
-$("t-cambiar").addEventListener("click",()=>{tPac=null;tReset();$("t-sel").hidden=true;$("t-body").hidden=true;$("t-q").hidden=false;$("t-q").focus()});
+$("t-cambiar").addEventListener("click",()=>{tPac=null;$("t-risk").innerHTML="";tReset();$("t-sel").hidden=true;$("t-body").hidden=true;$("t-q").hidden=false;$("t-q").focus()});
 $("t-cancel").addEventListener("click",tReset);
 async function tLoad(){
   if(!tPac)return;
@@ -548,6 +675,201 @@ $("f-rx").addEventListener("submit",async e=>{
   m.className="msg ok";m.textContent="Radiografía subida. El paciente ya la ve en su perfil.";$("x-file").value="";$("x-desc").value="";tLoad();
 });
 boot();
+
+/* Documentos tributarios */
+let bPac=null,bT;
+document.addEventListener("click",e=>{if(e.target.closest('[data-go="trib"]')){$("tb-fecha").value=hoyCL()}});
+$("tb-q").addEventListener("input",()=>{
+  clearTimeout(bT);const q=$("tb-q").value.trim(),box=$("tb-res");
+  if(q.length<2){box.innerHTML="";return}
+  bT=setTimeout(async()=>{
+    const r=await api("/pro/pacientes?q="+encodeURIComponent(q));
+    if(r.status===401)return sesionVencida();
+    box.innerHTML="";
+    if(!r.ok||!r.d.pacientes.length){box.innerHTML='<span class="empty">Sin resultados.</span>';return}
+    r.d.pacientes.forEach(p=>{const b=document.createElement("button");b.type="button";b.textContent=p.nombre+" · "+p.rut;b.onclick=()=>bPick(p);box.appendChild(b)});
+  },250);
+});
+function bPick(p){
+  bPac=p;$("tb-res").innerHTML="";$("tb-q").hidden=true;$("tb-q").value="";
+  $("tb-selt").textContent=p.nombre+" · "+p.rut;$("tb-sel").hidden=false;$("tb-risk").innerHTML=riesgoBadge(p);$("tb-body").hidden=false;bLoad();
+}
+$("tb-cambiar").addEventListener("click",()=>{bPac=null;$("tb-risk").innerHTML="";$("tb-sel").hidden=true;$("tb-body").hidden=true;$("tb-q").hidden=false;$("tb-q").focus()});
+async function bLoad(){
+  if(!bPac)return;
+  const box=$("tb-list"),sum=$("tb-sum");box.innerHTML='<span class="empty">Cargando…</span>';sum.textContent="";
+  const r=await api("/pro/tributarios?paciente_id="+bPac.id);
+  if(r.status===401)return sesionVencida();
+  box.innerHTML="";
+  if(!r.ok){box.innerHTML='<span class="empty">No se pudo cargar.</span>';return}
+  const L=r.d.documentos||[];
+  if(!L.length){box.innerHTML='<span class="empty">Sin documentos tributarios.</span>';return}
+  const tot=L.reduce((a,x)=>a+(x.tipo==="Nota de crédito"?-1:1)*Number(x.monto||0),0);
+  sum.textContent=L.length+(L.length===1?" documento":" documentos")+" · Monto neto: "+clp(tot);
+  L.forEach(x=>{
+    const d=document.createElement("div");d.className="citaI";
+    d.innerHTML='<div><b>'+esc(x.tipo)+(x.numero?' N° '+esc(x.numero):'')+'</b><br><small>'+esc(fechaL(String(x.fecha).slice(0,10)))+(x.monto!=null?' · '+esc(clp(x.monto)):'')+'</small>'+(x.notas?'<br><small>'+esc(x.notas)+'</small>':'')+'</div><div></div>';
+    const v=document.createElement("button");v.type="button";v.className="btn sec";v.style.padding="6px 12px";v.textContent="Ver";
+    v.onclick=async()=>{
+      const w=window.open("","_blank");const s=sesion();
+      try{
+        const q=await fetch(API+"/pro/tributarios/"+x.id+"/archivo",{headers:{Authorization:"Bearer "+(s&&s.token)}});
+        if(!q.ok)throw 0;const u=URL.createObjectURL(await q.blob());
+        if(w)w.location=u;else location.href=u;
+      }catch(err){if(w)w.close();alert("No se pudo abrir el documento.")}
+    };
+    d.lastChild.appendChild(v);box.appendChild(d);
+  });
+}
+$("f-tb").addEventListener("submit",async e=>{
+  e.preventDefault();const m=$("tb-msg"),b=$("tb-btn"),f=$("tb-file").files[0];
+  if(!bPac){m.className="msg err";m.textContent="Elige un paciente.";return}
+  if(!f){m.className="msg err";m.textContent="Elige un archivo.";return}
+  if(["application/pdf","image/jpeg","image/png","image/webp"].indexOf(f.type)<0){m.className="msg err";m.textContent="El archivo debe ser PDF, JPG, PNG o WEBP.";return}
+  if(f.size>12*1024*1024){m.className="msg err";m.textContent="El archivo supera los 12 MB.";return}
+  b.disabled=true;m.className="msg";m.textContent="Subiendo…";
+  const s=sesion();let r;
+  const qs="paciente_id="+bPac.id+"&tipo="+encodeURIComponent($("tb-tipo").value)+"&numero="+encodeURIComponent($("tb-num").value.trim())+
+    "&fecha="+encodeURIComponent($("tb-fecha").value)+"&monto="+encodeURIComponent($("tb-monto").value)+"&notas="+encodeURIComponent($("tb-notas").value.trim());
+  try{
+    const q=await fetch(API+"/pro/tributarios?"+qs,{method:"POST",headers:{"Content-Type":f.type,Authorization:"Bearer "+(s&&s.token)},body:f});
+    r={ok:q.ok,status:q.status,d:await q.json().catch(()=>({}))};
+  }catch(err){r={ok:false,status:0,d:{error:"No se pudo conectar con el servidor."}}}
+  b.disabled=false;
+  if(r.status===401)return sesionVencida();
+  if(!r.ok){m.className="msg err";m.textContent=r.d.error||"No se pudo guardar.";return}
+  m.className="msg ok";m.textContent="Documento guardado.";
+  $("tb-file").value="";$("tb-num").value="";$("tb-monto").value="";$("tb-notas").value="";bLoad();
+});
+
+/* ===== Roles ===== */
+function rol(){return (ME&&ME.rol)||"profesional"}   // profesional | secretaria | dueno
+function puedeEditarFin(){return rol()==="secretaria"||rol()==="dueno"}
+function aplicarRol(){
+  const m=$("m-dueno");if(m)m.hidden=rol()!=="dueno";
+}
+/* El servidor vuelve a revisar el rol en cada ruta: esto solo evita mostrar botones que no corresponden. */
+
+/* ===== Gráficos de barras ===== */
+function compactoCLP(n){
+  n=Number(n)||0;
+  if(n>=1e6)return"$"+(n/1e6).toFixed(1).replace(".",",")+" M";
+  if(n>=1e4)return"$"+Math.round(n/1e3)+" mil";
+  return clp(n);
+}
+function barrasSvg(items,opt){
+  opt=opt||{};
+  const W=360,H=230,base=184,top=34,pad=14,n=items.length;
+  const gap=n>4?(n>8?6:10):34,bw=(W-2*pad-(n-1)*gap)/n;
+  const max=Math.max.apply(null,items.map(i=>i.value).concat([1])),sc=(base-top)/max;
+  const fmt=opt.compacto?compactoCLP:clp;
+  let g='<line class="ax" x1="'+pad+'" y1="'+base+'" x2="'+(W-pad)+'" y2="'+base+'"/>';
+  items.forEach((it,k)=>{
+    const h=it.value>0?Math.max(it.value*sc,2):0,x=pad+k*(bw+gap),y=base-h,cx=x+bw/2;
+    g+='<rect x="'+x.toFixed(1)+'" y="'+y.toFixed(1)+'" width="'+bw.toFixed(1)+'" height="'+h.toFixed(1)+'" rx="3" fill="'+it.color+'"/>'+
+       '<text class="val" x="'+cx.toFixed(1)+'" y="'+(y-7).toFixed(1)+'" text-anchor="middle">'+esc(fmt(it.value))+'</text>'+
+       '<text class="lbl" x="'+cx.toFixed(1)+'" y="'+(base+18)+'" text-anchor="middle">'+esc(it.label)+'</text>';
+  });
+  const desc=items.map(i=>i.label+" "+fmt(i.value)).join(", ");
+  return'<svg viewBox="0 0 '+W+' '+H+'" role="img" aria-label="'+esc(desc)+'">'+g+'</svg>';
+}
+const MESES=["ene","feb","mar","abr","may","jun","jul","ago","sep","oct","nov","dic"];
+const ROJO="#d64545",AMARILLO="#f2b705",VERDE="#2e9e5b";
+
+/* ===== Finanzas del paciente ===== */
+let fPac=null,fT;
+document.addEventListener("click",e=>{if(e.target.closest('[data-go="fin"]')){$("fc-fecha").value=hoyCL();$("fp-fecha").value=hoyCL();$("f-forms").hidden=!puedeEditarFin()}});
+$("f-q").addEventListener("input",()=>{
+  clearTimeout(fT);const q=$("f-q").value.trim(),box=$("f-res");
+  if(q.length<2){box.innerHTML="";return}
+  fT=setTimeout(async()=>{
+    const r=await api("/pro/pacientes?q="+encodeURIComponent(q));
+    if(r.status===401)return sesionVencida();
+    box.innerHTML="";
+    if(!r.ok||!r.d.pacientes.length){box.innerHTML='<span class="empty">Sin resultados.</span>';return}
+    r.d.pacientes.forEach(p=>{const b=document.createElement("button");b.type="button";b.textContent=p.nombre+" · "+p.rut;b.onclick=()=>fPick(p);box.appendChild(b)});
+  },250);
+});
+function fPick(p){
+  fPac=p;$("f-res").innerHTML="";$("f-q").hidden=true;$("f-q").value="";
+  $("f-selt").textContent=p.nombre+" · "+p.rut;$("f-sel").hidden=false;$("f-risk").innerHTML=riesgoBadge(p);
+  $("f-body").hidden=false;$("f-forms").hidden=!puedeEditarFin();fLoad();
+}
+$("f-cambiar").addEventListener("click",()=>{fPac=null;$("f-risk").innerHTML="";$("f-sel").hidden=true;$("f-body").hidden=true;$("f-q").hidden=false;$("f-q").focus()});
+async function fLoad(){
+  if(!fPac)return;
+  const list=$("f-list");list.innerHTML='<span class="empty">Cargando…</span>';
+  const r=await api("/pro/finanzas/paciente/"+fPac.id);
+  if(r.status===401)return sesionVencida();
+  if(r.status===403){list.innerHTML='<span class="empty">No tienes permiso para ver las finanzas.</span>';return}
+  if(!r.ok){list.innerHTML='<span class="empty">No se pudo cargar.</span>';return}
+  const d=r.d;
+  $("f-kpis").innerHTML=
+    '<div class="kpi k-rojo"><small><i></i>Total a pagar</small><b>'+esc(clp(d.total))+'</b></div>'+
+    '<div class="kpi k-ama"><small><i></i>Por pagar</small><b>'+esc(clp(d.saldo))+'</b></div>'+
+    '<div class="kpi k-ver"><small><i></i>Ya pagado</small><b>'+esc(clp(d.pagado))+'</b></div>';
+  $("f-chart").innerHTML=barrasSvg([{label:"Total a pagar",value:d.total,color:ROJO},{label:"Por pagar",value:d.saldo,color:AMARILLO},{label:"Ya pagado",value:d.pagado,color:VERDE}]);
+  const pct=d.total>0?Math.round(Math.min(d.pagado,d.total)/d.total*100):0;
+  const e=$("f-estado");e.className="msg "+(d.saldo>0?"err":"ok");
+  e.textContent=d.total===0?"Sin cargos registrados.":d.saldo>0?"Con deuda: debe "+clp(d.saldo)+" ("+pct+"% pagado).":"Al día."+(d.a_favor>0?" Saldo a favor: "+clp(d.a_favor)+".":"");
+  const mov=d.cargos.map(c=>({t:"cargo",id:c.id,fecha:c.fecha,txt:c.concepto,monto:c.monto,anul:c.anulado,mot:c.anulado_motivo}))
+    .concat(d.pagos.map(p=>({t:"pago",id:p.id,fecha:p.fecha,txt:"Pago · "+p.medio+(p.nota?" · "+p.nota:""),monto:p.monto,anul:p.anulado,mot:p.anulado_motivo})))
+    .sort((a,b)=>a.fecha<b.fecha?1:a.fecha>b.fecha?-1:b.id-a.id);
+  list.innerHTML="";
+  if(!mov.length){list.innerHTML='<span class="empty">Sin movimientos.</span>';return}
+  mov.forEach(m=>{
+    const x=document.createElement("div");x.className="citaI mov"+(m.anul?" anul":"");
+    x.innerHTML='<div><span class="tg '+m.t+'">'+(m.t==="cargo"?"Cargo":"Pago")+'</span> <b>'+esc(m.txt)+'</b><br><small>'+esc(fechaL(m.fecha))+(m.anul?' · Anulado: '+esc(m.mot||""):"")+'</small></div><div><span class="m-m">'+(m.t==="pago"?"− ":"")+esc(clp(m.monto))+'</span></div>';
+    if(!m.anul&&puedeEditarFin()){
+      const b=document.createElement("button");b.type="button";b.className="btn sec";b.style.cssText="padding:4px 10px;margin-left:8px;font-size:12px";b.textContent="Anular";
+      b.onclick=async()=>{
+        const mot=prompt("Motivo de la anulación:");if(!mot||!mot.trim())return;
+        const q=await api("/pro/finanzas/"+(m.t==="cargo"?"cargos":"pagos")+"/"+m.id+"/anular",{motivo:mot.trim()});
+        if(q.status===401)return sesionVencida();
+        if(!q.ok){alert(q.d.error||"No se pudo anular.");return}
+        fLoad();
+      };
+      x.lastChild.appendChild(b);
+    }
+    list.appendChild(x);
+  });
+}
+async function enviarFin(form,msgId,btnId,path,body,limpiar){
+  const m=$(msgId),b=$(btnId);
+  if(!fPac){m.className="msg err";m.textContent="Elige un paciente.";return}
+  b.disabled=true;m.className="msg";m.textContent="Guardando…";
+  const r=await api(path,Object.assign({paciente_id:fPac.id},body));
+  b.disabled=false;
+  if(r.status===401)return sesionVencida();
+  if(!r.ok){m.className="msg err";m.textContent=r.d.error||"No se pudo guardar.";return}
+  m.className="msg ok";m.textContent="Guardado.";limpiar();fLoad();
+}
+$("f-cargo").addEventListener("submit",e=>{e.preventDefault();
+  enviarFin("f-cargo","fc-msg","fc-btn","/pro/finanzas/cargos",{concepto:$("fc-conc").value,monto:$("fc-monto").value,fecha:$("fc-fecha").value},()=>{$("fc-conc").value="";$("fc-monto").value=""})});
+$("f-pago").addEventListener("submit",e=>{e.preventDefault();
+  enviarFin("f-pago","fp-msg","fp-btn","/pro/finanzas/pagos",{monto:$("fp-monto").value,fecha:$("fp-fecha").value,medio:$("fp-medio").value,nota:$("fp-nota").value},()=>{$("fp-monto").value="";$("fp-nota").value=""})});
+
+/* ===== Panel del dueño ===== */
+async function dLoad(){
+  const m=$("d-msg");m.className="msg";m.textContent="Cargando…";
+  const r=await api("/pro/finanzas/resumen?meses="+encodeURIComponent($("d-meses").value));
+  if(r.status===401)return sesionVencida();
+  if(r.status===403){m.className="msg err";m.textContent="Esta sección es solo para el dueño de la clínica.";return}
+  if(!r.ok){m.className="msg err";m.textContent="No se pudo cargar el resumen.";return}
+  m.textContent="";const d=r.d;
+  $("d-kpis").innerHTML=
+    '<div class="kpi k-ver"><small><i></i>Ha entrado</small><b>'+esc(clp(d.ingresado_periodo))+'</b></div>'+
+    '<div class="kpi k-ama"><small><i></i>Falta por entrar</small><b>'+esc(clp(d.por_cobrar))+'</b></div>'+
+    '<div class="kpi"><small>Pacientes con deuda</small><b>'+esc(d.pacientes_con_deuda)+'</b></div>';
+  $("d-ing").innerHTML=barrasSvg(d.meses.map(x=>({label:MESES[parseInt(x.mes.slice(5),10)-1],value:x.ingresos,color:VERDE})),{compacto:true});
+  $("d-ant").innerHTML=barrasSvg(d.antiguedad.map(x=>({label:x.rango.replace(" días","d").replace("Más de ","+"),value:x.monto,color:AMARILLO})),{compacto:true});
+  const box=$("d-deud");
+  if(!d.deudores.length){box.innerHTML='<span class="empty">No hay pacientes con deuda.</span>';return}
+  box.innerHTML='<table class="tb"><thead><tr><th>Paciente</th><th>RUT</th><th class="n">Debe</th><th class="n">Días</th></tr></thead><tbody>'+
+    d.deudores.map(x=>'<tr><td>'+esc(x.nombre)+'</td><td>'+esc(x.rut)+'</td><td class="n">'+esc(clp(x.saldo))+'</td><td class="n">'+esc(x.dias)+'</td></tr>').join("")+'</tbody></table>';
+}
+$("d-meses").addEventListener("change",dLoad);
+document.addEventListener("click",e=>{if(e.target.closest('[data-go="dueno"]'))dLoad()});
 </script>
 </body>
 </html>

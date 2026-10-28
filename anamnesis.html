@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Anamnesis | RM Dental</title>
+<meta name="robots" content="noindex,nofollow">
+<link rel="icon" type="image/png" sizes="64x64" href="favicon.png"><link rel="icon" href="favicon.ico" sizes="any">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap">
+<style>
+:root{--bg:#F4FCFD;--surface:#fff;--fg:#10243A;--muted:#51647A;--line:#D5EEF2;--accent:#05808E;--accent-soft:#E3F6F8;--on-accent:#fff;--okc:#17743B;--errc:#B3261E}
+@media (prefers-color-scheme:dark){:root:not([data-theme=light]){--bg:#0c1a1d;--surface:#122428;--fg:#e7f2f4;--muted:#94adb2;--line:#25393d;--accent:#4fc3d1;--accent-soft:#17414a;--on-accent:#0a1a1f;--okc:#6fd49a;--errc:#ff8a80}}
+*{box-sizing:border-box}[hidden]{display:none!important}
+body{margin:0;background:var(--bg);color:var(--fg);font:15px/1.5 "Poppins",system-ui,Arial,sans-serif}
+.an-top{background:var(--surface);border-bottom:1px solid var(--line);padding:10px 16px}
+.an-top a{display:inline-block}.an-top img{height:34px;width:auto;display:block;background:#fff;border-radius:6px;padding:3px 6px}
+.an-wrap{max-width:720px;margin:0 auto;padding:20px 16px 48px;display:flex;flex-direction:column;gap:16px}
+h1{font-size:26px;line-height:1.2;margin:0}
+.an-lead{color:var(--muted);margin:4px 0 0}
+.an-card{background:var(--surface);border:1px solid var(--line);border-radius:12px}
+.an-pad{padding:18px 16px}
+.an-prog{display:flex;flex-direction:column;gap:6px}
+.an-prog-t{display:flex;justify-content:space-between;font-size:13px;color:var(--muted)}
+.an-bar{height:6px;background:var(--line);border-radius:3px;overflow:hidden}.an-bar span{display:block;height:100%;width:0;background:var(--accent);transition:width .25s}
+.an-head{width:100%;display:flex;align-items:center;gap:12px;text-align:left;font:inherit;color:var(--fg);background:none;border:0;padding:14px 16px;cursor:pointer;min-height:56px}
+.an-head b{flex:1;min-width:0;font-size:13px;letter-spacing:.04em;text-transform:uppercase}
+.an-head small{color:var(--muted);white-space:nowrap}
+.an-chev{width:18px;height:18px;flex:none;color:var(--muted);transition:transform .2s}
+.an-head[aria-expanded=false] .an-chev{transform:rotate(-90deg)}
+.an-body{border-top:1px solid var(--line)}
+.an-q{padding:16px;display:flex;flex-direction:column;gap:10px;border-bottom:1px solid var(--line)}
+.an-q:last-child{border-bottom:0}
+.an-qh{display:flex;gap:10px;align-items:baseline}
+.an-id{font-size:12px;color:var(--accent);font-weight:600;min-width:32px}
+.an-qt strong{font-weight:600;display:block}
+.an-qt span{display:block;font-size:13px;color:var(--muted);margin-top:2px}
+.an-q.done .an-id::after{content:" ✓";color:var(--okc)}
+.an-opts{display:grid;grid-template-columns:repeat(2,1fr);gap:6px;border:0;padding:0;margin:0;min-width:0}
+@media(min-width:520px){.an-opts{grid-template-columns:repeat(4,1fr)}}
+.an-opt{position:relative}
+.an-opt input{position:absolute;inset:0;width:100%;height:100%;margin:0;opacity:0;cursor:pointer}
+.an-opt label{display:flex;align-items:center;justify-content:center;text-align:center;min-height:44px;padding:6px 8px;font-size:14px;border:1px solid var(--line);border-radius:8px;background:var(--bg);pointer-events:none}
+.an-opt input:checked+label{background:var(--accent);border-color:var(--accent);color:var(--on-accent);font-weight:600}
+.an-opt input:focus-visible+label{outline:2px solid var(--accent);outline-offset:2px}
+.an-obs{display:flex;flex-direction:column;gap:4px}
+.an-obs label{font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.an-obs input{font:inherit;font-size:14px;color:var(--fg);background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:10px;min-height:42px;width:100%}
+.an-btn{font:inherit;font-weight:600;font-size:15px;color:var(--fg);background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:10px 16px;min-height:46px;cursor:pointer}
+.an-btn.main{background:var(--accent);border-color:var(--accent);color:var(--on-accent);width:100%}
+.an-btn:disabled{opacity:.6;cursor:default}
+.an-confirm{background:var(--accent-soft);border:1px solid var(--accent);border-radius:10px;padding:14px;display:flex;flex-direction:column;gap:10px}
+.an-confirm p{margin:0}.an-row{display:flex;flex-wrap:wrap;gap:8px}
+.an-msg{min-height:20px;font-size:14px;margin:0}.an-msg.err{color:var(--errc)}
+.an-done h2{margin:0 0 6px;font-size:22px;color:var(--okc)}.an-done p{margin:0 0 8px}
+.an-login p{margin:0 0 12px}
+.an-sel{font:inherit;font-size:14px;color:var(--fg);background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:10px;min-height:44px;width:100%}
+.an-f{display:flex;flex-direction:column;gap:4px}
+.an-f label{font-size:12px;font-weight:600;color:var(--muted)}
+.an-f input[type=text]{font:inherit;font-size:14px;color:var(--fg);background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:10px;min-height:44px;width:100%}
+.an-grid{display:grid;grid-template-columns:1fr;gap:12px}
+@media(min-width:520px){.an-grid.two{grid-template-columns:1fr 1fr}}
+.an-priv{font-size:13px;color:var(--muted);margin:0}
+a.an-link{display:inline-block;background:var(--accent);color:var(--on-accent);text-decoration:none;font-weight:600;padding:12px 18px;border-radius:8px}
+</style>
+<link rel="stylesheet" href="tema.css">
+</head>
+<body>
+<header class="an-top"><a href="index.html" aria-label="RM Dental, volver al inicio"><img src="logo.png" alt="Red Metropolitana Dental" width="640" height="99"></a></header>
+
+<main class="an-wrap">
+  <div>
+    <h1>Encuesta de salud</h1>
+    <p class="an-lead" id="lead">Responde con calma. Tus respuestas ayudan a que tu atención dental sea segura.</p>
+  </div>
+
+  <section class="an-card an-pad an-login" id="needLogin" hidden>
+    <p>Para responder la encuesta primero debes ingresar a tu portal de paciente con tu RUT.</p>
+    <a class="an-link" href="portal-pacientes.html">Ir al portal de pacientes</a>
+  </section>
+
+  <section class="an-card an-pad an-done" id="done" hidden aria-live="polite">
+    <h2>Gracias, quedó registrada</h2>
+    <p id="doneMsg"></p>
+    <a class="an-link" href="portal-pacientes.html">Volver a mi portal</a>
+  </section>
+
+  <div id="form" hidden>
+    <div class="an-prog" aria-live="polite">
+      <div class="an-prog-t"><span id="pt">0 de 19 respondidas</span><span id="pp">0%</span></div>
+      <div class="an-bar"><span id="pb"></span></div>
+    </div>
+
+    <section class="an-card" style="margin-top:16px">
+      <button class="an-head" id="tg" type="button" aria-expanded="true" aria-controls="qs">
+        <b>1 · Motivo de consulta y enfermedad actual</b><small id="sc">0/19</small>
+        <svg class="an-chev" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 8l5 5 5-5"/></svg>
+      </button>
+      <div class="an-body" id="qs"></div>
+    </section>
+
+    <section class="an-card" id="org" style="margin-top:16px" hidden>
+      <div class="an-head" style="cursor:default"><b>2 · Origen del paciente</b></div>
+      <div class="an-body an-pad" style="display:flex;flex-direction:column;gap:16px">
+        <p class="an-priv">Solo te lo preguntamos esta vez. Usamos estos datos para completar tu ficha y entender cómo llegan los pacientes a la clínica. Solo el personal autorizado puede verlos.</p>
+        <div class="an-f"><label for="o-canal">¿Cómo conociste la clínica? *</label>
+          <select class="an-sel" id="o-canal"><option value="">Selecciona una opción</option></select></div>
+        <div class="an-f"><label for="o-canal-det">Detalle (opcional)</label><input type="text" id="o-canal-det" maxlength="120" placeholder="Ej. nombre de quien te recomendó, empresa o convenio" autocomplete="off"></div>
+        <fieldset class="an-opts" style="grid-template-columns:repeat(2,1fr)"><legend style="font-size:12px;font-weight:600;color:var(--muted);margin-bottom:6px;position:static">¿Te derivó otro profesional o centro de salud? *</legend>
+          <div class="an-opt"><input type="radio" id="o-der-no" name="o-der" value="no"><label for="o-der-no">No</label></div>
+          <div class="an-opt"><input type="radio" id="o-der-si" name="o-der" value="si"><label for="o-der-si">Sí</label></div>
+        </fieldset>
+        <div id="o-der-box" class="an-grid" hidden>
+          <div class="an-f"><label for="o-der-tipo">Quién te derivó *</label>
+            <select class="an-sel" id="o-der-tipo"><option value="">Selecciona una opción</option><option>Profesional de la salud</option><option>Otra clínica</option><option>Centro de salud o consultorio</option><option>Otro paciente</option><option>Otro</option></select></div>
+          <div class="an-f"><label for="o-der-nom">Nombre de quien te derivó *</label><input type="text" id="o-der-nom" maxlength="120" autocomplete="off"></div>
+          <div class="an-f"><label for="o-der-cto">Teléfono o correo (opcional)</label><input type="text" id="o-der-cto" maxlength="120" autocomplete="off"></div>
+        </div>
+        <div class="an-grid two">
+          <div class="an-f"><label for="o-reg">Región *</label><select class="an-sel" id="o-reg"><option value="">Selecciona una región</option></select></div>
+          <div class="an-f"><label for="o-com">Comuna *</label><input type="text" id="o-com" maxlength="80" autocomplete="address-level2" placeholder="Ej. Providencia"></div>
+        </div>
+        <div class="an-f"><label for="o-dir">Dirección (opcional)</label><input type="text" id="o-dir" maxlength="160" autocomplete="street-address"></div>
+      </div>
+    </section>
+
+    <div style="margin-top:16px;display:flex;flex-direction:column;gap:12px">
+      <div class="an-confirm" id="cf" hidden>
+        <p id="cft"></p>
+        <div class="an-row"><button class="an-btn main" id="yes" type="button" style="width:auto">Sí, enviar</button><button class="an-btn" id="no" type="button">Volver</button></div>
+      </div>
+      <button class="an-btn main" id="fin" type="button">Finalizar encuesta</button>
+      <p class="an-msg" id="msg" role="alert"></p>
+    </div>
+  </div>
+</main>
+
+<script>
+(function(){
+var API_URL="https://api.rmdental.cl";
+var $=function(i){return document.getElementById(i)};
+var Q=[
+["1.1","N° de folio",""],
+["1.2","¿Está usted embarazada?","Si corresponde, indique semanas de gestación"],
+["1.3","¿Presenta usted hipertensión?","Si corresponde, indique medicamentos que consume"],
+["1.4","¿Presenta usted diabetes?","Si corresponde, indique medicamentos que consume"],
+["1.5","¿Usted fuma?","Si corresponde, indicar número de cigarrillos"],
+["1.6","¿Consume usted alcohol?","Indique frecuencia"],
+["1.7","¿Consume usted algún tipo de droga?","Si corresponde, indique cuál"],
+["1.8","¿Presenta usted problemas de coagulación?","Si corresponde, indique cuál y medicamentos que consume"],
+["1.9","¿Toma usted anticoagulantes?","Si corresponde, indique cuál"],
+["1.10","¿Presenta usted alergia a algún medicamento?","Si corresponde, indique cuál"],
+["1.11","¿Presenta usted epilepsia?","Si corresponde, indique medicamentos"],
+["1.12","¿Presenta usted cardiopatías?","Si corresponde, indique cuál y medicamentos"],
+["1.13","¿Presenta usted enfermedad tiroidea?","Si corresponde, indique cuál y medicamentos"],
+["1.14","¿Presenta usted problemas de inmunosupresión?","Si corresponde, indique cuál y medicamentos"],
+["1.15","¿Presenta usted enfermedad renal?","Si corresponde, indique cuál y medicamentos"],
+["1.16","¿Presenta usted problemas hepáticos?","Si corresponde, indique cuál y medicamentos"],
+["1.17","Indique otra condición relevante para su atención dental",""],
+["1.18","¿Ha perdido alguna vez una o más piezas dentales definitivas?",""],
+["1.19","¿Ha notado que sus dientes están desalineados?",""]
+];
+var O=[["si","Sí"],["no","No"],["otro","Otro"],["nr","No responde"]];
+var CANALES=["Instagram","Facebook","Google o Maps","Sitio web de la clínica","Recomendación de un paciente","Derivación de un profesional","Convenio o empresa","Publicidad en la calle","Otro"];
+var REGIONES=["Arica y Parinacota","Tarapacá","Antofagasta","Atacama","Coquimbo","Valparaíso","Metropolitana de Santiago","Libertador General Bernardo O'Higgins","Maule","Ñuble","Biobío","La Araucanía","Los Ríos","Los Lagos","Aysén","Magallanes y de la Antártica Chilena"];
+var ans={},sending=false,needOrigen=false;
+CANALES.forEach(function(c){var o=document.createElement("option");o.textContent=c;$("o-canal").appendChild(o)});
+REGIONES.forEach(function(c){var o=document.createElement("option");o.textContent=c;$("o-reg").appendChild(o)});
+document.querySelectorAll('input[name="o-der"]').forEach(function(r){r.addEventListener("change",function(){$("o-der-box").hidden=r.value!=="si"||!r.checked})});
+function origenData(){
+  var der=document.querySelector('input[name="o-der"]:checked');
+  var d={canal:$("o-canal").value,canal_detalle:$("o-canal-det").value.trim(),derivado:der?der.value:"",
+    region:$("o-reg").value,comuna:$("o-com").value.trim(),direccion:$("o-dir").value.trim()};
+  if(d.derivado==="si"){d.derivador_tipo=$("o-der-tipo").value;d.derivador_nombre=$("o-der-nom").value.trim();d.derivador_contacto=$("o-der-cto").value.trim()}
+  return d;
+}
+function origenError(){
+  var d=origenData();
+  if(!d.canal)return "Indica cómo conociste la clínica.";
+  if(!d.derivado)return "Indica si te derivó otro profesional o centro de salud.";
+  if(d.derivado==="si"&&(!d.derivador_tipo||!d.derivador_nombre))return "Indica quién te derivó y su nombre.";
+  if(!d.region||!d.comuna)return "Indica tu región y tu comuna.";
+  return "";
+}
+
+function call(path,opt){
+  opt=opt||{};var o={method:opt.method||"GET",credentials:"include",headers:{}};
+  if(opt.body){o.headers["Content-Type"]="application/json";o.body=JSON.stringify(opt.body)}
+  return fetch(API_URL+path,o).then(function(r){return r.json().then(function(d){return d},function(){return null}).then(function(d){return{ok:r.ok,status:r.status,data:d}})});
+}
+
+var h="";
+Q.forEach(function(q,i){
+  var n="q"+i;
+  h+='<div class="an-q" id="r'+i+'"><div class="an-qh"><span class="an-id">'+q[0]+'</span><div class="an-qt"><strong>'+q[1]+'</strong>'+(q[2]?'<span>'+q[2]+'</span>':'')+'</div></div>'+
+     '<fieldset class="an-opts"><legend style="position:absolute;left:-9999px">'+q[1]+'</legend>';
+  O.forEach(function(o){h+='<div class="an-opt"><input type="radio" id="'+n+o[0]+'" name="'+n+'" value="'+o[0]+'"><label for="'+n+o[0]+'">'+o[1]+'</label></div>'});
+  h+='</fieldset><div class="an-obs"><label for="'+n+'o">Observación</label><input type="text" id="'+n+'o" maxlength="300" autocomplete="off" placeholder="'+(q[2]||"Opcional")+'"></div></div>';
+});
+$("qs").innerHTML=h;
+
+function refresh(){
+  var d=Object.keys(ans).length,t=Q.length,p=Math.round(d/t*100);
+  Q.forEach(function(q,i){$("r"+i).classList.toggle("done",!!ans[i])});
+  $("pt").textContent=d+" de "+t+" respondidas";$("pp").textContent=p+"%";$("pb").style.width=p+"%";$("sc").textContent=d+"/"+t;
+}
+$("qs").addEventListener("change",function(e){
+  if(e.target.type==="radio"){ans[parseInt(e.target.name.slice(1),10)]=e.target.value;refresh()}
+});
+$("tg").addEventListener("click",function(){
+  var open=$("tg").getAttribute("aria-expanded")==="true";
+  $("tg").setAttribute("aria-expanded",String(!open));$("qs").hidden=open;
+});
+
+$("fin").addEventListener("click",function(){
+  if(needOrigen){var oe=origenError();if(oe){var mm=$("msg");mm.className="an-msg err";mm.textContent=oe;$("org").scrollIntoView({block:"center",behavior:"smooth"});return}}
+  $("msg").textContent="";
+  var pend=Q.length-Object.keys(ans).length;
+  $("cft").textContent=pend>0
+    ?"Quedan "+pend+(pend===1?" pregunta sin responder. ":" preguntas sin responder. ")+"¿Enviar de todos modos? Después no podrás editar las respuestas."
+    :"¿Confirmas que tus respuestas son correctas? Después no podrás editarlas.";
+  $("cf").hidden=false;$("fin").hidden=true;$("cf").scrollIntoView({block:"center",behavior:"smooth"});
+});
+$("no").addEventListener("click",function(){$("cf").hidden=true;$("fin").hidden=false});
+
+$("yes").addEventListener("click",function(){
+  if(sending)return;sending=true;$("yes").disabled=true;
+  var m=$("msg");m.className="an-msg";m.textContent="Enviando…";
+  var respuestas=Q.map(function(q,i){return{id:q[0],respuesta:ans[i]||null,observacion:$("q"+i+"o").value.trim()}});
+  call("/me/anamnesis",{method:"POST",body:needOrigen?{respuestas:respuestas,origen:origenData()}:{respuestas:respuestas}}).then(function(r){
+    if(r.status===401){$("form").hidden=true;$("needLogin").hidden=false;return}
+    if(!r.ok){m.className="an-msg err";m.textContent="No pudimos guardar tus respuestas. Intenta de nuevo en unos minutos.";sending=false;$("yes").disabled=false;return}
+    $("form").hidden=true;$("lead").hidden=true;
+    $("doneMsg").textContent=(r.data&&r.data.correo_enviado)
+      ?"Te enviamos una copia en PDF a tu correo. Tu equipo tratante ya puede ver tus respuestas."
+      :"Tu equipo tratante ya puede ver tus respuestas. No pudimos enviar el PDF a tu correo; lo recibirás más tarde.";
+    $("done").hidden=false;window.scrollTo({top:0,behavior:"smooth"});
+  },function(){m.className="an-msg err";m.textContent="Sin conexión. Revisa tu internet e intenta de nuevo.";sending=false;$("yes").disabled=false});
+});
+
+call("/me").then(function(r){
+  if(!r.ok){$("needLogin").hidden=false;return}
+  var n=r.data&&r.data.nombre?String(r.data.nombre).trim().split(/\s+/)[0]:"";
+  if(n)$("lead").textContent="Hola, "+n.charAt(0).toUpperCase()+n.slice(1).toLowerCase()+". Responde con calma: tus respuestas ayudan a que tu atención dental sea segura.";
+  $("form").hidden=false;refresh();
+  call("/me/origen").then(function(o){
+    if(o.ok&&o.data&&o.data.registrado===false){needOrigen=true;$("org").hidden=false}
+  },function(){});
+},function(){$("needLogin").hidden=false});
+})();
+</script>
+</body>
+</html>
