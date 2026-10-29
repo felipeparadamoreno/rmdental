@@ -110,6 +110,22 @@ table.tb td.n,table.tb th.n{text-align:right;font-variant-numeric:tabular-nums}
 .sheet .ft{margin-top:26px;border-top:1px solid #cde;padding-top:8px;font-size:11px;color:#567;text-align:center}
 .empty{color:#99a}
 .fin{margin-top:16px;display:flex;gap:10px;flex-wrap:wrap}
+.head{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+.plist{display:grid;gap:8px;margin-top:8px}
+.prow{display:grid;grid-template-columns:minmax(0,1.6fr) minmax(0,1fr) minmax(0,1fr) auto;gap:6px 14px;align-items:center;text-align:left;width:100%;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px 16px;font:inherit;color:inherit;cursor:pointer}
+.prow:hover{border-color:var(--teal)}.prow small{display:block;color:var(--mut);font-size:12px}.prow.off{opacity:.55}
+@media(max-width:700px){.prow{grid-template-columns:1fr}}
+.tabs{display:flex;flex-wrap:wrap;gap:6px;margin:16px 0}
+.tabs button{padding:9px 14px;border:1px solid var(--line);background:var(--card);border-radius:99px;font:inherit;font-weight:700;font-size:14px;color:var(--ink);cursor:pointer}
+.tabs button:hover{border-color:var(--teal)}.tabs button.on{background:var(--teal);border-color:var(--teal);color:#fff}
+.tg.grave{background:#fde8e8;color:#8f1a1a}
+.kv{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px 20px}
+.kv small{display:block;color:var(--mut);font-size:12px;font-weight:700;letter-spacing:.04em;text-transform:uppercase}
+.kv b{display:block;font-weight:600;word-break:break-word}
+.tabp>.card+.card{margin-top:16px}
+.qa{display:grid;grid-template-columns:minmax(0,1.6fr) minmax(0,1fr);gap:4px 14px;padding:8px 0;border-bottom:1px solid var(--line);font-size:14px}
+.qa:last-child{border-bottom:0}.qa.rk b{color:var(--err)}
+#a-q,#a-sel{display:none!important}
 @media print{
  @page{size:Letter;margin:14mm}
  body{background:#fff}.top,.noprint,.split>div:first-child,.back,.types,h1,p.lead,.fin{display:none!important}
@@ -138,27 +154,79 @@ table.tb td.n,table.tb th.n{text-align:right;font-variant-numeric:tabular-nums}
 
 <!-- MENÚ -->
 <section id="v-menu" hidden class="noprint">
-  <h1>¿Qué quieres hacer?</h1>
-  <p class="lead">Elige una opción para comenzar.</p>
+  <h1>Panel de profesionales</h1>
+  <p class="lead">Elige una sección para comenzar.</p>
+  <div class="menu">
+    <button class="opt" data-go="pacientes"><div class="ic">🦷</div><b>Pacientes</b><span>Lista de pacientes y ficha completa de cada uno: datos personales, citas, tratamientos, atenciones, pagos y anamnesis.</span></button>
+    <button class="opt" data-go="profesionales"><div class="ic">🩺</div><b>Profesionales</b><span>El equipo de la clínica: especialidad, contacto y rol.</span></button>
+    <button class="opt" data-go="admin"><div class="ic">🗂️</div><b>Administrativo</b><span>Documentos clínicos, usuarios, finanzas de la clínica y tu cuenta.</span></button>
+  </div>
+  <p style="margin-top:22px"><button class="btn sec" id="b-out" type="button">Cerrar sesión</button></p>
+</section>
+
+<!-- PACIENTES (lista) -->
+<section id="v-pacientes" hidden class="noprint">
+  <button class="back" data-go="menu">← Volver al inicio</button>
+  <div class="head"><h1>Pacientes</h1><button class="btn" type="button" data-go="ficha">＋ Nuevo paciente</button></div>
+  <div class="card" style="margin-top:12px">
+    <label for="pl-q" style="margin-top:0">Buscar por nombre, RUT o correo</label>
+    <input id="pl-q" placeholder="Escribe para filtrar la lista" autocomplete="off">
+  </div>
+  <p class="note" id="pl-count" style="color:var(--mut);font-size:13px;margin:12px 0 0"></p>
+  <div class="plist" id="pl-list"><span class="empty">Cargando…</span></div>
+</section>
+
+<!-- PACIENTE (ficha completa) -->
+<section id="v-paciente" hidden class="noprint">
+  <button class="back" data-go="pacientes">← Volver a Pacientes</button>
+  <h1 id="pd-nom"></h1>
+  <p class="lead" id="pd-sub" style="margin-bottom:0"></p>
+  <div id="pd-risk"></div>
+  <div class="tabs" id="pd-tabs" role="tablist">
+    <button type="button" data-tab="datos" class="on">Datos personales</button>
+    <button type="button" data-tab="citas">Citas</button>
+    <button type="button" data-tab="trat">Tratamientos y radiografías</button>
+    <button type="button" data-tab="aten" data-clin>Atenciones</button>
+    <button type="button" data-tab="pagos">Pagos</button>
+    <button type="button" data-tab="trib">Documentos tributarios</button>
+    <button type="button" data-tab="anam" data-clin>Anamnesis</button>
+    <button type="button" data-tab="ficha" data-clin>Ficha clínica</button>
+  </div>
+  <div class="tabp" id="tab-datos"></div>
+  <div class="tabp" id="tab-citas" hidden></div>
+  <div class="tabp" id="tab-trat" hidden></div>
+  <div class="tabp" id="tab-aten" hidden></div>
+  <div class="tabp" id="tab-pagos" hidden></div>
+  <div class="tabp" id="tab-trib" hidden></div>
+  <div class="tabp" id="tab-anam" hidden></div>
+  <div class="tabp" id="tab-ficha" hidden></div>
+</section>
+
+<!-- PROFESIONALES -->
+<section id="v-profesionales" hidden class="noprint">
+  <button class="back" data-go="menu">← Volver al inicio</button>
+  <h1>Profesionales</h1>
+  <p class="lead">El equipo de la clínica. Crear cuentas, cambiar roles o claves se hace en Administrativo › Usuarios (solo dueño).</p>
+  <div class="card"><div id="pf-list"><span class="empty">Cargando…</span></div></div>
+</section>
+
+<!-- ADMINISTRATIVO -->
+<section id="v-admin" hidden class="noprint">
+  <button class="back" data-go="menu">← Volver al inicio</button>
+  <h1>Administrativo</h1>
+  <p class="lead">Gestión de la clínica y de tu cuenta.</p>
   <div class="menu">
     <button class="opt" data-go="docs"><div class="ic">📄</div><b>Emisión de documentos clínicos</b><span>Informes, certificados, indicaciones, órdenes de examen y consentimientos, con el logo de la Red.</span></button>
-    <button class="opt" data-go="agenda"><div class="ic">📅</div><b>Agendar hora a un paciente</b><span>Elige paciente, día y hora. La cita aparece de inmediato en su perfil.</span></button>
-    <button class="opt" data-go="trat"><div class="ic">🩻</div><b>Tratamiento y radiografías</b><span>Registra hallazgos, tratamiento, sesiones restantes, valor y sube radiografías. El paciente lo ve en su perfil.</span></button>
-    <button class="opt" data-go="ficha"><div class="ic">🦷</div><b>Agregar ficha de paciente</b><span>Registra antecedentes clínicos y da de alta al paciente en la Red, con acceso a su perfil.</span></button>
-    <button class="opt" data-go="trib"><div class="ic">🧾</div><b>Documentos tributarios</b><span>Guarda boletas, facturas y comprobantes de pago de cada paciente y consúltalos cuando los necesites.</span></button>
-    <button class="opt" data-go="aten" id="m-aten"><div class="ic">📋</div><b>Historial de atención</b><span>Qué se le hizo al paciente en cada visita: procedimiento, piezas dentales e indicaciones.</span></button>
-    <button class="opt" data-go="usu" id="m-usu" hidden><div class="ic">👥</div><b>Usuarios</b><span>Crea cuentas para profesionales y secretaría, asigna roles, genera claves y desactiva accesos.</span></button>
-    <button class="opt" data-go="fin"><div class="ic">💳</div><b>Finanzas del paciente</b><span>Cuánto debe, cuánto ha pagado y cuánto le falta, con su historial de cargos y pagos.</span></button>
     <button class="opt" data-go="dueno" id="m-dueno" hidden><div class="ic">📊</div><b>Panel del dueño</b><span>Cuánto dinero ha entrado, cuánto falta por entrar y quiénes tienen deuda.</span></button>
+    <button class="opt" data-go="usu" id="m-usu" hidden><div class="ic">👥</div><b>Usuarios</b><span>Crea cuentas para profesionales y secretaría, asigna roles, genera claves y desactiva accesos.</span></button>
+    <a class="opt" href="segunda-opinion.html" style="text-decoration:none"><div class="ic">💬</div><b>Emitir segunda opinión</b><span>Abre el formulario de segunda opinión con tu misma sesión.</span></a>
+    <button class="opt" data-go="clave"><div class="ic">🔑</div><b>Cambiar mi clave</b><span>Actualiza la clave con la que entras al panel.</span></button>
   </div>
-  <p style="margin-top:22px"><a class="btn sec" href="segunda-opinion.html">Emitir segunda opinión</a>
-  <button class="btn sec" data-go="clave" type="button" style="margin-left:8px">Cambiar mi clave</button>
-  <button class="btn sec" id="b-out" type="button" style="margin-left:8px">Cerrar sesión</button></p>
 </section>
 
 <!-- DOCUMENTOS -->
 <section id="v-docs" hidden>
-  <button class="back noprint" data-go="menu">← Volver al inicio</button>
+  <button class="back noprint" data-go="admin">← Volver a Administrativo</button>
   <h1>Emisión de documentos clínicos</h1>
   <p class="lead">Elige el tipo de documento, completa los datos y descárgalo o imprímelo en PDF.</p>
   <div class="types" id="types"></div>
@@ -200,7 +268,7 @@ table.tb td.n,table.tb th.n{text-align:right;font-variant-numeric:tabular-nums}
 
 <!-- FICHA -->
 <section id="v-ficha" hidden class="noprint">
-  <button class="back" data-go="menu">← Volver al inicio</button>
+  <button class="back" data-go="pacientes">← Volver a Pacientes</button>
   <h1>Agregar ficha de paciente</h1>
   <p class="lead">Al guardar, el paciente queda registrado en la Red y recibe un correo para acceder a su perfil.</p>
   <form id="f-ficha" class="card" autocomplete="off">
@@ -356,7 +424,7 @@ table.tb td.n,table.tb th.n{text-align:right;font-variant-numeric:tabular-nums}
 
 <!-- PANEL DEL DUEÑO -->
 <section id="v-dueno" hidden class="noprint">
-  <button class="back" data-go="menu">← Volver al inicio</button>
+  <button class="back" data-go="admin">← Volver a Administrativo</button>
   <h1>Panel del dueño</h1>
   <p class="lead">Dinero que ha entrado, dinero que falta por entrar y pacientes con deuda.</p>
   <div class="card">
@@ -403,7 +471,7 @@ table.tb td.n,table.tb th.n{text-align:right;font-variant-numeric:tabular-nums}
 </section>
 <!-- USUARIOS -->
 <section id="v-usu" hidden class="noprint">
-  <button class="back" data-go="menu">← Volver al inicio</button>
+  <button class="back" data-go="admin">← Volver a Administrativo</button>
   <h1>Usuarios</h1>
   <p class="lead">Quién puede entrar al panel y qué puede hacer. Solo el dueño ve esta sección.</p>
   <div class="split">
@@ -426,7 +494,7 @@ table.tb td.n,table.tb th.n{text-align:right;font-variant-numeric:tabular-nums}
 
 <!-- CAMBIAR MI CLAVE -->
 <section id="v-clave" hidden class="noprint">
-  <button class="back" data-go="menu">← Volver al inicio</button>
+  <button class="back" data-go="admin">← Volver a Administrativo</button>
   <h1>Cambiar mi clave</h1>
   <form class="card" id="f-clave" autocomplete="off" style="max-width:460px">
     <label for="c-act">Clave actual *</label><input id="c-act" type="password" autocomplete="current-password" required>
@@ -472,7 +540,7 @@ function rutOk(r){
 
 /* Vistas */
 function show(v){
-  ["login","menu","docs","ficha","agenda","trat","trib","fin","dueno","aten","usu","clave"].forEach(n=>$("v-"+n).hidden=n!==v);
+  ["login","menu","pacientes","paciente","profesionales","admin","docs","ficha","agenda","trat","trib","fin","dueno","aten","usu","clave"].forEach(n=>$("v-"+n).hidden=n!==v);
   window.scrollTo(0,0);
 }
 document.addEventListener("click",e=>{const b=e.target.closest("[data-go]");if(b)show(b.dataset.go)});
@@ -1096,6 +1164,151 @@ $("f-clave").addEventListener("submit",async e=>{
   if(!r.ok){m.className="msg err";m.textContent=r.d.error||"No se pudo cambiar la clave.";return}
   m.className="msg ok";m.textContent="Clave cambiada.";["c-act","c-nue","c-rep"].forEach(i=>$(i).value="");
 });
+
+/* ===== Reordenamiento: Pacientes · Profesionales · Administrativo ===== */
+/* Las pantallas de citas, tratamientos, atenciones, pagos y tributarios ya existentes se mueven
+   dentro de las pestañas de la ficha del paciente y se reutilizan tal cual. */
+[["tab-citas","#v-agenda .split"],["tab-trat","#t-body"],["tab-aten","#h-body"],["tab-pagos","#f-body"],["tab-trib","#tb-body"]]
+  .forEach(function(m){const n=document.querySelector(m[1]);if(n)$(m[0]).appendChild(n)});
+
+let PD=null,plSeq=0,plT;
+function edadDe(f){
+  if(!/^\d{4}-\d{2}-\d{2}$/.test(f||""))return null;
+  const [y,m,d]=f.split("-").map(Number),h=new Date();
+  let e=h.getFullYear()-y;if(h.getMonth()+1<m||(h.getMonth()+1===m&&h.getDate()<d))e--;
+  return e>=0&&e<130?e:null;
+}
+function tagRiesgo(r){
+  if(!r||!r.nivel||r.nivel==="ninguno")return"";
+  return'<span class="tg '+(r.nivel==="grave"?"grave":"warn")+'" title="'+esc((r.factores||[]).join(", "))+'">Riesgo '+esc(r.nivel)+'</span>';
+}
+
+/* --- Lista de pacientes --- */
+document.addEventListener("click",e=>{if(e.target.closest('[data-go="pacientes"]'))cargarPacientes()});
+$("pl-q").addEventListener("input",()=>{clearTimeout(plT);plT=setTimeout(cargarPacientes,250)});
+async function cargarPacientes(){
+  const q=$("pl-q").value.trim(),box=$("pl-list"),n=++plSeq;
+  const r=await api("/pro/pacientes/lista"+(q?"?q="+encodeURIComponent(q):""));
+  if(n!==plSeq)return;
+  if(r.status===401)return sesionVencida();
+  if(!r.ok){box.innerHTML='<span class="empty">No se pudo cargar la lista.</span>';$("pl-count").textContent="";return}
+  const L=r.d.pacientes||[];
+  $("pl-count").textContent=L.length+(L.length===1?" paciente":" pacientes");
+  box.innerHTML="";
+  if(!L.length){box.innerHTML='<span class="empty">No hay pacientes'+(q?" que coincidan con la búsqueda":" registrados")+'.</span>';return}
+  L.forEach(p=>{
+    const b=document.createElement("button");b.type="button";b.className="prow"+(p.activo?"":" off");
+    b.innerHTML='<div><b>'+esc(p.nombre)+'</b><small>'+esc(p.rut)+'</small></div>'+
+      '<div><small>Teléfono</small>'+esc(p.telefono||"—")+'</div>'+
+      '<div><small>Próxima cita</small>'+(p.proxima_cita?esc(fmtCita(p.proxima_cita)):"—")+'</div>'+
+      '<div>'+tagRiesgo(p.riesgo)+(p.activo?"":' <span class="tg warn">Inactivo</span>')+'</div>';
+    b.onclick=()=>openPaciente(p);
+    box.appendChild(b);
+  });
+}
+
+/* --- Ficha del paciente --- */
+function openPaciente(p){
+  PD={p:{id:p.id,rut:p.rut,nombre:p.nombre,riesgo:p.riesgo||null},ficha:null,hecho:{}};
+  $("pd-nom").textContent=p.nombre;$("pd-sub").textContent=p.rut;$("pd-risk").innerHTML=riesgoBadge(PD.p);
+  ["a-list","t-list","x-list","h-list","f-list","tb-list","f-kpis","f-chart","f-estado"].forEach(id=>{const e=$(id);if(e)e.innerHTML=""});
+  document.querySelectorAll("#tab-pagos form,#tab-trib form").forEach(f=>f.reset());
+  document.querySelectorAll("#pd-tabs [data-clin]").forEach(b=>b.hidden=rol()==="secretaria");
+  show("paciente");irTab("datos");
+}
+$("pd-tabs").addEventListener("click",e=>{const b=e.target.closest("[data-tab]");if(b)irTab(b.dataset.tab)});
+function irTab(t){
+  if(!PD)return;
+  document.querySelectorAll("#pd-tabs button").forEach(b=>b.classList.toggle("on",b.dataset.tab===t));
+  document.querySelectorAll(".tabp").forEach(d=>d.hidden=d.id!=="tab-"+t);
+  if(PD.hecho[t])return;PD.hecho[t]=true;
+  const p=PD.p;
+  if(t==="citas"){selHora=null;initAgenda();pickPac(p)}
+  else if(t==="trat")tPick(p);
+  else if(t==="aten")hPick(p);
+  else if(t==="pagos"){$("fc-fecha").value=hoyCL();$("fp-fecha").value=hoyCL();$("f-forms").hidden=!puedeEditarFin();fPick(p)}
+  else if(t==="trib")bPick(p);
+  else pintarFicha(t);
+}
+function kv(l,v){return'<div><small>'+esc(l)+'</small><b>'+(v?esc(v):"—")+'</b></div>'}
+function campo(t,v){return v?'<p><span class="lb">'+esc(t)+'</span><br>'+esc(v)+'</p>':""}
+async function pintarFicha(t){
+  const box=$("tab-"+t),id=PD.p.id;
+  box.innerHTML='<div class="card"><span class="empty">Cargando…</span></div>';
+  if(!PD.ficha){
+    const r=await api("/pro/pacientes/"+id+"/ficha");
+    if(r.status===401)return sesionVencida();
+    if(!PD||PD.p.id!==id)return;
+    if(!r.ok){box.innerHTML='<div class="card"><span class="empty">'+esc(r.d.error||"No se pudo cargar.")+'</span></div>';PD.hecho[t]=false;return}
+    PD.ficha=r.d;
+  }
+  if(!PD||PD.p.id!==id)return;
+  const d=PD.ficha;
+  box.innerHTML=t==="datos"?htmlDatos(d):t==="anam"?htmlAnam(d):htmlFichas(d);
+  const b=$("an-pdf");if(b)b.onclick=verPdf;
+}
+function htmlDatos(d){
+  const p=d.paciente,o=d.origen,e=edadDe(p.fecha_nac);
+  let h='<div class="card"><h2 style="margin-top:0">Datos personales</h2><div class="kv">'+
+    kv("Nombre",p.nombre)+kv("RUT",p.rut)+kv("Correo",p.email)+kv("Teléfono",p.telefono)+
+    kv("Fecha de nacimiento",p.fecha_nac?fechaL(p.fecha_nac)+(e!=null?" · "+e+" años":""):"")+
+    kv("Consentimiento de datos",p.consentimiento_en?"Aceptado el "+fmtCita(p.consentimiento_en):"Sin registro")+
+    kv("Estado",p.activo?"Activo":"Inactivo")+'</div></div>';
+  h+='<div class="card"><h2 style="margin-top:0">Origen del paciente</h2>';
+  if(!o)h+='<span class="empty">El paciente aún no declara cómo llegó a la clínica.</span>';
+  else h+='<div class="kv">'+kv("Cómo llegó",o.canal+(o.canal_detalle?" · "+o.canal_detalle:""))+
+    kv("Derivado por",o.derivado?[o.derivador_tipo,o.derivador_nombre,o.derivador_contacto].filter(Boolean).join(" · "):"No fue derivado")+
+    kv("Región",o.region)+kv("Comuna",o.comuna)+kv("Dirección",o.direccion)+'</div>';
+  return h+'</div>';
+}
+function htmlAnam(d){
+  if(!d.clinico)return'<div class="card"><span class="empty">No tienes permiso para ver datos clínicos.</span></div>';
+  const a=d.anamnesis;
+  if(!a)return'<div class="card"><h2 style="margin-top:0">Anamnesis</h2><span class="empty">El paciente aún no responde la encuesta de salud.</span></div>';
+  let f="";try{if(a.fecha)f=fmtCita(a.fecha)}catch(e){}
+  let h='<div class="card"><div class="head"><h2 style="margin:0">Encuesta de salud'+(f?" · "+esc(f):"")+'</h2><button class="btn sec" id="an-pdf" type="button">Ver PDF</button></div>'+
+    riesgoBadge({riesgo:a.riesgo})+'<div style="margin-top:12px">';
+  h+=a.respuestas.map(r=>'<div class="qa'+(r.riesgo?" rk":"")+'"><span>'+esc(r.pregunta)+'</span><b>'+esc(r.respuesta)+(r.texto?" — "+esc(r.texto):"")+'</b></div>').join("");
+  return h+'</div></div>';
+}
+function htmlFichas(d){
+  if(!d.clinico)return'<div class="card"><span class="empty">No tienes permiso para ver datos clínicos.</span></div>';
+  if(!d.fichas.length)return'<div class="card"><h2 style="margin-top:0">Ficha clínica</h2><span class="empty">Este paciente no tiene fichas clínicas registradas.</span></div>';
+  const C=[["motivo","Motivo de consulta"],["anamnesis","Anamnesis"],["antecedentes_medicos","Antecedentes médicos"],["alergias","Alergias"],["medicamentos","Medicamentos"],
+    ["antecedentes_dentales","Antecedentes dentales"],["habitos","Hábitos"],["examen_clinico","Examen clínico"],["diagnostico","Diagnóstico"],["plan_tratamiento","Plan de tratamiento"],["observaciones","Observaciones"]];
+  return'<div class="card"><h2 style="margin-top:0">Ficha clínica</h2>'+d.fichas.map((f,i)=>{
+    let fe="";try{fe=fmtCita(f.creada_en)}catch(e){}
+    return'<div class="ev'+(i?" old":"")+'"><h3>Ficha del '+esc(fe)+'</h3><div class="meta">'+esc(f.profesional||"")+'</div>'+C.map(c=>campo(c[1],f[c[0]])).join("")+'</div>';
+  }).join("")+'</div>';
+}
+async function verPdf(){
+  const s=sesion(),a=PD&&PD.ficha&&PD.ficha.anamnesis;if(!s||!a)return;
+  const w=window.open("","_blank");
+  try{
+    const r=await fetch(API+"/pro/pacientes/"+PD.p.id+"/anamnesis/"+a.id+"/pdf",{headers:{Authorization:"Bearer "+s.token}});
+    if(!r.ok)throw new Error("pdf");
+    const url=URL.createObjectURL(await r.blob());
+    if(w)w.location.href=url;else{const l=document.createElement("a");l.href=url;l.download="Encuesta_de_salud.pdf";l.click()}
+  }catch(e){if(w)w.close();alert("No se pudo abrir el PDF.")}
+}
+
+/* --- Profesionales --- */
+document.addEventListener("click",e=>{if(e.target.closest('[data-go="profesionales"]'))cargarProfesionales()});
+async function cargarProfesionales(){
+  const box=$("pf-list");box.innerHTML='<span class="empty">Cargando…</span>';
+  const r=await api("/pro/profesionales");
+  if(r.status===401)return sesionVencida();
+  if(!r.ok){box.innerHTML='<span class="empty">No se pudo cargar.</span>';return}
+  box.innerHTML="";
+  if(!r.d.profesionales.length){box.innerHTML='<span class="empty">Sin profesionales registrados.</span>';return}
+  r.d.profesionales.forEach(u=>{
+    const d=document.createElement("div");d.className="urow"+(u.activo?"":" off");
+    d.innerHTML='<div><b>'+esc(u.nombre)+(u.yo?' <span class="tg">Tú</span>':"")+(u.activo?"":' <span class="tg warn">Desactivado</span>')+'</b><br><small>'+
+      [u.especialidad,u.registro?"Reg. "+u.registro:"",u.rut,u.correo,u.telefono].filter(Boolean).map(esc).join(" · ")+'</small></div>'+
+      '<div class="acts"><span class="tg">'+esc(ROL_TXT[u.rol]||u.rol||"")+'</span></div>';
+    box.appendChild(d);
+  });
+}
 </script>
 </body>
 </html>
