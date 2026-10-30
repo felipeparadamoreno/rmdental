@@ -31,7 +31,7 @@
   var S, root, body, progress, lastFocus, widgetId = null, recaptchaCargado = false;
 
   function reset() {
-    S = { token: null, existe: false, pista: null, nuevo: false, nombre: "", cfg: null, motivo: "", comuna: "", clinica: null, dias: null, dia: null, hora: null, paso: 0 };
+    S = { token: null, existe: false, pista: null, nuevo: false, nombre: "", cfg: null, motivo: "", comuna: "", clinica: null, dias: null, dia: null, hora: null, mes: null, paso: 0 };
   }
   function h(tag, attrs) {
     var el = document.createElement(tag);
@@ -114,6 +114,7 @@
   }
   function go(n) {
     S.paso = n;
+    root.querySelector(".rsv-dialog").classList.remove("rsv-wide");
     body.textContent = "";
     setProgress(n < PASOS ? n + 1 : 0);
     [paso0, paso1, paso2, paso3, paso4, paso5][n]();
@@ -300,6 +301,7 @@
 
   /* ---------- 5. Agenda ---------- */
   function paso4() {
+    root.querySelector(".rsv-dialog").classList.add("rsv-wide");
     titulo("Elige tu día y tu hora", S.clinica.nombre + (S.clinica.direccion ? " · " + S.clinica.direccion : ""));
     var zona = h("div", { class: "rsv-agenda" }, h("p", { class: "rsv-sub", text: "Buscando horas disponibles…" }));
     var err = errorBox();
@@ -308,39 +310,68 @@
     var f = h("form", { novalidate: true }, zona, err, a.row);
     body.appendChild(f);
 
-    function pintar() {
+    function pad(n) { return (n < 10 ? "0" : "") + n; }
+    function clave(d) { return d.getFullYear() + "-" + pad(d.getMonth() + 1) + "-" + pad(d.getDate()); }
+    function pintar(foco) {
       zona.textContent = "";
       var dias = Object.keys(S.dias || {}).sort();
       if (!dias.length) {
         zona.appendChild(h("p", { class: "rsv-sub", text: "No hay horas disponibles en los próximos días en esta clínica. Prueba con otra clínica o escríbenos a contacto@rmdental.cl." }));
         return;
       }
-      var fila = h("div", { class: "rsv-days", role: "group", "aria-label": "Días disponibles" });
-      dias.forEach(function (d) {
-        var p = d.split("-"), dt = new Date(+p[0], +p[1] - 1, +p[2]);
-        var b = h("button", { type: "button", class: "rsv-day" + (S.dia === d ? " sel" : ""), "aria-pressed": S.dia === d ? "true" : "false",
-          "aria-label": fechaLarga(d) },
-          h("small", { text: DOW[dt.getDay()] }), h("b", { text: String(dt.getDate()) }), h("small", { text: MON[dt.getMonth()] }));
-        b.addEventListener("click", function () { S.dia = d; S.hora = null; a.next.disabled = true; pintar(); });
-        fila.appendChild(b);
-      });
-      zona.appendChild(fila);
+      var hoy = new Date(), hoyK = clave(hoy);
+      var minIdx = hoy.getFullYear() * 12 + hoy.getMonth();
+      var u = dias[dias.length - 1].split("-");
+      var maxIdx = Math.max(minIdx, +u[0] * 12 + (+u[1] - 1));
+      if (!S.mes) { var p0 = (S.dia || dias[0]).split("-"); S.mes = { y: +p0[0], m: +p0[1] - 1 }; }
+      var idx = S.mes.y * 12 + S.mes.m;
+      function mover(n) { var i = idx + n; S.mes = { y: Math.floor(i / 12), m: i % 12 }; pintar(".rsv-nav-" + (n < 0 ? "prev" : "next")); }
+
+      /* calendario del mes completo (semana de lunes a domingo) */
+      var mesTxt = MONL[S.mes.m].charAt(0).toUpperCase() + MONL[S.mes.m].slice(1);
+      var cab = h("div", { class: "rsv-cal-head" },
+        h("button", { type: "button", class: "rsv-nav rsv-nav-prev", "aria-label": "Mes anterior", text: "‹", disabled: idx <= minIdx, onclick: function () { mover(-1); } }),
+        h("div", { class: "rsv-cal-title", "aria-live": "polite", text: S.mes.y + " - " + mesTxt }),
+        h("button", { type: "button", class: "rsv-nav rsv-nav-next", "aria-label": "Mes siguiente", text: "›", disabled: idx >= maxIdx, onclick: function () { mover(1); } }));
+      var sem = h("div", { class: "rsv-cal-dow", "aria-hidden": "true" });
+      ["L", "M", "M", "J", "V", "S", "D"].forEach(function (x) { sem.appendChild(h("span", { text: x })); });
+      var grid = h("div", { class: "rsv-cal-grid" });
+      var desfase = (new Date(S.mes.y, S.mes.m, 1).getDay() + 6) % 7;
+      for (var i = 0; i < 42; i++) {
+        (function (d) {
+          var k = clave(d), enMes = d.getMonth() === S.mes.m, libre = enMes && !!S.dias[k];
+          var b = h("button", { type: "button",
+            class: "rsv-cd" + (libre ? " ok" : "") + (enMes ? "" : " out") + (k === hoyK ? " today" : "") + (S.dia === k ? " sel" : ""),
+            disabled: !libre, "aria-pressed": libre ? String(S.dia === k) : null,
+            "aria-label": fechaLarga(k) + (libre ? "" : ", sin horas disponibles"), text: String(d.getDate()) });
+          if (libre) b.addEventListener("click", function () { S.dia = k; S.hora = null; a.next.disabled = true; err.textContent = ""; pintar(".rsv-cd.sel"); });
+          grid.appendChild(b);
+        })(new Date(S.mes.y, S.mes.m, 1 - desfase + i));
+      }
+      var colCal = h("div", null, h("p", { class: "rsv-label", text: "Selecciona la fecha" }), h("div", { class: "rsv-cal" }, cab, sem, grid));
+
+      /* horas del día elegido */
+      var colHoras = h("div", { class: "rsv-hpanel" }, h("p", { class: "rsv-label", text: "Selecciona una hora" }));
       if (S.dia) {
-        zona.appendChild(h("p", { class: "rsv-label", text: "Horas disponibles el " + fechaLarga(S.dia) }));
+        colHoras.appendChild(h("p", { class: "rsv-small", text: fechaLarga(S.dia) }));
         var horas = h("div", { class: "rsv-hours", role: "group", "aria-label": "Horas disponibles" });
         S.dias[S.dia].forEach(function (hh) {
           var b = h("button", { type: "button", class: "rsv-hour" + (S.hora === hh ? " sel" : ""), "aria-pressed": S.hora === hh ? "true" : "false", text: hh });
-          b.addEventListener("click", function () { S.hora = hh; a.next.disabled = false; err.textContent = ""; pintar(); });
+          b.addEventListener("click", function () { S.hora = hh; a.next.disabled = false; err.textContent = ""; pintar(".rsv-hour.sel"); });
           horas.appendChild(b);
         });
-        zona.appendChild(horas);
-      } else zona.appendChild(h("p", { class: "rsv-sub", text: "Selecciona un día." }));
+        colHoras.appendChild(horas);
+      } else colHoras.appendChild(h("p", { class: "rsv-info", text: "Selecciona una fecha primero." }));
+
+      zona.appendChild(colCal); zona.appendChild(colHoras);
       if (S.dia && S.hora) zona.appendChild(h("p", { class: "rsv-sum", text: "Tu hora: " + fechaLarga(S.dia) + " a las " + S.hora + " · 30 minutos" }));
+      if (foco) { var el = zona.querySelector(foco); if (el && !el.disabled) el.focus(); }
     }
     function cargar() {
       api("GET", "/reserva/horas?clinica=" + encodeURIComponent(S.clinica.id)).then(function (d) {
         if (!d.ok) { zona.textContent = ""; err.textContent = msg(d.error); if (d.error === "sesion_vencida") setTimeout(function () { go(0); }, 1200); return; }
         S.dias = d.dias || {};
+        S.mes = null;
         if (S.dia && !S.dias[S.dia]) { S.dia = null; S.hora = null; }
         pintar();
       });
