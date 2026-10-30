@@ -456,7 +456,9 @@ dialog::backdrop{background:rgba(6,18,22,.62)}
 .contact .fine{color:var(--muted);font-size:.8rem;margin:0}
 </style>
 <link rel="stylesheet" href="tema.css">
+<link rel="stylesheet" href="reserva.css">
 <script src="rut.js" defer></script>
+<script src="reserva.js" defer></script>
 </head>
 <body>
 <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
@@ -527,7 +529,7 @@ dialog::backdrop{background:rgba(6,18,22,.62)}
         <div class="blob" aria-hidden="true"></div>
         <div class="photo"><img src="hero.jpg" alt="Paciente sonriendo durante una consulta dental" width="439" height="328"></div>
         <aside class="next" aria-live="polite">
-          <p class="eyebrow">Próxima hora disponible</p>
+          <p class="eyebrow">Agenda en línea</p>
           <p class="t" id="next-when">Reserva tu hora en línea</p>
           <p class="s" id="next-s">Atención de 30 minutos</p>
           <button class="btn btn-cta" id="next-btn" type="button">Tomar esta hora</button>
@@ -672,9 +674,10 @@ dialog::backdrop{background:rgba(6,18,22,.62)}
         <h2>Elige tu día y tu hora.</h2>
         <div class="agenda-info"><p><b>La evaluación tiene un valor de $10.000</b> y la realiza un cirujano dentista.</p></div>
         <div class="agenda-info"><p><b>Limpieza + evaluación: 20.000 pesos</b></p></div>
-        <p class="lead">Los horarios en gris ya están tomados. Las horas se reservan con al menos 3 días de anticipación. La hora queda reservada una vez que se paga y la clínica te la confirma.</p>
+        <p class="lead">Ingresa tu RUT, elige tu clínica y reserva en pocos minutos. Te confirmamos por WhatsApp y correo.</p>
+        <div class="submit-row"><button type="button" class="btn btn-cta" data-agendar>Agendar hora</button></div>
       </div>
-      <div class="panel">
+      <div class="panel" hidden>
         <form id="book-form" novalidate>
           <div class="field" style="max-width:420px">
             <label for="reason">Motivo</label>
@@ -907,7 +910,8 @@ dialog::backdrop{background:rgba(6,18,22,.62)}
     $("next-btn").hidden=true;
   }
   }
-  renderNext();
+  /* La tarjeta de la portada ya no usa el calendario antiguo: abre el agendador nuevo, que lee la agenda real de la clínica */
+  $("next-btn").textContent="Agendar hora";$("next-btn").onclick=function(){if(window.RMReserva)RMReserva.open()};
   renderDays();renderTimes();renderSum();
   /* Calendario: fetch y, si falla, JSONP. Agrega ?debug a la URL del sitio para ver el estado. */
   var dbg=/[?&]debug/.test(location.search),stEl=$("cal-status");
@@ -1109,7 +1113,7 @@ dialog::backdrop{background:rgba(6,18,22,.62)}
   f.addEventListener("submit",function(e){
     e.preventDefault();
     setReason(pick(document.getElementById("rm-q").value));
-    var a=document.getElementById("agenda");if(a)a.scrollIntoView({behavior:"smooth"});
+    if(window.RMReserva){RMReserva.open();return}var a=document.getElementById("agenda");if(a)a.scrollIntoView({behavior:"smooth"});
   });
   [].slice.call(document.querySelectorAll(".rm-chip[data-reason]")).forEach(function(c){
     c.addEventListener("click",function(){setReason(c.getAttribute("data-reason"))});

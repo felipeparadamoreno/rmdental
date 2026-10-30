@@ -1,0 +1,64 @@
+/* RM Dental · agendador web (ventana de "Agendar hora"). Usa las variables de tema.css (colores, tipografía). */
+html.rsv-lock{overflow:hidden}
+.rsv-overlay{position:fixed;inset:0;z-index:1000;display:flex;align-items:center;justify-content:center;padding:16px;background:rgba(8,28,36,.55);backdrop-filter:blur(3px)}
+.rsv-overlay[hidden]{display:none}
+.rsv-dialog{position:relative;width:100%;max-width:540px;max-height:calc(100dvh - 32px);overflow:auto;background:var(--surface,#fff);color:var(--fg,#10243A);border:1px solid var(--line,#D5EEF2);border-radius:22px;box-shadow:0 24px 70px rgba(4,40,50,.35);font-family:var(--font-body,system-ui,sans-serif);animation:rsv-in .22s ease-out}
+@keyframes rsv-in{from{opacity:0;transform:translateY(14px) scale(.98)}to{opacity:1;transform:none}}
+@media (prefers-reduced-motion:reduce){.rsv-dialog{animation:none}}
+.rsv-head{display:flex;align-items:center;justify-content:space-between;padding:14px 18px 0}
+.rsv-brand{font-weight:700;color:var(--accent,#05808E);letter-spacing:.01em}
+.rsv-x{border:0;background:var(--accent-soft,#E3F6F8);color:var(--fg,#10243A);width:36px;height:36px;border-radius:50%;font-size:1.5rem;line-height:1;cursor:pointer}
+.rsv-x:hover{background:var(--line,#D5EEF2)}
+.rsv-progress{display:flex;align-items:center;gap:6px;padding:10px 18px 0;min-height:22px}
+.rsv-dot{flex:0 0 26px;height:6px;border-radius:999px;background:var(--line,#D5EEF2)}
+.rsv-dot.done{background:var(--teal,#04A5B8)}
+.rsv-dot.now{background:var(--accent,#05808E)}
+.rsv-count{margin-left:auto;font-size:.78rem;color:var(--muted,#51647A)}
+.rsv-body{padding:8px 22px 22px}
+.rsv-title{font-family:var(--font-display,inherit);font-size:clamp(1.35rem,4.5vw,1.7rem);line-height:1.2;margin:.9rem 0 .4rem;font-weight:700;outline:none}
+.rsv-h3{font-size:1.05rem;margin:1.3rem 0 .2rem}
+.rsv-sub{color:var(--muted,#51647A);font-size:.95rem;margin:.2rem 0 1rem}
+.rsv-field{display:grid;gap:.3rem;margin:0 0 .9rem}
+.rsv-field label,.rsv-label{font-weight:600;font-size:.92rem}
+.rsv-field small{color:var(--muted,#51647A);font-size:.8rem}
+.rsv-input{width:100%;box-sizing:border-box;padding:.75rem .9rem;border:1px solid var(--line,#D5EEF2);border-radius:12px;background:var(--field,#F4FCFD);color:var(--fg,#10243A);font:inherit;font-size:1rem}
+.rsv-input:focus-visible{outline:none;border-color:var(--teal,#04A5B8);box-shadow:0 0 0 3px rgba(4,165,184,.25)}
+.rsv-captcha{margin:.2rem 0 .9rem;min-height:78px;overflow-x:auto}
+.rsv-check{display:flex;gap:.6rem;align-items:flex-start;font-size:.9rem;margin:0 0 .9rem;cursor:pointer}
+.rsv-check input{margin-top:.2rem;width:18px;height:18px;flex:0 0 18px;accent-color:var(--accent,#05808E)}
+.rsv-check a{color:var(--accent,#05808E);text-decoration:underline}
+.rsv-err{color:var(--danger,#C2410C);font-size:.9rem;margin:.2rem 0 .6rem;min-height:1.2em}
+.rsv-warn{background:var(--accent-soft,#E3F6F8);border-radius:12px;padding:.7rem .9rem;font-size:.9rem}
+.rsv-actions{display:flex;gap:.7rem;justify-content:flex-end;margin-top:.6rem}
+.rsv-actions .btn{cursor:pointer}
+.rsv-actions .btn[disabled]{opacity:.55;cursor:not-allowed}
+.rsv-col{flex-direction:column}
+.rsv-col .btn{text-align:center;justify-content:center}
+.rsv-options{display:grid;gap:.5rem;margin-bottom:.6rem}
+.rsv-opt{display:flex;gap:.7rem;align-items:center;padding:.75rem .9rem;border:1px solid var(--line,#D5EEF2);border-radius:14px;background:var(--field,#F4FCFD);cursor:pointer;font-size:.97rem}
+.rsv-opt:hover{border-color:var(--teal,#04A5B8)}
+.rsv-opt:has(input:checked){border-color:var(--accent,#05808E);background:var(--accent-soft,#E3F6F8);box-shadow:0 0 0 2px rgba(5,128,142,.18)}
+.rsv-opt:has(input:focus-visible){box-shadow:0 0 0 3px rgba(4,165,184,.35)}
+.rsv-opt input{accent-color:var(--accent,#05808E);width:18px;height:18px;flex:0 0 18px}
+.rsv-opt span{display:grid;gap:.1rem}
+.rsv-opt small{color:var(--muted,#51647A);font-size:.82rem}
+.rsv-days{display:flex;gap:.5rem;overflow-x:auto;padding:.2rem .1rem .6rem;scroll-snap-type:x proximity}
+.rsv-day{flex:0 0 62px;display:grid;justify-items:center;gap:.05rem;padding:.55rem .2rem;border:1px solid var(--line,#D5EEF2);border-radius:14px;background:var(--field,#F4FCFD);color:var(--fg,#10243A);font:inherit;cursor:pointer;scroll-snap-align:start}
+.rsv-day b{font-size:1.2rem}
+.rsv-day small{font-size:.72rem;text-transform:uppercase;color:var(--muted,#51647A)}
+.rsv-day.sel,.rsv-hour.sel{background:var(--cta,#05808E);color:var(--cta-fg,#fff);border-color:var(--cta,#05808E)}
+.rsv-day.sel small{color:inherit}
+.rsv-hours{display:grid;grid-template-columns:repeat(auto-fill,minmax(78px,1fr));gap:.5rem;margin:.4rem 0 .6rem}
+.rsv-hour{padding:.6rem .2rem;border:1px solid var(--line,#D5EEF2);border-radius:12px;background:var(--field,#F4FCFD);color:var(--fg,#10243A);font:inherit;cursor:pointer}
+.rsv-hour:hover,.rsv-day:hover{border-color:var(--teal,#04A5B8)}
+.rsv-day:focus-visible,.rsv-hour:focus-visible{outline:3px solid rgba(4,165,184,.45);outline-offset:1px}
+.rsv-sum{background:var(--accent-soft,#E3F6F8);border-radius:12px;padding:.7rem .9rem;font-weight:600;margin:.4rem 0}
+.rsv-ficha{background:var(--accent-soft,#E3F6F8);border-radius:16px;padding:.8rem 1rem;margin:.6rem 0}
+.rsv-ficha p{margin:.25rem 0;font-size:.97rem}
+.rsv-steps{margin:.2rem 0 1rem 1.2rem;padding:0;color:var(--muted,#51647A);font-size:.92rem;display:grid;gap:.3rem}
+@media (max-width:520px){
+  .rsv-overlay{padding:0;align-items:flex-end}
+  .rsv-dialog{max-width:none;max-height:96dvh;border-radius:22px 22px 0 0}
+  .rsv-actions{flex-direction:column-reverse}
+  .rsv-actions .btn{width:100%;text-align:center}
+}
