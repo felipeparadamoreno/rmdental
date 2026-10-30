@@ -115,6 +115,16 @@ table.tb td.n,table.tb th.n{text-align:right;font-variant-numeric:tabular-nums}
 .prow{display:grid;grid-template-columns:minmax(0,1.6fr) minmax(0,1fr) minmax(0,1fr) auto;gap:6px 14px;align-items:center;text-align:left;width:100%;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px 16px;font:inherit;color:inherit;cursor:pointer}
 .prow:hover{border-color:var(--teal)}.prow small{display:block;color:var(--mut);font-size:12px}.prow.off{opacity:.55}
 @media(max-width:700px){.prow{grid-template-columns:1fr}}
+.hz-d{display:grid;grid-template-columns:110px 1fr;gap:6px 12px;align-items:start;padding:10px 0;border-bottom:1px solid var(--line)}
+.hz-d:last-of-type{border-bottom:0}
+.hz-d>b{padding-top:8px}
+.hz-ts{display:grid;gap:6px}
+.hz-t{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.hz-t input[type=time]{width:auto;min-width:112px}
+.hz-x{border:0;background:none;cursor:pointer;color:var(--mut);font-size:16px;padding:6px 8px}
+.hz-x:hover{color:#b3261e}
+.hz-add{grid-column:2;justify-self:start;border:1px dashed var(--line);background:none;border-radius:9px;padding:6px 12px;cursor:pointer;color:var(--teal);font:inherit;font-weight:700}
+@media(max-width:560px){.hz-d{grid-template-columns:1fr}.hz-add{grid-column:1}.hz-d>b{padding-top:0}}
 .tabs{display:flex;flex-wrap:wrap;gap:6px;margin:16px 0}
 .tabs button{padding:9px 14px;border:1px solid var(--line);background:var(--card);border-radius:99px;font:inherit;font-weight:700;font-size:14px;color:var(--ink);cursor:pointer}
 .tabs button:hover{border-color:var(--teal)}.tabs button.on{background:var(--teal);border-color:var(--teal);color:#fff}
@@ -159,6 +169,7 @@ table.tb td.n,table.tb th.n{text-align:right;font-variant-numeric:tabular-nums}
   <div class="menu">
     <button class="opt" data-go="pacientes"><div class="ic">🦷</div><b>Pacientes</b><span>Lista de pacientes y ficha completa de cada uno: datos personales, citas, tratamientos, atenciones, pagos y anamnesis.</span></button>
     <button class="opt" data-go="profesionales"><div class="ic">🩺</div><b>Profesionales</b><span>El equipo de la clínica: especialidad, contacto y rol.</span></button>
+    <button class="opt" data-go="horarios"><div class="ic">🕘</div><b>Horarios</b><span>El horario general de la clínica y el horario personal de cada profesional.</span></button>
     <button class="opt" data-go="admin"><div class="ic">🗂️</div><b>Administrativo</b><span>Documentos clínicos, usuarios, finanzas de la clínica y tu cuenta.</span></button>
   </div>
   <p style="margin-top:22px"><button class="btn sec" id="b-out" type="button">Cerrar sesión</button></p>
@@ -208,6 +219,23 @@ table.tb td.n,table.tb th.n{text-align:right;font-variant-numeric:tabular-nums}
   <h1>Profesionales</h1>
   <p class="lead">El equipo de la clínica. Crear cuentas, cambiar roles o claves se hace en Administrativo › Usuarios (solo dueño).</p>
   <div class="card"><div id="pf-list"><span class="empty">Cargando…</span></div></div>
+</section>
+
+<!-- HORARIOS -->
+<section id="v-horarios" hidden class="noprint">
+  <button class="back" data-go="menu">← Volver al inicio</button>
+  <h1>Horarios</h1>
+  <p class="lead">Las horas que se ofrecen para agendar salen de aquí. El horario de cada profesional se recorta siempre al de la clínica.</p>
+  <div class="tabs" role="tablist">
+    <button type="button" data-hz="clinica" class="on">Horario de la clínica</button>
+    <button type="button" data-hz="prof">Horario de cada profesional</button>
+  </div>
+  <div class="card" id="hz-clinica"><span class="empty">Cargando…</span></div>
+  <div class="card" id="hz-prof" hidden>
+    <label for="hz-sel" style="margin-top:0">Profesional</label>
+    <select id="hz-sel"></select>
+    <div id="hz-pbody" style="margin-top:14px"></div>
+  </div>
 </section>
 
 <!-- ADMINISTRATIVO -->
@@ -540,7 +568,7 @@ function rutOk(r){
 
 /* Vistas */
 function show(v){
-  ["login","menu","pacientes","paciente","profesionales","admin","docs","ficha","agenda","trat","trib","fin","dueno","aten","usu","clave"].forEach(n=>$("v-"+n).hidden=n!==v);
+  ["login","menu","pacientes","paciente","profesionales","admin","docs","ficha","agenda","trat","trib","fin","dueno","aten","usu","clave","horarios"].forEach(n=>$("v-"+n).hidden=n!==v);
   window.scrollTo(0,0);
 }
 document.addEventListener("click",e=>{const b=e.target.closest("[data-go]");if(b)show(b.dataset.go)});
@@ -695,12 +723,13 @@ async function loadSlots(){
   const f=$("a-fecha").value,box=$("a-slots");selHora=null;
   if(!f){box.innerHTML='<span class="empty" style="grid-column:1/-1">Elige una fecha.</span>';return}
   const dow=new Date(f+"T12:00:00").getDay();
-  if(dow===0){box.innerHTML='<span class="empty" style="grid-column:1/-1">Domingo: sin atención.</span>';return}
-  const r=await api("/pro/citas/ocupadas?fecha="+f);
+  const [r,hz]=await Promise.all([api("/pro/citas/ocupadas?fecha="+f),api("/pro/horarios/dia?fecha="+f)]);
   if(r.status===401)return sesionVencida();
   const busy=new Set(r.ok?r.d.horas:[]),hoy=f===hoyCL(),now=ahoraCL();
   box.innerHTML="";
-  (dow===6?HORARIO.sab:HORARIO.sem).forEach(h=>{
+  const horas=hz.ok&&Array.isArray(hz.d.horas)?hz.d.horas:(dow===6?HORARIO.sab:HORARIO.sem);
+  if(!horas.length){box.innerHTML='<span class="empty" style="grid-column:1/-1">Sin atención ese día según tu horario.</span>';return}
+  horas.forEach(h=>{
     const b=document.createElement("button");b.type="button";b.className="slot";b.textContent=h;
     if(busy.has(h)||(hoy&&h<=now))b.disabled=true;
     b.onclick=()=>{selHora=h;box.querySelectorAll(".slot").forEach(x=>x.classList.toggle("on",x===b))};
@@ -736,6 +765,103 @@ $("f-agenda").addEventListener("submit",async e=>{
   m.className="msg ok";m.textContent="Hora agendada para "+selPac.nombre+": "+$("a-fecha").value.split("-").reverse().join("/")+" a las "+selHora+".";
   loadSlots();loadCitas();
 });
+/* Horarios: clínica y cada profesional */
+const HZ_DIAS=[[1,"Lunes"],[2,"Martes"],[3,"Miércoles"],[4,"Jueves"],[5,"Viernes"],[6,"Sábado"],[0,"Domingo"]];
+let HZ=null;
+function hzTramos(bloques,dia){return bloques.filter(b=>b.dia===dia)}
+function hzTexto(bloques){
+  return HZ_DIAS.map(([d,n])=>{const t=hzTramos(bloques,d);return '<div class="hz-d"><b>'+n+'</b><span>'+(t.length?t.map(x=>esc(x.desde)+' – '+esc(x.hasta)).join(' · '):'<em class="empty">Sin atención</em>')+'</span></div>'}).join("");
+}
+function hzFila(b){
+  return '<div class="hz-t"><input type="time" step="1800" value="'+esc(b.desde)+'" data-f="desde"><span>a</span><input type="time" step="1800" value="'+esc(b.hasta)+'" data-f="hasta"><button type="button" class="hz-x" aria-label="Quitar tramo" data-x>✕</button></div>';
+}
+function hzEditor(bloques){
+  return HZ_DIAS.map(([d,n])=>'<div class="hz-d" data-dia="'+d+'"><b>'+n+'</b><div class="hz-ts">'+hzTramos(bloques,d).map(hzFila).join("")+'</div><button type="button" class="hz-add" data-add>＋ Agregar tramo</button></div>').join("");
+}
+function hzLeer(cont){
+  const out=[];
+  cont.querySelectorAll(".hz-d[data-dia]").forEach(d=>{
+    d.querySelectorAll(".hz-t").forEach(t=>{
+      const a=t.querySelector('[data-f="desde"]').value,b=t.querySelector('[data-f="hasta"]').value;
+      if(a||b)out.push({dia:+d.dataset.dia,desde:a,hasta:b});
+    });
+  });
+  return out;
+}
+function hzBind(cont){
+  cont.addEventListener("click",e=>{
+    const x=e.target.closest("[data-x]");if(x){x.closest(".hz-t").remove();return}
+    const a=e.target.closest("[data-add]");
+    if(a){const ts=a.closest(".hz-d").querySelector(".hz-ts");ts.insertAdjacentHTML("beforeend",hzFila({desde:"09:00",hasta:"13:00"}))}
+  });
+}
+async function hzGuardar(url,cont,msg,btn){
+  const bloques=hzLeer(cont);
+  if(bloques.some(b=>!b.desde||!b.hasta)){msg.className="msg err";msg.textContent="Completa la hora de inicio y de término de cada tramo.";return}
+  btn.disabled=true;msg.className="msg";msg.textContent="Guardando…";
+  const r=await api(url,{bloques},"PUT");
+  btn.disabled=false;
+  if(r.status===401)return sesionVencida();
+  if(!r.ok){msg.className="msg err";msg.textContent=r.d.error||"No se pudo guardar.";return}
+  msg.className="msg ok";msg.textContent="Horario guardado ✓";
+  await hzCargar(true);
+}
+function hzRenderClinica(){
+  const c=HZ.clinica,box=$("hz-clinica"),ed=HZ.puede_editar_clinica;
+  let h='<h2 style="margin-top:0">Horario general de la clínica</h2>';
+  if(!c.definido)h+='<p class="note" style="color:var(--mut);font-size:13px">Aún no se ha guardado un horario: por ahora rige el horario por defecto que se muestra abajo.</p>';
+  if(ed){
+    h+='<div id="hz-ced">'+hzEditor(c.bloques)+'</div><p class="msg" id="hz-cmsg" role="alert"></p><button class="btn" type="button" id="hz-cbtn">Guardar horario de la clínica</button>';
+  }else h+=hzTexto(c.bloques)+'<p class="note" style="color:var(--mut);font-size:13px;margin-top:12px">Solo el dueño puede cambiar el horario de la clínica.</p>';
+  box.innerHTML=h;
+  if(ed){const cont=$("hz-ced");hzBind(cont);$("hz-cbtn").onclick=()=>hzGuardar("/pro/horarios/clinica",cont,$("hz-cmsg"),$("hz-cbtn"))}
+}
+function hzRenderProf(){
+  const sel=$("hz-sel"),prev=sel.value||String(HZ.yo);
+  sel.innerHTML=HZ.profesionales.map(p=>'<option value="'+p.id+'">'+esc(p.nombre)+(p.especialidad?" · "+esc(p.especialidad):"")+(p.id===HZ.yo?" (yo)":"")+'</option>').join("");
+  if(HZ.profesionales.some(p=>String(p.id)===prev))sel.value=prev;
+  hzProfBody();
+}
+function hzProfBody(){
+  const p=HZ.profesionales.find(x=>String(x.id)===$("hz-sel").value),box=$("hz-pbody");
+  if(!p){box.innerHTML='<span class="empty">No hay profesionales.</span>';return}
+  let h='';
+  if(!p.definido)h+='<p class="note" style="color:var(--mut);font-size:13px;margin-top:0">Sin horario propio: sigue el horario de la clínica. Agrega tramos para fijar uno personal (siempre dentro del horario de la clínica).</p>';
+  if(p.puede_editar){
+    h+='<div id="hz-ped">'+hzEditor(p.definido?p.bloques:[])+'</div><p class="msg" id="hz-pmsg" role="alert"></p>'+
+       '<button class="btn" type="button" id="hz-pbtn">Guardar horario de '+esc(p.nombre.split(" ")[0])+'</button> '+
+       (p.definido?'<button class="btn sec" type="button" id="hz-preset">Usar el horario de la clínica</button>':'');
+  }else h+=(p.definido?hzTexto(p.bloques):'<span class="empty">Sigue el horario de la clínica.</span>')+'<p class="note" style="color:var(--mut);font-size:13px;margin-top:12px">Cada profesional cambia su propio horario; el dueño puede cambiar el de todos.</p>';
+  box.innerHTML=h;
+  if(p.puede_editar){
+    const cont=$("hz-ped");hzBind(cont);
+    $("hz-pbtn").onclick=()=>{
+      if(!hzLeer(cont).length&&!confirm("Sin tramos, "+p.nombre+" seguirá el horario de la clínica. ¿Continuar?"))return;
+      hzGuardar("/pro/horarios/profesional/"+p.id,cont,$("hz-pmsg"),$("hz-pbtn"));
+    };
+    const rs=$("hz-preset");
+    if(rs)rs.onclick=async()=>{
+      if(!confirm("¿Quitar el horario personal y seguir el de la clínica?"))return;
+      const r=await api("/pro/horarios/profesional/"+p.id,{bloques:[]},"PUT");
+      if(r.status===401)return sesionVencida();
+      if(!r.ok){$("hz-pmsg").className="msg err";$("hz-pmsg").textContent=r.d.error||"No se pudo guardar.";return}
+      await hzCargar(true);
+    };
+  }
+}
+async function hzCargar(silencioso){
+  if(!silencioso)$("hz-clinica").innerHTML='<span class="empty">Cargando…</span>';
+  const r=await api("/pro/horarios");
+  if(r.status===401)return sesionVencida();
+  if(!r.ok){$("hz-clinica").innerHTML='<span class="empty">'+esc(r.d.error||"No se pudo cargar.")+'</span>';return}
+  HZ=r.d;hzRenderClinica();hzRenderProf();
+}
+$("hz-sel").addEventListener("change",hzProfBody);
+document.querySelectorAll("[data-hz]").forEach(b=>b.addEventListener("click",()=>{
+  document.querySelectorAll("[data-hz]").forEach(x=>x.classList.toggle("on",x===b));
+  $("hz-clinica").hidden=b.dataset.hz!=="clinica";$("hz-prof").hidden=b.dataset.hz!=="prof";
+}));
+document.addEventListener("click",e=>{if(e.target.closest('[data-go="horarios"]'))hzCargar()});
 /* Tratamiento, sesiones, valor y radiografías */
 let tPac=null,tEdit=null,tT=null;
 const clp=n=>n==null?"—":"$"+Number(n).toLocaleString("es-CL");
