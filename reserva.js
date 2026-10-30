@@ -10,6 +10,7 @@
   var MON = ["ene", "feb", "mar", "abr", "may", "jun", "jul", "ago", "sep", "oct", "nov", "dic"];
   var MONL = ["enero", "febrero", "marzo", "abril", "mayo", "junio", "julio", "agosto", "septiembre", "octubre", "noviembre", "diciembre"];
   var PASOS = 5;
+  var HORA_INICIO = 9 * 60, HORA_FIN = 18 * 60; /* horario de atención (igual que HORARIO en agenda.js del servidor); las horas que el servidor no entrega se muestran tachadas */
   var ERRORES = {
     rut_invalido: "Revisa tu RUT: no parece válido.",
     falta_aceptar_terminos: "Debes aceptar los términos y condiciones.",
@@ -355,9 +356,13 @@
       if (S.dia) {
         colHoras.appendChild(h("p", { class: "rsv-small", text: fechaLarga(S.dia) }));
         var horas = h("div", { class: "rsv-hours", role: "group", "aria-label": "Horas disponibles" });
-        S.dias[S.dia].forEach(function (hh) {
-          var b = h("button", { type: "button", class: "rsv-hour" + (S.hora === hh ? " sel" : ""), "aria-pressed": S.hora === hh ? "true" : "false", text: hh });
-          b.addEventListener("click", function () { S.hora = hh; a.next.disabled = false; err.textContent = ""; pintar(".rsv-hour.sel"); });
+        var libres = S.dias[S.dia], todas = libres.slice(), paso = S.duracion || 30;
+        for (var t = HORA_INICIO; t < HORA_FIN; t += paso) { var tt = pad(Math.floor(t / 60)) + ":" + pad(t % 60); if (todas.indexOf(tt) < 0) todas.push(tt); }
+        todas.sort().forEach(function (hh) {
+          var libre = libres.indexOf(hh) >= 0;
+          var b = h("button", { type: "button", class: "rsv-hour" + (libre ? "" : " no") + (S.hora === hh ? " sel" : ""), disabled: !libre,
+            "aria-pressed": libre ? String(S.hora === hh) : null, "aria-label": libre ? hh : hh + ", no disponible", text: hh });
+          if (libre) b.addEventListener("click", function () { S.hora = hh; a.next.disabled = false; err.textContent = ""; pintar(".rsv-hour.sel"); });
           horas.appendChild(b);
         });
         colHoras.appendChild(horas);
@@ -371,6 +376,7 @@
       api("GET", "/reserva/horas?clinica=" + encodeURIComponent(S.clinica.id)).then(function (d) {
         if (!d.ok) { zona.textContent = ""; err.textContent = msg(d.error); if (d.error === "sesion_vencida") setTimeout(function () { go(0); }, 1200); return; }
         S.dias = d.dias || {};
+        S.duracion = d.duracion_minutos || 30;
         S.mes = null;
         if (S.dia && !S.dias[S.dia]) { S.dia = null; S.hora = null; }
         pintar();

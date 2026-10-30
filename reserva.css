@@ -60,6 +60,7 @@ html.rsv-lock{overflow:hidden}
 .rsv-cal-dow span{text-align:center;padding:.45rem 0;font-size:.85rem;background:var(--accent-soft,#E3F6F8);color:var(--fg,#10243A)}
 .rsv-cal-grid{gap:2px;padding:2px;background:var(--surface,#fff)}
 .rsv-cd{min-height:40px;border:0;border-radius:2px;background:var(--field,#F4FCFD);color:var(--muted,#51647A);font:inherit;font-size:.95rem;cursor:default}
+.rsv-cd:not(.ok):not(.out){text-decoration:line-through;opacity:.6}
 .rsv-cd.out{background:transparent;color:var(--line,#D5EEF2)}
 .rsv-cd.ok{color:var(--fg,#10243A);font-weight:700;cursor:pointer}
 .rsv-cd.ok:hover{background:var(--accent-soft,#E3F6F8)}
@@ -70,6 +71,7 @@ html.rsv-lock{overflow:hidden}
 .rsv-info{margin:.4rem 0 0;padding:1rem;border-radius:10px;background:var(--accent-soft,#E3F6F8);color:var(--fg,#10243A);text-align:center;font-size:.95rem}
 .rsv-hours{display:grid;grid-template-columns:repeat(auto-fill,minmax(78px,1fr));gap:.5rem;margin:.4rem 0 .6rem}
 .rsv-hour{padding:.6rem .2rem;border:1px solid var(--line,#D5EEF2);border-radius:12px;background:var(--field,#F4FCFD);color:var(--fg,#10243A);font:inherit;cursor:pointer}
+.rsv-hour.no,.rsv-hour.no:hover{text-decoration:line-through;color:var(--muted,#51647A);opacity:.55;background:transparent;border-color:var(--line,#D5EEF2);cursor:not-allowed}
 .rsv-hour:hover{border-color:var(--teal,#04A5B8)}
 .rsv-hour:focus-visible{outline:3px solid rgba(4,165,184,.45);outline-offset:1px}
 .rsv-sum{background:var(--accent-soft,#E3F6F8);border-radius:12px;padding:.7rem .9rem;font-weight:600;margin:.4rem 0}
