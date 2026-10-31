@@ -530,8 +530,9 @@ dialog::backdrop{background:rgba(6,18,22,.62)}
         <div class="photo"><img src="hero.jpg" alt="Paciente sonriendo durante una consulta dental" width="439" height="328"></div>
         <aside class="next" aria-live="polite">
           <p class="eyebrow">Agenda en línea</p>
-          <p class="t" id="next-when">Reserva tu hora en línea</p>
-          <p class="s" id="next-s">Atención de 30 minutos</p>
+          <p class="s" id="next-s">Primera fecha disponible</p>
+          <p class="t" id="next-when" data-proxima-fecha>Reserva tu hora en línea</p>
+          <p class="s">Atención de 30 minutos</p>
           <button class="btn btn-cta" id="next-btn" type="button">Tomar esta hora</button>
           <dl class="hours">
             <div><dt>Lunes, miércoles y viernes</dt><dd>09:00–15:00</dd></div>
@@ -675,6 +676,7 @@ dialog::backdrop{background:rgba(6,18,22,.62)}
         <div class="agenda-info"><p><b>La evaluación tiene un valor de $10.000</b> y la realiza un cirujano dentista.</p></div>
         <div class="agenda-info"><p><b>Limpieza + evaluación: 20.000 pesos</b></p></div>
         <p class="lead">Ingresa tu RUT, elige tu clínica y reserva en pocos minutos. Te confirmamos por WhatsApp y correo.</p>
+        <div class="agenda-info agenda-next"><p>Primera fecha disponible: <b data-proxima-fecha>en 7 días</b></p></div>
         <div class="submit-row"><button type="button" class="btn btn-cta" data-agendar>Agendar hora</button></div>
       </div>
       <div class="panel" hidden>
@@ -891,25 +893,7 @@ dialog::backdrop{background:rgba(6,18,22,.62)}
   $("reason").addEventListener("change",renderSum);
   
 
-  function renderNext(){
-  $("next-btn").hidden=false;
-  if(days.length){
-    var first=days[0],ft=first.free[0];
-    var label=first.isToday?"Hoy":(function(){
-      var tmr=new Date(now.getFullYear(),now.getMonth(),now.getDate()+1);
-      return first.date.getTime()===tmr.getTime()?"Mañana":DOW[first.date.getDay()].charAt(0).toUpperCase()+DOW[first.date.getDay()].slice(1)+" "+first.date.getDate();
-    })();
-    $("next-when").textContent=label+" · "+BANDS[["manana","mediodia","tarde"].indexOf(bandOf(ft))].n;
-    $("next-s").textContent="Duración: 30 minutos";
-    $("next-btn").onclick=function(){
-      selDay=0;selTime=null;selBand=bandOf(ft);renderDays();renderTimes();renderSum();
-      $("agenda").scrollIntoView();
-    };
-  }else{
-    $("next-when").textContent="Escríbenos por correo";
-    $("next-btn").hidden=true;
-  }
-  }
+  function renderNext(){$("next-btn").hidden=false} /* la fecha de la tarjeta la pone reserva.js (hoy + 7 días) */
   /* La tarjeta de la portada ya no usa el calendario antiguo: abre el agendador nuevo, que lee la agenda real de la clínica */
   $("next-btn").textContent="Agendar hora";$("next-btn").onclick=function(){if(window.RMReserva)RMReserva.open()};
   renderDays();renderTimes();renderSum();

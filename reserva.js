@@ -424,7 +424,24 @@
       h("button", { type: "button", class: "btn btn-ghost", text: "Cerrar", onclick: close })));
   }
 
-  window.RMReserva = { open: open, close: close };
+  /* Primera fecha que ofrece el agendador: 7 días después de hoy (igual que DIAS_MIN_WEB del servidor), de lunes a viernes.
+     Cualquier elemento con data-proxima-fecha recibe ese texto, por ejemplo "Lunes 9 de noviembre". */
+  function proxima() {
+    var hoy = new Date(), d = new Date(hoy.getFullYear(), hoy.getMonth(), hoy.getDate() + 7);
+    while (d.getDay() === 0 || d.getDay() === 6) d.setDate(d.getDate() + 1);
+    return d;
+  }
+  function textoProxima() {
+    var d = proxima(), t = DOWL[d.getDay()] + " " + d.getDate() + " de " + MONL[d.getMonth()];
+    return t.charAt(0).toUpperCase() + t.slice(1);
+  }
+  function pintarProxima() {
+    var els = document.querySelectorAll("[data-proxima-fecha]"), t = textoProxima();
+    for (var i = 0; i < els.length; i++) els[i].textContent = t;
+  }
+  if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", pintarProxima); else pintarProxima();
+
+  window.RMReserva = { open: open, close: close, proxima: proxima, textoProxima: textoProxima };
 
   /* Todos los enlaces y botones "Agendar hora" (href="#agenda") abren esta ventana */
   document.addEventListener("click", function (e) {

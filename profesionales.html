@@ -398,7 +398,9 @@ button,input,select{font:inherit;color:inherit}
 </style>
 <link rel="stylesheet" href="agenda.css">
 <link rel="stylesheet" href="tema.css">
+<link rel="stylesheet" href="reserva.css">
 <script src="rut.js" defer></script>
+<script src="reserva.js" defer></script>
 </head>
 <body>
 <header class="top" id="top">
@@ -406,7 +408,7 @@ button,input,select{font:inherit;color:inherit}
     <a class="brand" href="#top" aria-label="RM Dental"><img class="logo" src="logo.png" alt="Red Metropolitana Dental" width="640" height="99"></a>
     <div class="top-r">
       <a class="wa" id="wa-top" href="#consulta">Escríbenos por correo</a>
-      <a class="btn btn-cta" href="#reservar">Reservar mi hora<i class="live" role="img" aria-label="En línea"></i></a>
+      <a class="btn btn-cta" href="#reservar" data-agendar>Reservar mi hora<i class="live" role="img" aria-label="En línea"></i></a>
     </div>
   </div>
 </header>
@@ -428,8 +430,9 @@ button,input,select{font:inherit;color:inherit}
       </div>
       <div class="card" id="reservar">
         <h2>Reserva tu hora</h2>
-        <p class="sub">Déjanos tus datos y te confirmamos la hora.</p>
-        <form class="form" id="lead-form" novalidate>
+        <p class="sub">Primera fecha disponible: <b data-proxima-fecha>en 7 días</b>. Reserva en línea y te confirmamos por WhatsApp y correo.</p>
+        <button class="btn btn-cta btn-block" type="button" data-agendar>Quiero mi hora</button>
+        <form class="form" id="lead-form" novalidate hidden style="display:none">
           <div class="field"><label for="f-name">Nombre</label><input id="f-name" autocomplete="name" placeholder="Tu nombre y apellido"></div>
           <div class="field"><label for="f-rut">RUT</label><input id="f-rut" data-rut inputmode="text" autocomplete="off" placeholder="12.345.678-5" maxlength="12"></div>
           <div class="field"><label for="f-phone">Teléfono o WhatsApp</label><input id="f-phone" type="tel" autocomplete="tel" placeholder="+56 9 ..."></div>
@@ -551,7 +554,7 @@ button,input,select{font:inherit;color:inherit}
         <p>Reserva tu hora con cirujanos dentistas de la Universidad de Chile. Atendemos lunes, miércoles y viernes de 07:00 a 15:00 y sábado de 07:00 a 13:00.</p>
       </div>
       <div class="acts">
-        <a class="btn btn-cta" href="#reservar">Reservar mi hora</a>
+        <a class="btn btn-cta" href="#reservar" data-agendar>Reservar mi hora</a>
         <a class="btn btn-ghost" id="wa-end" href="#consulta">Escribir por correo</a>
       </div>
     </div>
@@ -598,7 +601,7 @@ button,input,select{font:inherit;color:inherit}
   </div>
 </footer>
 
-<div class="bar"><a class="btn btn-cta btn-block" href="#reservar">Reservar mi hora</a></div>
+<div class="bar"><a class="btn btn-cta btn-block" href="#reservar" data-agendar>Reservar mi hora</a></div>
 
 <script src="agenda.js"></script>
 <script>
