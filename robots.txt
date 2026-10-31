@@ -1,5 +1,7 @@
 User-agent: *
 Allow: /
 Disallow: /portal-pacientes.html
+Disallow: /opinion.html
+Disallow: /generar-opinion.html
 
 Sitemap: https://rmdental.cl/sitemap.xml

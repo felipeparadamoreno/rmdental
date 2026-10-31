@@ -1,0 +1,223 @@
+<!doctype html>
+<html lang="es-CL">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Tu opinión · RM Dental</title>
+<meta name="robots" content="noindex,nofollow">
+<meta name="referrer" content="no-referrer">
+<meta name="theme-color" content="#05808E">
+<link rel="icon" type="image/png" sizes="64x64" href="favicon.png"><link rel="icon" href="favicon.ico" sizes="any"><link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap">
+<style>
+:root{
+  color-scheme:light;
+  --bg:#F4FCFD;--surface:#FFFFFF;--field:#F4FCFD;--fg:#10243A;--muted:#51647A;--line:#D5EEF2;
+  --accent:#05808E;--accent-soft:#E3F6F8;--teal:#04A5B8;--teal-text:#0592A4;
+  --cta:#05808E;--cta-hover:#056B77;--cta-fg:#FFFFFF;--shadow:0 8px 28px rgba(4,165,184,.14);
+  --gold:#F5A400;--ok:#0E8F5B;--ok-soft:#DDF5E9;--err:#B42318;--err-soft:#FDE8E6;--logo-plate:transparent;
+  --font:"Poppins",system-ui,-apple-system,"Segoe UI",Arial,sans-serif;
+}
+@media (prefers-color-scheme:dark){:root{
+  color-scheme:dark;
+  --bg:#0A1A1F;--surface:#10262C;--field:#0C1E23;--fg:#E6F4F6;--muted:#9DB6BC;--line:#1F3F47;
+  --accent:#4CD0E0;--accent-soft:#12404A;--teal-text:#4CD0E0;--shadow:0 8px 28px rgba(0,0,0,.35);
+  --ok:#5FD8A2;--ok-soft:#12372A;--err:#FF9B91;--err-soft:#3A1713;--logo-plate:#FFFFFF;}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font:400 15px/1.55 var(--font);-webkit-font-smoothing:antialiased}
+h1,h2,p{margin:0}
+:focus-visible{outline:2px solid var(--teal);outline-offset:2px}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.top{background:var(--surface);border-bottom:1px solid var(--line);padding-top:env(safe-area-inset-top,0px)}
+.top .in{max-width:640px;margin:0 auto;padding:12px 16px;display:flex;align-items:center}
+.top img{height:36px;width:auto;padding:3px 6px;margin-left:-6px;border-radius:6px;background:var(--logo-plate)}
+main{max-width:640px;margin:0 auto;padding:24px 16px calc(40px + env(safe-area-inset-bottom,0px))}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:20px;padding:1.5rem;box-shadow:var(--shadow)}
+.eyebrow{display:inline-block;background:var(--accent-soft);color:var(--accent);padding:.3rem .8rem;border-radius:999px;font-size:.7rem;font-weight:600;letter-spacing:.14em}
+h1{font-size:clamp(1.35rem,4.5vw,1.8rem);font-weight:600;letter-spacing:-.01em;line-height:1.2;margin:.8rem 0 .3rem}
+.lead{color:var(--muted);margin-bottom:1.4rem}
+.lead b{color:var(--fg);font-weight:600}
+fieldset{border:0;padding:0;margin:0 0 1.4rem}
+legend,.lbl{font-weight:600;font-size:.92rem;margin-bottom:.55rem;padding:0;display:block}
+.opt{font-weight:400;color:var(--muted);font-size:.8rem}
+
+/* estrellas: 5 radios; row-reverse + ~ ilumina las anteriores al pasar el mouse o elegir */
+.stars{display:flex;flex-direction:row-reverse;justify-content:flex-end;gap:.15rem}
+.stars input{position:absolute;opacity:0;width:1px;height:1px}
+.stars label{font-size:2.6rem;line-height:1;color:var(--line);cursor:pointer;padding:.1rem .15rem;transition:transform .12s,color .12s}
+.stars label:hover,.stars label:hover~label,.stars input:checked~label{color:var(--gold)}
+.stars label:hover{transform:scale(1.1)}
+.stars input:focus-visible+label{outline:2px solid var(--teal);outline-offset:2px;border-radius:8px}
+.rate-txt{min-height:1.5rem;margin-top:.35rem;font-size:.88rem;color:var(--teal-text);font-weight:500}
+
+textarea{width:100%;min-height:120px;resize:vertical;font:400 .95rem/1.5 var(--font);color:var(--fg);background:var(--field);border:1px solid var(--line);border-radius:14px;padding:.8rem .9rem}
+textarea:focus{outline:2px solid var(--teal);outline-offset:1px;border-color:var(--teal)}
+.count{text-align:right;font-size:.74rem;color:var(--muted);margin-top:.25rem}
+
+.choice{display:grid;gap:.6rem}
+.choice label{display:flex;gap:.7rem;align-items:flex-start;border:1px solid var(--line);background:var(--field);border-radius:14px;padding:.8rem .9rem;cursor:pointer}
+.choice label:has(input:checked){border-color:var(--teal);background:var(--accent-soft)}
+.choice label:has(input:focus-visible){outline:2px solid var(--teal);outline-offset:2px}
+.choice input{margin-top:.25rem;accent-color:var(--cta);flex:none}
+.choice b{display:block;font-size:.92rem;font-weight:600}
+.choice span{font-size:.8rem;color:var(--muted)}
+.choice em{font-style:normal;color:var(--fg);font-weight:600}
+
+.btn{display:inline-flex;width:100%;align-items:center;justify-content:center;gap:.5rem;border:0;border-radius:999px;font:500 .95rem var(--font);padding:.85rem 1.4rem;cursor:pointer;background:var(--cta);color:var(--cta-fg);box-shadow:var(--shadow);transition:background .15s}
+.btn:hover:not(:disabled){background:var(--cta-hover)}
+.btn:disabled{opacity:.5;cursor:not-allowed;box-shadow:none}
+.btn.alt{background:var(--accent-soft);color:var(--accent);box-shadow:none;text-decoration:none}
+.msg{font-size:.85rem;margin-top:.8rem;min-height:1.2rem}
+.msg.err{color:var(--err)}
+.fine{font-size:.76rem;color:var(--muted);margin-top:1rem;text-align:center}
+
+.state{text-align:center;padding:1rem .5rem}
+.state .big{width:3.6rem;height:3.6rem;border-radius:50%;display:grid;place-items:center;margin:0 auto 1rem;font-size:1.7rem;background:var(--accent-soft);color:var(--teal-text)}
+.state.ok .big{background:var(--ok-soft);color:var(--ok)}
+.state.bad .big{background:var(--err-soft);color:var(--err)}
+.state h2{font-size:1.25rem;font-weight:600;margin-bottom:.4rem}
+.state p{color:var(--muted);margin-bottom:1.3rem}
+.spin{width:28px;height:28px;border:3px solid var(--line);border-top-color:var(--teal);border-radius:50%;margin:1rem auto;animation:g .8s linear infinite}
+@keyframes g{to{transform:rotate(360deg)}}
+@media (prefers-reduced-motion:reduce){.spin{animation:none}.stars label{transition:none}}
+[hidden]{display:none!important}
+</style>
+</head>
+<body>
+<header class="top"><div class="in"><img src="logo.png" alt="Red Metropolitana Dental" width="640" height="99"></div></header>
+<main>
+
+  <!-- Cargando -->
+  <section class="card" id="v-carga" aria-live="polite"><div class="spin" role="status" aria-label="Cargando"></div></section>
+
+  <!-- Link no sirve -->
+  <section class="card" id="v-malo" hidden>
+    <div class="state bad">
+      <div class="big" aria-hidden="true">!</div>
+      <h2 id="malo-t">Este enlace no es válido</h2>
+      <p id="malo-p"></p>
+      <a class="btn alt" href="index.html">Ir al inicio</a>
+    </div>
+  </section>
+
+  <!-- Formulario -->
+  <section class="card" id="v-form" hidden>
+    <span class="eyebrow">TU OPINIÓN</span>
+    <h1>¿Cómo fue tu atención con <span id="f-pro"></span>?</h1>
+    <p class="lead" id="f-lead">Tu opinión ayuda a otros pacientes y nos ayuda a mejorar. Toma menos de un minuto.</p>
+
+    <form id="form" novalidate>
+      <fieldset>
+        <legend id="lg-estrellas">Tu calificación</legend>
+        <div class="stars" role="radiogroup" aria-labelledby="lg-estrellas">
+          <input type="radio" name="estrellas" id="s5" value="5"><label for="s5" title="Excelente"><span class="sr">5 estrellas, excelente</span><span aria-hidden="true">★</span></label>
+          <input type="radio" name="estrellas" id="s4" value="4"><label for="s4" title="Buena"><span class="sr">4 estrellas, buena</span><span aria-hidden="true">★</span></label>
+          <input type="radio" name="estrellas" id="s3" value="3"><label for="s3" title="Regular"><span class="sr">3 estrellas, regular</span><span aria-hidden="true">★</span></label>
+          <input type="radio" name="estrellas" id="s2" value="2"><label for="s2" title="Mala"><span class="sr">2 estrellas, mala</span><span aria-hidden="true">★</span></label>
+          <input type="radio" name="estrellas" id="s1" value="1"><label for="s1" title="Muy mala"><span class="sr">1 estrella, muy mala</span><span aria-hidden="true">★</span></label>
+        </div>
+        <div class="rate-txt" id="rate-txt" aria-live="polite"></div>
+      </fieldset>
+
+      <div style="margin-bottom:1.4rem">
+        <label class="lbl" for="texto">Cuéntanos más <span class="opt">(opcional)</span></label>
+        <textarea id="texto" maxlength="1000" placeholder="¿Qué fue lo que más valoraste? ¿Algo que podamos mejorar?"></textarea>
+        <div class="count"><span id="cnt">0</span>/1000</div>
+      </div>
+
+      <fieldset>
+        <legend id="lg-priv">¿Cómo quieres que aparezca tu opinión?</legend>
+        <div class="choice" role="radiogroup" aria-labelledby="lg-priv">
+          <label><input type="radio" name="priv" value="anonimo" checked>
+            <div><b>De forma anónima</b><span>Se mostrará como «Paciente verificado». Nadie verá tu nombre.</span></div></label>
+          <label><input type="radio" name="priv" value="nombre">
+            <div><b>Publicar mi nombre</b><span>Se mostrará como <em id="f-nombre">tu nombre</em> (solo tu nombre y la inicial del apellido).</span></div></label>
+        </div>
+      </fieldset>
+
+      <button class="btn" id="enviar" type="submit" disabled>Enviar opinión</button>
+      <p class="msg" id="msg" role="alert"></p>
+      <p class="fine">Este enlace es personal y funciona una sola vez. Al enviar, quedará desactivado.</p>
+    </form>
+  </section>
+
+  <!-- Gracias -->
+  <section class="card" id="v-ok" hidden>
+    <div class="state ok">
+      <div class="big" aria-hidden="true">✓</div>
+      <h2>¡Gracias por tu opinión!</h2>
+      <p>La recibimos y se publicará en el perfil del profesional. Este enlace ya quedó desactivado.</p>
+      <a class="btn alt" href="index.html">Volver a RM Dental</a>
+    </div>
+  </section>
+
+</main>
+<script>
+(function(){
+  var API = (window.RM_API_URL || "https://api.rmdental.cl").replace(/\/+$/, "");
+  var $ = function(id){ return document.getElementById(id); };
+  var token = (location.hash || "").slice(1);
+  var TEXTOS = {1:"Muy mala",2:"Mala",3:"Regular",4:"Buena",5:"Excelente"};
+
+  function ver(id){ ["v-carga","v-malo","v-form","v-ok"].forEach(function(v){ $(v).hidden = v !== id; }); window.scrollTo(0,0); }
+  function malo(motivo){
+    var t = {
+      usado:   ["Este enlace ya fue utilizado", "Ya recibimos una opinión con este enlace. ¡Gracias! Cada enlace sirve una sola vez."],
+      vencido: ["Este enlace venció", "El plazo para dejar tu opinión con este enlace terminó. Si quieres opinar, pídele uno nuevo a RM Dental."],
+      invalido:["Este enlace no es válido", "Revisa que lo hayas copiado completo. Si el problema sigue, pídele un enlace nuevo a RM Dental."],
+      red:     ["No pudimos conectarnos", "Revisa tu conexión e intenta de nuevo en unos minutos. Tu enlace sigue sin usarse."]
+    }[motivo] || ["Algo salió mal", "Intenta nuevamente en unos minutos."];
+    $("malo-t").textContent = t[0]; $("malo-p").textContent = t[1]; ver("v-malo");
+  }
+
+  if (!/^[A-Za-z0-9_-]{43}$/.test(token)) { malo("invalido"); return; }
+
+  fetch(API + "/opiniones/link/" + token, { cache: "no-store" })
+    .then(function(r){ return r.json().catch(function(){ return {}; }).then(function(d){ return { ok:r.ok, d:d }; }); })
+    .then(function(x){
+      if (!x.ok || !x.d.ok) return malo(x.d.motivo === "usado" || x.d.motivo === "vencido" ? x.d.motivo : (x.d.motivo === "error" ? "red" : "invalido"));
+      $("f-pro").textContent = x.d.profesional;
+      if (x.d.nombre_sugerido) $("f-nombre").textContent = x.d.nombre_sugerido;
+      ver("v-form");
+    })
+    .catch(function(){ malo("red"); });
+
+  var form = $("form"), btn = $("enviar");
+  function estrellas(){ var c = form.querySelector('input[name="estrellas"]:checked'); return c ? +c.value : 0; }
+  form.addEventListener("change", function(){
+    var n = estrellas(); btn.disabled = !n; $("rate-txt").textContent = n ? n + " de 5 · " + TEXTOS[n] : "";
+  });
+  $("texto").addEventListener("input", function(){ $("cnt").textContent = this.value.length; });
+
+  form.addEventListener("submit", function(e){
+    e.preventDefault();
+    var n = estrellas(), msg = $("msg");
+    if (!n) { msg.className = "msg err"; msg.textContent = "Elige de 1 a 5 estrellas."; return; }
+    btn.disabled = true; btn.textContent = "Enviando…"; msg.className = "msg"; msg.textContent = "";
+    fetch(API + "/opiniones/link/" + token, {
+      method: "POST", headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        estrellas: n, texto: $("texto").value.trim(),
+        publicar_nombre: form.querySelector('input[name="priv"]:checked').value === "nombre"
+      })
+    })
+    .then(function(r){ return r.json().catch(function(){ return {}; }).then(function(d){ return { ok:r.ok, d:d }; }); })
+    .then(function(x){
+      if (x.ok && x.d.ok) {
+        try { history.replaceState(null, "", location.pathname); } catch (e) {}   // saca el token de la barra de direcciones
+        return ver("v-ok");
+      }
+      if (x.d.motivo === "usado" || x.d.motivo === "vencido" || x.d.motivo === "invalido") return malo(x.d.motivo);
+      throw new Error("fallo");
+    })
+    .catch(function(){
+      btn.disabled = false; btn.textContent = "Enviar opinión";
+      msg.className = "msg err"; msg.textContent = "No pudimos enviar tu opinión. Intenta de nuevo; tu enlace sigue vigente.";
+    });
+  });
+})();
+</script>
+</body>
+</html>

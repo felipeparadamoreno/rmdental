@@ -1,0 +1,206 @@
+<!doctype html>
+<html lang="es-CL">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Generar link de opinión · RM Dental</title>
+<meta name="robots" content="noindex,nofollow">
+<meta name="referrer" content="no-referrer">
+<meta name="theme-color" content="#05808E">
+<link rel="icon" type="image/png" sizes="64x64" href="favicon.png"><link rel="icon" href="favicon.ico" sizes="any">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap">
+<style>
+:root{color-scheme:light;--bg:#F4FCFD;--surface:#fff;--field:#F4FCFD;--fg:#10243A;--muted:#51647A;--line:#D5EEF2;--accent:#05808E;--accent-soft:#E3F6F8;--teal:#04A5B8;--cta:#05808E;--cta-hover:#056B77;--ok:#0E8F5B;--ok-soft:#DDF5E9;--err:#B42318;--warn:#8A5A00;--warn-soft:#FFF4D6;--shadow:0 8px 28px rgba(4,165,184,.14);--logo-plate:transparent;--font:"Poppins",system-ui,-apple-system,"Segoe UI",Arial,sans-serif}
+@media (prefers-color-scheme:dark){:root{color-scheme:dark;--bg:#0A1A1F;--surface:#10262C;--field:#0C1E23;--fg:#E6F4F6;--muted:#9DB6BC;--line:#1F3F47;--accent:#4CD0E0;--accent-soft:#12404A;--ok:#5FD8A2;--ok-soft:#12372A;--err:#FF9B91;--warn:#F3D98B;--warn-soft:#3A2E0A;--shadow:0 8px 28px rgba(0,0,0,.35);--logo-plate:#fff}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font:400 15px/1.55 var(--font)}
+h1,h2,p{margin:0}
+:focus-visible{outline:2px solid var(--teal);outline-offset:2px}
+.top{background:var(--surface);border-bottom:1px solid var(--line);padding-top:env(safe-area-inset-top,0px)}
+.top .in{max-width:720px;margin:0 auto;padding:12px 16px;display:flex;align-items:center;justify-content:space-between;gap:12px}
+.top img{height:34px;width:auto;padding:3px 6px;margin-left:-6px;border-radius:6px;background:var(--logo-plate)}
+.top .who{font-size:.82rem;color:var(--muted)}
+.top button.link{background:none;border:0;color:var(--accent);font:500 .82rem var(--font);cursor:pointer;margin-left:.6rem}
+main{max-width:720px;margin:0 auto;padding:22px 16px calc(40px + env(safe-area-inset-bottom,0px));display:grid;gap:18px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:1.3rem;box-shadow:var(--shadow)}
+h1{font-size:1.35rem;font-weight:600;margin-bottom:.25rem}
+h2{font-size:1.05rem;font-weight:600;margin-bottom:.7rem}
+.sub{color:var(--muted);font-size:.88rem;margin-bottom:1.1rem}
+label{display:block;font-weight:600;font-size:.85rem;margin:.9rem 0 .35rem}
+input[type=text],input[type=password],select{width:100%;font:400 .95rem var(--font);color:var(--fg);background:var(--field);border:1px solid var(--line);border-radius:12px;padding:.7rem .85rem}
+.chk{display:flex;gap:.55rem;align-items:flex-start;font-weight:400;margin-top:1rem}
+.chk input{margin-top:.3rem;accent-color:var(--cta)}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:.4rem;border:0;border-radius:999px;font:500 .92rem var(--font);padding:.75rem 1.4rem;cursor:pointer;background:var(--cta);color:#fff}
+.btn:hover:not(:disabled){background:var(--cta-hover)}
+.btn:disabled{opacity:.55;cursor:not-allowed}
+.btn.alt{background:var(--accent-soft);color:var(--accent)}
+.row{display:flex;gap:.6rem;flex-wrap:wrap;margin-top:1.1rem}
+.msg{font-size:.85rem;margin-top:.8rem;min-height:1.2rem}
+.msg.err{color:var(--err)}
+.res{background:var(--ok-soft);border-radius:14px;padding:1rem}
+.res .url{font:500 .82rem ui-monospace,Menlo,Consolas,monospace;word-break:break-all;background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:.6rem .7rem;margin:.6rem 0}
+.res .nota{font-size:.8rem;color:var(--muted)}
+.res .aviso{font-size:.8rem;background:var(--warn-soft);color:var(--warn);border-radius:10px;padding:.5rem .7rem;margin-top:.6rem}
+table{width:100%;border-collapse:collapse;font-size:.84rem}
+th,td{text-align:left;padding:.5rem .4rem;border-bottom:1px solid var(--line)}
+th{font-weight:600;color:var(--muted);font-size:.74rem;letter-spacing:.04em;text-transform:uppercase}
+.pill{display:inline-block;border-radius:999px;padding:.12rem .6rem;font-size:.74rem;font-weight:600}
+.pill.pendiente{background:var(--warn-soft);color:var(--warn)}
+.pill.respondido{background:var(--ok-soft);color:var(--ok)}
+.pill.vencido{background:var(--accent-soft);color:var(--muted)}
+.tablewrap{overflow-x:auto}
+[hidden]{display:none!important}
+</style>
+</head>
+<body>
+<header class="top"><div class="in">
+  <img src="logo.png" alt="Red Metropolitana Dental" width="640" height="99">
+  <div><span class="who" id="who"></span><button class="link" id="salir" type="button" hidden>Salir</button></div>
+</div></header>
+<main>
+
+  <!-- Ingreso (usa la misma cuenta del panel de profesionales) -->
+  <section class="card" id="v-login" hidden>
+    <h1>Ingresar</h1>
+    <p class="sub">Usa tu RUT y la clave del panel de profesionales.</p>
+    <form id="f-login" autocomplete="on">
+      <label for="l-rut">RUT</label>
+      <input type="text" id="l-rut" data-rut inputmode="text" autocomplete="username" placeholder="12.345.678-5" required>
+      <label for="l-pass">Clave</label>
+      <input type="password" id="l-pass" autocomplete="current-password" required>
+      <div class="row"><button class="btn" id="l-btn" type="submit">Ingresar</button></div>
+      <p class="msg" id="l-msg" role="alert"></p>
+    </form>
+  </section>
+
+  <!-- Generador -->
+  <section id="v-app" hidden style="display:grid;gap:18px">
+    <div class="card">
+      <h1>Link de opinión para un paciente</h1>
+      <p class="sub">El paciente debe estar en la base. El link sirve una sola vez: cuando envía su opinión, queda desactivado.</p>
+      <form id="f-gen" novalidate>
+        <label for="g-rut">RUT del paciente</label>
+        <input type="text" id="g-rut" data-rut inputmode="text" placeholder="12.345.678-5" autocomplete="off" required>
+        <label for="g-pro">Profesional</label>
+        <select id="g-pro" required></select>
+        <label class="chk"><input type="checkbox" id="g-mail"><span>Enviarlo también al correo del paciente</span></label>
+        <div class="row"><button class="btn" id="g-btn" type="submit">Generar link</button></div>
+        <p class="msg" id="g-msg" role="alert"></p>
+      </form>
+      <div class="res" id="g-res" hidden>
+        <b id="r-t"></b>
+        <div class="url" id="r-url"></div>
+        <div class="row" style="margin-top:.4rem">
+          <button class="btn" id="r-copy" type="button">Copiar link</button>
+          <a class="btn alt" id="r-wa" target="_blank" rel="noopener">Enviar por WhatsApp</a>
+        </div>
+        <p class="nota" id="r-nota" style="margin-top:.7rem"></p>
+        <p class="aviso" id="r-aviso" hidden>Este paciente no tiene una cita «realizada» con este profesional registrada, así que la opinión no quedará ligada a una atención.</p>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>Últimos links</h2>
+      <div class="tablewrap"><table>
+        <thead><tr><th>Paciente</th><th>Profesional</th><th>Estado</th><th>Estrellas</th></tr></thead>
+        <tbody id="lista"><tr><td colspan="4" style="color:var(--muted)">Cargando…</td></tr></tbody>
+      </table></div>
+    </div>
+  </section>
+</main>
+
+<script src="rut.js"></script>
+<script>
+(function(){
+  var API = (window.RM_API_URL || "https://api.rmdental.cl").replace(/\/+$/, "");
+  var SESION = "rmd_sesion";   // misma sesión que panel-profesionales.html y segunda-opinion.html
+  var $ = function(id){ return document.getElementById(id); };
+  var esc = function(s){ return String(s == null ? "" : s).replace(/[&<>"']/g, function(c){ return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]; }); };
+
+  function sesion(){ try { var s = JSON.parse(sessionStorage.getItem(SESION) || "null"); return s && s.token && s.exp * 1000 > Date.now() ? s : null; } catch (e) { return null; } }
+  function expDe(tk){ try { return JSON.parse(atob(tk.split(".")[1].replace(/-/g,"+").replace(/_/g,"/"))).exp; } catch (e) { return 0; } }
+  function api(path, body){
+    var s = sesion(), h = {};
+    if (body) h["Content-Type"] = "application/json";
+    if (s) h["Authorization"] = "Bearer " + s.token;
+    return fetch(API + path, { method: body ? "POST" : "GET", headers: h, body: body ? JSON.stringify(body) : undefined })
+      .then(function(r){ return r.json().catch(function(){ return {}; }).then(function(d){ return { ok:r.ok, status:r.status, d:d }; }); })
+      .catch(function(){ return { ok:false, status:0, d:{ error:"No se pudo conectar con el servidor." } }; });
+  }
+
+  function arrancar(){
+    var s = sesion();
+    if (!s) { $("v-login").hidden = false; $("v-app").hidden = true; $("salir").hidden = true; $("who").textContent = ""; return; }
+    $("v-login").hidden = true; $("v-app").hidden = false; $("salir").hidden = false;
+    $("who").textContent = (s.profesional && s.profesional.nombre) || "";
+    cargarPerfiles(); cargarLista();
+  }
+  function vencida(){ try { sessionStorage.removeItem(SESION); } catch (e) {} arrancar(); }
+
+  $("f-login").addEventListener("submit", function(e){
+    e.preventDefault();
+    var m = $("l-msg"), b = $("l-btn");
+    if (!window.RMRut.valid($("l-rut").value)) { m.className = "msg err"; m.textContent = "Revisa el RUT."; return; }
+    b.disabled = true; m.className = "msg"; m.textContent = "Verificando…";
+    api("/segunda-opinion/login", { rut: $("l-rut").value, clave: $("l-pass").value }).then(function(r){
+      b.disabled = false;
+      if (!r.ok) { m.className = "msg err"; m.textContent = r.status === 401 ? "RUT o clave incorrectos." : (r.d.error || "No se pudo ingresar."); return; }
+      try { sessionStorage.setItem(SESION, JSON.stringify({ token: r.d.token, profesional: r.d.profesional, exp: expDe(r.d.token) })); } catch (e) {}
+      $("l-pass").value = ""; m.textContent = ""; arrancar();
+    });
+  });
+  $("salir").addEventListener("click", function(){ vencida(); });
+
+  function cargarPerfiles(){
+    api("/pro/opiniones/perfiles").then(function(r){
+      if (r.status === 401) return vencida();
+      var sel = $("g-pro"), ps = (r.d && r.d.perfiles) || [];
+      if (!r.ok || !ps.length) { sel.innerHTML = '<option value="">No hay perfiles públicos creados</option>'; return; }
+      sel.innerHTML = ps.map(function(p){ return '<option value="' + p.id + '"' + (p.id === r.d.yo ? " selected" : "") + ">" + esc(p.nombre) + (p.especialidad ? " · " + esc(p.especialidad) : "") + "</option>"; }).join("");
+    });
+  }
+  function cargarLista(){
+    api("/pro/opiniones/links").then(function(r){
+      if (r.status === 401) return vencida();
+      var t = $("lista"), ls = (r.d && r.d.links) || [];
+      if (!ls.length) { t.innerHTML = '<tr><td colspan="4" style="color:var(--muted)">Aún no has generado links.</td></tr>'; return; }
+      t.innerHTML = ls.map(function(l){
+        return "<tr><td>" + esc(l.paciente) + "</td><td>" + esc(l.profesional) + '</td><td><span class="pill ' + l.estado + '">' + l.estado + "</span></td><td>" + (l.estrellas ? "★".repeat(l.estrellas) : "—") + "</td></tr>";
+      }).join("");
+    });
+  }
+
+  var ultimaUrl = "";
+  $("f-gen").addEventListener("submit", function(e){
+    e.preventDefault();
+    var m = $("g-msg"), b = $("g-btn");
+    $("g-res").hidden = true;
+    if (!window.RMRut.valid($("g-rut").value)) { m.className = "msg err"; m.textContent = "El RUT no es válido."; return; }
+    if (!$("g-pro").value) { m.className = "msg err"; m.textContent = "Elige el profesional."; return; }
+    b.disabled = true; m.className = "msg"; m.textContent = "Generando…";
+    api("/pro/opiniones/links", { rut: $("g-rut").value, profesional_id: Number($("g-pro").value), enviar_correo: $("g-mail").checked }).then(function(r){
+      b.disabled = false;
+      if (r.status === 401) return vencida();
+      if (!r.ok) { m.className = "msg err"; m.textContent = r.d.error || "No se pudo generar el link."; return; }
+      m.textContent = ""; ultimaUrl = r.d.url;
+      $("r-t").textContent = "Link para " + r.d.paciente + " · " + r.d.profesional;
+      $("r-url").textContent = r.d.url;
+      $("r-wa").href = "https://wa.me/?text=" + encodeURIComponent("Hola, gracias por atenderte en RM Dental. Cuéntanos cómo fue tu atención (toma menos de un minuto): " + r.d.url);
+      $("r-nota").textContent = "Sirve una sola vez y vence en " + r.d.expira_dias + " días. Cópialo ahora: no se puede volver a ver." +
+        ($("g-mail").checked ? (r.d.correo_enviado ? " Correo enviado." : (r.d.tiene_correo ? " No se pudo enviar el correo." : " El paciente no tiene correo registrado.")) : "");
+      $("r-aviso").hidden = !!r.d.cita_vinculada;
+      $("g-res").hidden = false; $("g-rut").value = ""; cargarLista();
+    });
+  });
+  $("r-copy").addEventListener("click", function(){
+    var b = this;
+    function ok(){ b.textContent = "¡Copiado!"; setTimeout(function(){ b.textContent = "Copiar link"; }, 1800); }
+    if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(ultimaUrl).then(ok, function(){ window.prompt("Copia el link:", ultimaUrl); });
+    else window.prompt("Copia el link:", ultimaUrl);
+  });
+
+  arrancar();
+})();
+</script>
+</body>
+</html>
