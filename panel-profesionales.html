@@ -280,6 +280,56 @@ input:focus,select:focus,textarea:focus{outline:3px solid rgba(18,104,236,.12);b
   .app-shell{display:block}.sidebar,.top{display:none!important}.workspace{display:block}main{padding:0!important}
 }
 
+
+/* ===== Agenda clínica en vivo por box ===== */
+.ag-live{margin:18px 0 24px}
+.ag-live-head{display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap;margin-bottom:14px}
+.ag-live-title{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.ag-live-title h2{font-size:18px;margin:0;color:var(--ink)}
+.ag-live-tools{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.ag-live-date{border:1px solid var(--line);border-radius:9px;padding:9px 10px;background:#fff;color:var(--ink);font:inherit}
+.ag-live-status{display:inline-flex;align-items:center;gap:7px;color:var(--mut);font-size:12px}
+.ag-live-status i{width:8px;height:8px;border-radius:50%;background:#20b877;box-shadow:0 0 0 3px #e3f8ee}
+.ag-live-legend{display:flex;gap:12px;align-items:center;flex-wrap:wrap;color:var(--mut);font-size:12px;margin:0 0 12px}
+.ag-live-legend span{display:inline-flex;align-items:center;gap:6px}
+.ag-live-legend i{width:9px;height:9px;border-radius:3px;display:inline-block}
+.ag-live-board{border:1px solid #e3eaf3;border-radius:14px;background:#fff;overflow:hidden}
+.ag-live-scroll{max-height:690px;overflow:auto;overscroll-behavior:contain}
+.ag-live-grid{display:grid;grid-template-columns:66px repeat(var(--ag-cols,1),minmax(220px,1fr));min-width:max-content;align-items:stretch}
+.ag-time-col{width:66px;background:#fbfcfe;border-right:1px solid #e6edf5}
+.ag-time-head,.ag-box-head{height:76px;position:sticky;top:0;z-index:6;background:#f8faff;border-bottom:1px solid #e5ecf5}
+.ag-time-head{border-right:1px solid #e6edf5}
+.ag-time-label{height:48px;display:flex;justify-content:center;align-items:flex-start;padding-top:3px;color:#60718a;font-size:11px;font-weight:650;border-bottom:1px solid #edf1f6}
+.ag-box-col{min-width:220px;border-right:1px solid #e6edf5}
+.ag-box-head{padding:12px 13px;display:flex;flex-direction:column;justify-content:center;gap:4px}
+.ag-box-name{font-size:14px;font-weight:800;color:#1f3048;display:flex;align-items:center;justify-content:space-between;gap:8px}
+.ag-box-meta{font-size:11px;color:#71829a;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ag-box-count{font-size:10px;font-weight:750;color:#135fce;background:#eaf2ff;border-radius:20px;padding:3px 7px;white-space:nowrap}
+.ag-box-track{height:1152px;position:relative;background-image:repeating-linear-gradient(to bottom,transparent 0,transparent 47px,#e8eef5 47px,#e8eef5 48px);background-color:#fff}
+.ag-box-track:before{content:"";position:absolute;inset:0 0 auto;height:1px;background:#e8eef5}
+.ag-event{position:absolute;left:6px;right:6px;min-height:40px;overflow:hidden;border-radius:8px;padding:5px 7px 5px 9px;border:1px solid #c5dcff;border-left:4px solid #2674e8;background:#eef5ff;color:#17365f;box-shadow:0 2px 6px rgba(18,58,110,.06);z-index:2;font-size:11px;line-height:1.25;text-align:left;cursor:default}
+.ag-event b{display:block;font-size:11px;color:#123763;margin-bottom:2px}
+.ag-event .ag-ev-pac{font-size:12px;font-weight:800;white-space:nowrap;text-overflow:ellipsis;overflow:hidden}
+.ag-event .ag-ev-pro{white-space:nowrap;text-overflow:ellipsis;overflow:hidden;color:#385676;margin-top:2px}
+.ag-event .ag-ev-mot{white-space:nowrap;text-overflow:ellipsis;overflow:hidden;color:#637894;margin-top:2px}
+.ag-event.state-pendiente{background:#fff7e8;border-color:#f3d9a5;border-left-color:#e9a52c;color:#704d12}
+.ag-event.state-realizada{background:#eaf8f0;border-color:#c3e9d2;border-left-color:#2da56a;color:#20573b}
+.ag-event.state-cancelada{background:#f5f6f8;border-color:#e2e5ea;border-left-color:#a8b1bd;color:#7a8491;opacity:.72}
+.ag-now-line{position:absolute;left:0;right:0;height:2px;background:#e34d5b;z-index:4;pointer-events:none}
+.ag-now-line:before{content:"";position:absolute;left:0;top:-3px;width:8px;height:8px;border-radius:50%;background:#e34d5b}
+.ag-live-empty{padding:25px;text-align:center;color:#74849a;font-size:13px}
+.ag-unassigned{margin-top:14px;border:1px solid #e4eaf2;border-radius:12px;padding:14px;background:#fff}
+.ag-unassigned h3{margin:0 0 10px;font-size:14px;color:#263850}
+.ag-unassigned-row{display:grid;grid-template-columns:minmax(170px,1.1fr) minmax(140px,1fr) minmax(150px,1fr) auto;align-items:center;gap:9px;padding:9px 0;border-top:1px solid #edf1f6;font-size:12px}
+.ag-unassigned-row:first-of-type{border-top:0}
+.ag-unassigned-row small{display:block;color:#74849a;margin-top:2px}
+.ag-unassigned-row select{width:100%;min-width:0;border:1px solid #dce5f0;border-radius:8px;padding:8px;background:#fff;color:#24364d}
+.ag-new-box{display:flex;align-items:center;gap:7px;flex-wrap:wrap;margin-top:12px;padding-top:12px;border-top:1px solid #edf1f6}
+.ag-new-box input{max-width:190px;border:1px solid #dce5f0;border-radius:8px;padding:8px 10px}
+.ag-live-note{padding:10px 12px;border-radius:9px;background:#fff8e9;color:#815b14;font-size:12px;margin-top:10px}
+.ag-live-error{padding:12px;border-radius:9px;background:#fff1f1;color:#9d3434;font-size:13px;margin:10px 0}
+@media(max-width:700px){.ag-live-tools{width:100%}.ag-live-date{flex:1;min-width:145px}.ag-live-scroll{max-height:620px}.ag-unassigned-row{grid-template-columns:1fr 1fr}.ag-unassigned-row button{grid-column:2}.ag-live-title h2{font-size:16px}}
+
 </style>
 </head>
 <body>
@@ -496,9 +546,40 @@ input:focus,select:focus,textarea:focus{outline:3px solid rgba(18,104,236,.12);b
 <!-- AGENDA -->
 <section id="v-agenda" hidden class="noprint">
   <button class="back" data-go="menu">← Volver al inicio</button>
-  <h1>Agendar hora a un paciente</h1>
-  <p class="lead">La hora queda en el perfil del paciente y se le puede avisar por correo. ¿Paciente nuevo? Primero créalo en “Agregar ficha de paciente”.</p>
+  <h1>Agenda de la clínica</h1>
+  <p class="lead">Ocupación diaria por box, con el profesional y paciente asociados a cada hora. La vista se actualiza automáticamente.</p>
+  <div class="ag-live card">
+    <div class="ag-live-head">
+      <div class="ag-live-title"><h2>Agenda en tiempo real</h2><span class="ag-live-status"><i></i><span id="ag-live-updated">Conectando…</span></span></div>
+      <div class="ag-live-tools">
+        <button class="btn sec" type="button" id="ag-live-prev" aria-label="Día anterior">‹</button>
+        <input class="ag-live-date" type="date" id="ag-live-date" aria-label="Fecha de agenda">
+        <button class="btn sec" type="button" id="ag-live-next" aria-label="Día siguiente">›</button>
+        <button class="btn sec" type="button" id="ag-live-today">Hoy</button>
+        <button class="btn sec" type="button" id="ag-live-refresh">↻ Actualizar</button>
+      </div>
+    </div>
+    <div class="ag-live-legend">
+      <span><i style="background:#2674e8"></i>Agendada</span>
+      <span><i style="background:#e9a52c"></i>Pendiente</span>
+      <span><i style="background:#2da56a"></i>Realizada</span>
+      <span><i style="background:#a8b1bd"></i>Cancelada</span>
+    </div>
+    <div id="ag-live-error" class="ag-live-error" hidden></div>
+    <div class="ag-live-board"><div class="ag-live-scroll" id="ag-live-grid"><div class="ag-live-empty">Cargando agenda del día…</div></div></div>
+    <div id="ag-live-unassigned" class="ag-unassigned" hidden></div>
+    <div id="ag-live-add-box" class="ag-new-box" hidden>
+      <b style="font-size:12px;color:#52657e">Agregar box:</b>
+      <input id="ag-new-box-name" maxlength="80" placeholder="Nombre del box">
+      <input id="ag-new-box-specialty" maxlength="120" placeholder="Especialidad (opcional)">
+      <button class="btn sec" type="button" id="ag-new-box-save">＋ Crear box</button>
+      <span id="ag-new-box-msg" class="msg" role="status"></span>
+    </div>
+    <div class="ag-live-note">La agenda muestra las citas registradas en RMDental. Las citas antiguas sin box asignado aparecerán abajo para distribuirlas. Actualización automática cada 15 segundos.</div>
+  </div>
   <div class="split">
+    <form class="card" id="f-agenda" autocomplete="off">
+      <h2 style="margin-top:0">Agendar una nueva hora</h2>
     <form class="card" id="f-agenda" autocomplete="off">
       <label for="a-q">Paciente (nombre o RUT) *</label>
       <input id="a-q" placeholder="Escribe al menos 2 letras o el RUT">
@@ -966,9 +1047,105 @@ function fmtCita(iso){
 }
 function hoyCL(){const p={};new Intl.DateTimeFormat("en-CA",{timeZone:TZC,year:"numeric",month:"2-digit",day:"2-digit"}).formatToParts(new Date()).forEach(x=>p[x.type]=x.value);return p.year+"-"+p.month+"-"+p.day}
 function ahoraCL(){const p={};new Intl.DateTimeFormat("en-GB",{timeZone:TZC,hour:"2-digit",minute:"2-digit",hourCycle:"h23"}).formatToParts(new Date()).forEach(x=>p[x.type]=x.value);return p.hour+":"+p.minute}
+
+/* ===== Agenda clínica por box: lectura autenticada y refresco periódico ===== */
+let AGL={fecha:null,boxes:[],citas:[],cargando:false,seq:0,poll:null};
+const AG_START=8,AG_END=20,AG_ROW=48,AG_REFRESH_MS=15000;
+function agAddDays(f,n){const d=new Date(f+"T12:00:00");d.setDate(d.getDate()+n);return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0")}
+function agHora(x){const d=new Date(x);return new Intl.DateTimeFormat("es-CL",{timeZone:TZC,hour:"2-digit",minute:"2-digit",hourCycle:"h23"}).format(d)}
+function agMinutos(x){const h=agHora(x).split(":").map(Number);return h[0]*60+h[1]}
+function agFechaLabel(f){return new Intl.DateTimeFormat("es-CL",{weekday:"long",day:"numeric",month:"long",year:"numeric"}).format(new Date(f+"T12:00:00"))}
+function agPuedeCrearBox(){return !!(ME&&ME.rol==="dueno")}
+function agPuedeAsignar(c){return !!(ME&&(ME.rol==="dueno"||ME.rol==="secretaria"||Number(c.profesional_id)===Number(ME.id)))}
+async function agCargar(silencioso){
+  const fecha=$("ag-live-date").value||hoyCL();AGL.fecha=fecha;
+  const seq=++AGL.seq;
+  if(!silencioso){$("ag-live-error").hidden=true;$("ag-live-grid").innerHTML='<div class="ag-live-empty">Actualizando agenda…</div>'}
+  AGL.cargando=true;
+  const r=await api("/pro/agenda/dia?fecha="+encodeURIComponent(fecha));
+  if(seq!==AGL.seq)return;
+  AGL.cargando=false;
+  if(r.status===401)return sesionVencida();
+  if(!r.ok){
+    const msg=r.status===404?"La API todavía no tiene habilitada la agenda por box. Debe instalarse el complemento de agenda y ejecutar la migración SQL entregados junto al panel.":(r.d&&r.d.error)||"No se pudo consultar la agenda.";
+    $("ag-live-error").textContent=msg;$("ag-live-error").hidden=false;$("ag-live-grid").innerHTML='<div class="ag-live-empty">No hay datos disponibles. No se muestran horarios simulados.</div>';
+    $("ag-live-updated").textContent="Sin conexión con la agenda";$("ag-live-unassigned").hidden=true;return;
+  }
+  AGL.boxes=Array.isArray(r.d.boxes)?r.d.boxes:[];AGL.citas=Array.isArray(r.d.citas)?r.d.citas:[];
+  agRender();
+  const hora=new Intl.DateTimeFormat("es-CL",{timeZone:TZC,hour:"2-digit",minute:"2-digit",hourCycle:"h23"}).format(new Date());
+  $("ag-live-updated").textContent="Actualizado " + hora + " · automático cada 15 s";
+  $("ag-live-add-box").hidden=!agPuedeCrearBox();
+}
+function agRender(){
+  const grid=$("ag-live-grid"),boxes=AGL.boxes,citas=AGL.citas,fecha=AGL.fecha||hoyCL();
+  if(!boxes.length){grid.innerHTML='<div class="ag-live-empty">No hay boxes activos configurados para esta sucursal. El dueño puede crear los boxes desde esta pantalla.</div>';agRenderSinBox();return}
+  const filtered=citas.filter(c=>c.estado!=="cancelada"&&c.box_id!=null);
+  const rows=[];for(let m=AG_START*60;m<AG_END*60;m+=30)rows.push(m);
+  let out='<div class="ag-live-grid" style="--ag-cols:'+boxes.length+'"><div class="ag-time-col"><div class="ag-time-head"></div>'+rows.map(m=>'<div class="ag-time-label">'+String(Math.floor(m/60)).padStart(2,"0")+':'+String(m%60).padStart(2,"0")+'</div>').join('')+'</div>';
+  boxes.forEach(b=>{
+    const list=citas.filter(c=>Number(c.box_id)===Number(b.id));
+    out+='<div class="ag-box-col"><div class="ag-box-head"><div class="ag-box-name"><span>'+esc(b.nombre)+'</span><span class="ag-box-count">'+list.filter(c=>c.estado!=="cancelada").length+' citas</span></div><div class="ag-box-meta">'+esc(b.especialidad||"Box de atención")+'</div></div><div class="ag-box-track">';
+    if(fecha===hoyCL()){
+      const now=agMinutos(new Date());if(now>=AG_START*60&&now<AG_END*60)out+='<div class="ag-now-line" style="top:'+((now-AG_START*60)*AG_ROW/30)+'px" title="Hora actual"></div>';
+    }
+    list.forEach(c=>{
+      const start=agMinutos(c.inicio),dur=Math.max(15,Math.min(240,Number(c.duracion_min)||30)),top=(start-AG_START*60)*AG_ROW/30,height=Math.max(36,dur*AG_ROW/30-5);
+      if(start<AG_START*60||start>=AG_END*60)return;
+      const state=String(c.estado||"agendada").toLowerCase();
+      out+='<div class="ag-event state-'+esc(state)+'" style="top:'+top+'px;height:'+height+'px" title="'+esc(c.motivo||"")+'"><b>'+esc(agHora(c.inicio))+' – '+esc(agHora(new Date(new Date(c.inicio).getTime()+dur*60000)))+'</b><div class="ag-ev-pac">'+esc(c.paciente||"Paciente sin nombre")+'</div><div class="ag-ev-pro">'+esc(c.profesional||"Profesional por asignar")+'</div><div class="ag-ev-mot">'+esc(c.motivo||state)+'</div></div>';
+    });
+    out+='</div></div>';
+  });
+  out+='</div>';grid.innerHTML=out;agRenderSinBox();
+}
+function agRenderSinBox(){
+  const wrap=$("ag-live-unassigned"),items=AGL.citas.filter(c=>!c.box_id&&c.estado!=="cancelada");
+  if(!items.length){wrap.hidden=true;wrap.innerHTML="";return}
+  wrap.hidden=false;
+  let h='<h3>Citas sin box asignado <span style="color:#7a8ba1;font-weight:500">('+items.length+')</span></h3>';
+  items.forEach(c=>{
+    h+='<div class="ag-unassigned-row"><div><b>'+esc(c.paciente||"Paciente")+'</b><small>'+esc(agHora(c.inicio))+' · '+esc(c.motivo||"Consulta")+'</small></div><div><b>'+esc(c.profesional||"Profesional por asignar")+'</b><small>'+esc(c.especialidad||"")+'</small></div>';
+    if(agPuedeAsignar(c)&&AGL.boxes.length){h+='<div><select data-ag-box="'+Number(c.id)+'" aria-label="Asignar box a la cita"><option value="">Seleccionar box…</option>'+AGL.boxes.map(b=>'<option value="'+Number(b.id)+'">'+esc(b.nombre)+'</option>').join('')+'</select></div><button class="btn sec" type="button" data-ag-assign="'+Number(c.id)+'" style="padding:8px 10px">Asignar</button>'}
+    else h+='<div><small>Requiere asignación de box</small></div><div></div>';
+    h+='</div>';
+  });
+  wrap.innerHTML=h;
+}
+async function agAsignar(id){
+  const sel=document.querySelector('[data-ag-box="'+id+'"]');if(!sel||!sel.value){alert("Selecciona un box.");return}
+  const b=document.querySelector('[data-ag-assign="'+id+'"]');b.disabled=true;
+  const r=await api("/pro/agenda/citas/"+id+"/box",{box_id:Number(sel.value)},"PUT");b.disabled=false;
+  if(r.status===401)return sesionVencida();
+  if(!r.ok){alert(r.d&&r.d.error||"No se pudo asignar el box.");return}
+  agCargar(true);
+}
+async function agCrearBox(){
+  const nombre=$("ag-new-box-name").value.trim(),especialidad=$("ag-new-box-specialty").value.trim(),msg=$("ag-new-box-msg");
+  if(!nombre){msg.className="msg err";msg.textContent="Indica el nombre del box.";return}
+  const btn=$("ag-new-box-save");btn.disabled=true;msg.textContent="Guardando…";
+  const r=await api("/pro/agenda/boxes",{nombre,especialidad},"POST");btn.disabled=false;
+  if(r.status===401)return sesionVencida();
+  if(!r.ok){msg.className="msg err";msg.textContent=r.d&&r.d.error||"No se pudo crear el box.";return}
+  $("ag-new-box-name").value="";$("ag-new-box-specialty").value="";msg.className="msg ok";msg.textContent="Box creado.";agCargar(true);
+}
+function agIniciar(){
+  if(!$("ag-live-date").value)$("ag-live-date").value=hoyCL();
+  agCargar(false);
+  if(!AGL.poll)AGL.poll=setInterval(()=>{if(!$('v-agenda').hidden&&!AGL.cargando)agCargar(true)},AG_REFRESH_MS);
+}
+$("ag-live-date").addEventListener("change",()=>{agCargar(false);if($("a-fecha")){$("a-fecha").value=$("ag-live-date").value;loadSlots()}});
+$("ag-live-prev").addEventListener("click",()=>{$("ag-live-date").value=agAddDays($("ag-live-date").value||hoyCL(),-1);agCargar(false)});
+$("ag-live-next").addEventListener("click",()=>{$("ag-live-date").value=agAddDays($("ag-live-date").value||hoyCL(),1);agCargar(false)});
+$("ag-live-today").addEventListener("click",()=>{$("ag-live-date").value=hoyCL();agCargar(false)});
+$("ag-live-refresh").addEventListener("click",()=>agCargar(false));
+$("ag-new-box-save").addEventListener("click",agCrearBox);
+$("ag-live-unassigned").addEventListener("click",e=>{const b=e.target.closest("[data-ag-assign]");if(b)agAsignar(b.dataset.agAssign)});
+document.addEventListener("click",e=>{if(e.target.closest('[data-go="agenda"]'))agIniciar()});
 document.addEventListener("click",e=>{if(e.target.closest('[data-go="agenda"]'))initAgenda()});
 function initAgenda(){
   $("a-fecha").min=hoyCL();if(!$("a-fecha").value)$("a-fecha").value=hoyCL();
+  if($("ag-live-date")&&!$("ag-live-date").value)$("ag-live-date").value=hoyCL();
   loadSlots();
 }
 $("a-q").addEventListener("input",()=>{
