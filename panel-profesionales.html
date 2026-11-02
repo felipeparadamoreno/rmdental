@@ -1556,7 +1556,8 @@ async function pintarFicha(t){
   const d=PD.ficha;
   box.innerHTML=t==="datos"?htmlDatos(d):t==="anam"?htmlAnam(d):htmlFichas(d);
   const b=$("an-pdf");if(b)b.onclick=verPdf;
-  const send=$('pd-send-requests');if(send)send.onclick=solicitarDatosPaciente;
+  const send=$('pd-send-requests');if(send)send.onclick=()=>solicitarDatosPaciente(false);
+  const pres=$('pd-anam-presencial');if(pres)pres.onclick=()=>solicitarDatosPaciente(true);
   const sol=$('an-solicitar');
   if(sol)sol.onclick=()=>{irTab("datos");const c=document.querySelector('#pd-requests input[value="anamnesis"]');if(c){c.checked=true;const a=document.querySelector('#tab-datos .pd-actions');if(a)a.scrollIntoView({behavior:"smooth",block:"center"})}};
 }
@@ -1579,36 +1580,49 @@ function htmlDatos(d){
     '<label class="chk"><input type="checkbox" value="anamnesis"> Solicitar anamnesis / encuesta de salud</label>'+
     '<label class="chk"><input type="checkbox" value="correo"> Solicitar o confirmar correo electrónico</label>'+
     '<label class="chk"><input type="checkbox" value="telefono"> Solicitar o confirmar teléfono</label></div>'+
-    '<button class="btn" id="pd-send-requests" type="button">Enviar solicitudes</button><div class="pd-action-result" id="pd-contact-result" hidden></div></div>';
+    '<button class="btn" id="pd-send-requests" type="button">Enviar solicitudes</button> <button class="btn sec" id="pd-anam-presencial" type="button">Completar anamnesis ahora, con el paciente en la clínica</button><div class="pd-action-result" id="pd-contact-result" hidden></div></div>';
   return h;
 }
-async function solicitarDatosPaciente(){
+async function solicitarDatosPaciente(presencial){
   if(!PD)return;
-  const acciones=[...document.querySelectorAll('#pd-requests input:checked')].map(x=>x.value);
-  const result=$('pd-contact-result'),btn=$('pd-send-requests');
+  const acciones=presencial?['anamnesis']:[...document.querySelectorAll('#pd-requests input:checked')].map(x=>x.value);
+  const result=$('pd-contact-result'),btn=$('pd-send-requests'),btn2=$('pd-anam-presencial');
   if(!acciones.length){result.hidden=false;result.textContent='Selecciona al menos una solicitud.';return;}
-  btn.disabled=true;result.hidden=false;result.textContent='Preparando solicitud…';
-  const r=await api('/pro/pacientes/'+PD.p.id+'/solicitudes',{acciones});
-  btn.disabled=false;
+  btn.disabled=true;if(btn2)btn2.disabled=true;result.hidden=false;result.textContent='Preparando solicitud…';
+  const r=await api('/pro/pacientes/'+PD.p.id+'/solicitudes',presencial?{acciones,presencial:true}:{acciones});
+  btn.disabled=false;if(btn2)btn2.disabled=false;
   if(r.status===401)return sesionVencida();
   if(!r.ok){result.textContent=r.d.error||'No se pudo preparar la solicitud.';return;}
-  let html=r.d.correo_enviado?'Solicitud enviada al correo registrado. ':'No se envió correo (no hay email registrado o el correo no está disponible). ';
+  let html='';
+  if(r.d.presencial&&r.d.anamnesis_url){
+    html='Enlace listo (un solo uso, vale 3 horas). <a target="_blank" rel="noopener" href="'+esc(r.d.anamnesis_url)+'">Abrir el formulario para que el paciente lo complete y firme</a>';
+    result.innerHTML=html;return;
+  }
+  html=r.d.correo_enviado?'Solicitud enviada al correo registrado. ':'No se envió correo (no hay email registrado o el correo no está disponible). ';
   if(r.d.update_url)html+='Se generó un enlace seguro para actualizar los datos. ';
+  if(r.d.anamnesis_url)html+='Se generó el enlace personal de la anamnesis (vale 7 días, un solo uso). <button class="btn sec" type="button" data-copy="'+esc(r.d.anamnesis_url)+'">Copiar enlace</button> ';
   if(r.d.whatsapp_texto){
     const tel=String(PD.p.telefono||'').replace(/\D/g,'');
     const href='https://wa.me/'+(tel||'')+'?text='+encodeURIComponent(r.d.whatsapp_texto);
     html+='<a target="_blank" rel="noopener" href="'+href+'">Abrir WhatsApp con el mensaje preparado</a>';
   }
   result.innerHTML=html;
+  const c=result.querySelector('[data-copy]');
+  if(c)c.onclick=async()=>{try{await navigator.clipboard.writeText(c.dataset.copy);c.textContent='Copiado'}catch(e){c.textContent='No se pudo copiar'}};
 }
 
+function firmaInfo(f){
+  if(!f)return'<p class="note" style="color:var(--mut);margin:10px 0 0">Esta encuesta se respondió sin firma.</p>';
+  let t="";try{t=fmtCita(f.en)}catch(e){}
+  return'<p class="note" style="margin:10px 0 0">'+(f.verificada?'<b>✓ Firmada</b>':'<b style="color:var(--bad,#b3261e)">⚠ La firma no coincide con el registro: no se puede garantizar su autenticidad</b>')+(t?' · '+esc(t):'')+(f.metodo?' · '+esc(f.metodo):'')+(f.testigo?' · '+esc(f.testigo):'')+'</p>';
+}
 function htmlAnam(d){
   if(!d.clinico)return'<div class="card"><span class="empty">No tienes permiso para ver datos clínicos.</span></div>';
   const a=d.anamnesis;
   if(!a)return'<div class="card"><h2 style="margin-top:0">Anamnesis</h2><span class="empty">El paciente aún no responde la encuesta de salud.</span><p style="margin:12px 0 0"><button class="btn" id="an-solicitar" type="button">Solicitar anamnesis al paciente</button></p></div>';
   let f="";try{if(a.fecha)f=fmtCita(a.fecha)}catch(e){}
   let h='<div class="card"><div class="head"><h2 style="margin:0">Encuesta de salud'+(f?" · "+esc(f):"")+'</h2><button class="btn sec" id="an-pdf" type="button">Ver PDF</button></div>'+
-    riesgoBadge({riesgo:a.riesgo})+'<div style="margin-top:12px">';
+    riesgoBadge({riesgo:a.riesgo})+firmaInfo(a.firma)+'<div style="margin-top:12px">';
   h+=a.respuestas.map(r=>'<div class="qa'+(r.riesgo?" rk":"")+'"><span>'+esc(r.pregunta)+'</span><b>'+esc(r.respuesta)+(r.texto?" — "+esc(r.texto):"")+'</b></div>').join("");
   return h+'</div></div>';
 }

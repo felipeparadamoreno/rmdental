@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Anamnesis | RM Dental</title>
 <meta name="robots" content="noindex,nofollow">
+<meta name="referrer" content="no-referrer">
 <link rel="icon" type="image/png" sizes="64x64" href="favicon.png"><link rel="icon" href="favicon.ico" sizes="any">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -62,6 +63,10 @@ h1{font-size:26px;line-height:1.2;margin:0}
 .an-grid{display:grid;grid-template-columns:1fr;gap:12px}
 @media(min-width:520px){.an-grid.two{grid-template-columns:1fr 1fr}}
 .an-priv{font-size:13px;color:var(--muted);margin:0}
+#sg{display:block;width:100%;height:auto;aspect-ratio:560/180;background:#fff;border:1.5px dashed var(--accent);border-radius:10px;touch-action:none;cursor:crosshair}
+.an-sign-bar{display:flex;justify-content:space-between;align-items:center;gap:8px;font-size:12px;color:var(--muted)}
+.an-sign-bar button{font:inherit;font-size:13px;color:var(--accent);background:none;border:0;cursor:pointer;text-decoration:underline;min-height:36px}
+.an-banner{background:var(--accent-soft);border:1px solid var(--accent);border-radius:10px;padding:10px 14px;font-size:14px}
 a.an-link{display:inline-block;background:var(--accent);color:var(--on-accent);text-decoration:none;font-weight:600;padding:12px 18px;border-radius:8px}
 </style>
 <link rel="stylesheet" href="tema.css">
@@ -75,6 +80,10 @@ a.an-link{display:inline-block;background:var(--accent);color:var(--on-accent);t
     <p class="an-lead" id="lead">Responde con calma. Tus respuestas ayudan a que tu atención dental sea segura.</p>
   </div>
 
+  <div class="an-banner" id="presBanner" hidden>Estás completando la encuesta en la clínica. Responde con el equipo a tu lado si tienes dudas.</div>
+
+  <section class="an-card an-pad" id="badLink" hidden role="alert"><p id="badLinkMsg" style="margin:0"></p></section>
+
   <section class="an-card an-pad an-login" id="needLogin" hidden>
     <p>Para responder la encuesta primero debes ingresar a tu portal de paciente con tu RUT.</p>
     <a class="an-link" href="portal-pacientes.html">Ir al portal de pacientes</a>
@@ -83,7 +92,7 @@ a.an-link{display:inline-block;background:var(--accent);color:var(--on-accent);t
   <section class="an-card an-pad an-done" id="done" hidden aria-live="polite">
     <h2>Gracias, quedó registrada</h2>
     <p id="doneMsg"></p>
-    <a class="an-link" href="portal-pacientes.html">Volver a mi portal</a>
+    <a class="an-link" id="doneLink" href="portal-pacientes.html">Volver a mi portal</a>
   </section>
 
   <div id="form" hidden>
@@ -122,6 +131,16 @@ a.an-link{display:inline-block;background:var(--accent);color:var(--on-accent);t
           <div class="an-f"><label for="o-com">Comuna *</label><input type="text" id="o-com" maxlength="80" autocomplete="address-level2" placeholder="Ej. Providencia"></div>
         </div>
         <div class="an-f"><label for="o-dir">Dirección (opcional)</label><input type="text" id="o-dir" maxlength="160" autocomplete="street-address"></div>
+      </div>
+    </section>
+
+    <section class="an-card" id="sign" style="margin-top:16px">
+      <div class="an-head" style="cursor:default"><b>Firma del paciente</b></div>
+      <div class="an-body an-pad" style="display:flex;flex-direction:column;gap:14px">
+        <p class="an-priv">Con tu firma confirmas que las respuestas son verdaderas y que las entregas voluntariamente a la clínica. Firma con el dedo o el lápiz dentro del recuadro.</p>
+        <div class="an-f" id="rutBox" hidden><label for="s-rut">Confirma tu RUT para firmar *</label><input type="text" id="s-rut" inputmode="text" autocomplete="off" placeholder="12.345.678-9" maxlength="14"></div>
+        <canvas id="sg" width="560" height="180" aria-label="Recuadro para firmar"></canvas>
+        <div class="an-sign-bar"><span>Firma aquí</span><button type="button" id="sg-clear">Borrar firma</button></div>
       </div>
     </section>
 
@@ -165,6 +184,22 @@ var O=[["si","Sí"],["no","No"],["otro","Otro"],["nr","No responde"]];
 var CANALES=["Instagram","Facebook","Google o Maps","Sitio web de la clínica","Recomendación de un paciente","Derivación de un profesional","Convenio o empresa","Publicidad en la calle","Otro"];
 var REGIONES=["Arica y Parinacota","Tarapacá","Antofagasta","Atacama","Coquimbo","Valparaíso","Metropolitana de Santiago","Libertador General Bernardo O'Higgins","Maule","Ñuble","Biobío","La Araucanía","Los Ríos","Los Lagos","Aysén","Magallanes y de la Antártica Chilena"];
 var ans={},sending=false,needOrigen=false;
+var TOKEN=new URLSearchParams(location.search).get("t")||"";
+if(!/^[a-f0-9]{64}$/.test(TOKEN))TOKEN="";
+
+/* --- Firma --- */
+var cv=$("sg"),cx=cv.getContext("2d"),drawing=false,last=null,ink=0,INK="#10243A";
+cx.lineWidth=2.4;cx.lineCap="round";cx.lineJoin="round";cx.strokeStyle=INK;cx.fillStyle=INK;
+function pos(e){var r=cv.getBoundingClientRect();return{x:(e.clientX-r.left)*cv.width/r.width,y:(e.clientY-r.top)*cv.height/r.height}}
+cv.addEventListener("pointerdown",function(e){e.preventDefault();try{cv.setPointerCapture(e.pointerId)}catch(_){}drawing=true;last=pos(e);cx.beginPath();cx.arc(last.x,last.y,1.3,0,6.3);cx.fill();ink+=2});
+cv.addEventListener("pointermove",function(e){if(!drawing)return;e.preventDefault();var p=pos(e);cx.beginPath();cx.moveTo(last.x,last.y);cx.lineTo(p.x,p.y);cx.stroke();ink+=Math.hypot(p.x-last.x,p.y-last.y);last=p});
+["pointerup","pointercancel"].forEach(function(t){cv.addEventListener(t,function(){drawing=false})});
+$("sg-clear").addEventListener("click",function(){cx.clearRect(0,0,cv.width,cv.height);ink=0});
+function firmaError(){
+  if(TOKEN&&!$("s-rut").value.trim())return "Escribe tu RUT para poder firmar.";
+  if(ink<150)return "Falta tu firma. Dibújala dentro del recuadro.";
+  return "";
+}
 CANALES.forEach(function(c){var o=document.createElement("option");o.textContent=c;$("o-canal").appendChild(o)});
 REGIONES.forEach(function(c){var o=document.createElement("option");o.textContent=c;$("o-reg").appendChild(o)});
 document.querySelectorAll('input[name="o-der"]').forEach(function(r){r.addEventListener("change",function(){$("o-der-box").hidden=r.value!=="si"||!r.checked})});
@@ -215,6 +250,8 @@ $("tg").addEventListener("click",function(){
 
 $("fin").addEventListener("click",function(){
   if(needOrigen){var oe=origenError();if(oe){var mm=$("msg");mm.className="an-msg err";mm.textContent=oe;$("org").scrollIntoView({block:"center",behavior:"smooth"});return}}
+  var fe=firmaError();
+  if(fe){var m2=$("msg");m2.className="an-msg err";m2.textContent=fe;$("sign").scrollIntoView({block:"center",behavior:"smooth"});return}
   $("msg").textContent="";
   var pend=Q.length-Object.keys(ans).length;
   $("cft").textContent=pend>0
@@ -228,26 +265,47 @@ $("yes").addEventListener("click",function(){
   if(sending)return;sending=true;$("yes").disabled=true;
   var m=$("msg");m.className="an-msg";m.textContent="Enviando…";
   var respuestas=Q.map(function(q,i){return{id:q[0],respuesta:ans[i]||null,observacion:$("q"+i+"o").value.trim()}});
-  call("/me/anamnesis",{method:"POST",body:needOrigen?{respuestas:respuestas,origen:origenData()}:{respuestas:respuestas}}).then(function(r){
-    if(r.status===401){$("form").hidden=true;$("needLogin").hidden=false;return}
-    if(!r.ok){m.className="an-msg err";m.textContent="No pudimos guardar tus respuestas. Intenta de nuevo en unos minutos.";sending=false;$("yes").disabled=false;return}
-    $("form").hidden=true;$("lead").hidden=true;
+  var body={respuestas:respuestas,firma:cv.toDataURL("image/png")};
+  if(needOrigen)body.origen=origenData();
+  if(TOKEN)body.rut=$("s-rut").value.trim();
+  var url=TOKEN?"/anamnesis-link/"+encodeURIComponent(TOKEN):"/me/anamnesis";
+  function reintentar(txt){m.className="an-msg err";m.textContent=txt;sending=false;$("yes").disabled=false;$("cf").hidden=true;$("fin").hidden=false}
+  call(url,{method:"POST",body:body}).then(function(r){
+    if(r.status===401&&!TOKEN){$("form").hidden=true;$("needLogin").hidden=false;return}
+    if(r.status===404&&TOKEN){$("form").hidden=true;$("lead").hidden=true;$("badLinkMsg").textContent=(r.data&&r.data.error)||"Este enlace venció o ya fue utilizado.";$("badLink").hidden=false;return}
+    if(r.status===403){reintentar((r.data&&r.data.error)||"No pudimos confirmar tu identidad.");$("rutBox").scrollIntoView({block:"center",behavior:"smooth"});return}
+    if(!r.ok){reintentar("No pudimos guardar tus respuestas. Intenta de nuevo en unos minutos.");return}
+    $("form").hidden=true;$("lead").hidden=true;$("presBanner").hidden=true;
+    if(TOKEN)$("doneLink").hidden=true;
     $("doneMsg").textContent=(r.data&&r.data.correo_enviado)
-      ?"Te enviamos una copia en PDF a tu correo. Tu equipo tratante ya puede ver tus respuestas."
+      ?"Te enviamos una copia firmada en PDF a tu correo. Tu equipo tratante ya puede ver tus respuestas."
       :"Tu equipo tratante ya puede ver tus respuestas. No pudimos enviar el PDF a tu correo; lo recibirás más tarde.";
     $("done").hidden=false;window.scrollTo({top:0,behavior:"smooth"});
-  },function(){m.className="an-msg err";m.textContent="Sin conexión. Revisa tu internet e intenta de nuevo.";sending=false;$("yes").disabled=false});
+  },function(){reintentar("Sin conexión. Revisa tu internet e intenta de nuevo.")});
 });
 
-call("/me").then(function(r){
-  if(!r.ok){$("needLogin").hidden=false;return}
-  var n=r.data&&r.data.nombre?String(r.data.nombre).trim().split(/\s+/)[0]:"";
+function mostrarForm(nombre){
+  var n=nombre?String(nombre).trim().split(/\s+/)[0]:"";
   if(n)$("lead").textContent="Hola, "+n.charAt(0).toUpperCase()+n.slice(1).toLowerCase()+". Responde con calma: tus respuestas ayudan a que tu atención dental sea segura.";
   $("form").hidden=false;refresh();
-  call("/me/origen").then(function(o){
-    if(o.ok&&o.data&&o.data.registrado===false){needOrigen=true;$("org").hidden=false}
-  },function(){});
-},function(){$("needLogin").hidden=false});
+}
+if(TOKEN){
+  $("rutBox").hidden=false;
+  call("/anamnesis-link/"+encodeURIComponent(TOKEN)).then(function(r){
+    if(!r.ok){$("lead").hidden=true;$("badLinkMsg").textContent=(r.data&&r.data.error)||"No pudimos validar el enlace. Pide uno nuevo a la clínica.";$("badLink").hidden=false;return}
+    if(r.data.presencial)$("presBanner").hidden=false;
+    if(r.data.necesita_origen){needOrigen=true;$("org").hidden=false}
+    mostrarForm(r.data.nombre);
+  },function(){$("badLinkMsg").textContent="Sin conexión. Revisa tu internet e intenta de nuevo.";$("badLink").hidden=false});
+}else{
+  call("/me").then(function(r){
+    if(!r.ok){$("needLogin").hidden=false;return}
+    mostrarForm(r.data&&r.data.nombre);
+    call("/me/origen").then(function(o){
+      if(o.ok&&o.data&&o.data.registrado===false){needOrigen=true;$("org").hidden=false}
+    },function(){});
+  },function(){$("needLogin").hidden=false});
+}
 })();
 </script>
 </body>
