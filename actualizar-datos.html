@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="es-CL">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow"><title>Actualizar datos · RM Dental</title>
+<style>
+:root{--bg:#f2f6f6;--card:#fff;--fg:#0f2b32;--muted:#526c72;--line:#d3e0e1;--accent:#0b6e7a;--ok:#17743b;--err:#b3261e}
+*{box-sizing:border-box}[hidden]{display:none!important}body{margin:0;background:var(--bg);color:var(--fg);font:16px/1.5 Arial,sans-serif;padding:28px 14px}
+main{max-width:560px;margin:4vh auto}.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:24px;box-shadow:0 10px 32px #0f2b320d}
+h1{font-size:25px;margin:0 0 6px}p{color:var(--muted);margin:0 0 16px}label{display:block;font-weight:700;font-size:13px;margin:13px 0 5px;color:var(--muted)}input{width:100%;padding:12px;border:1px solid var(--line);border-radius:9px;font:inherit;background:#f8fbfb;color:var(--fg)}button{margin-top:18px;width:100%;border:0;border-radius:9px;padding:13px 18px;background:var(--accent);color:#fff;font:inherit;font-weight:700;cursor:pointer}button:disabled{opacity:.6;cursor:wait}.msg{padding:11px 12px;border-radius:9px;margin:12px 0 0;font-size:14px;background:#f2f6f6}.msg.ok{color:var(--ok)}.msg.err{color:var(--err)}.brand{font-weight:700;color:var(--accent);font-size:13px;letter-spacing:.07em;text-transform:uppercase;margin-bottom:14px}
+</style>
+</head>
+<body><main><div class="card"><div class="brand">Red Metropolitana Dental</div><h1>Actualizar mis datos</h1><p id="intro">La clínica te solicita completar o confirmar algunos antecedentes personales.</p><form id="f" hidden>
+<label for="nombre" id="lnombre" hidden>Nombre completo</label><input id="nombre" autocomplete="name" hidden>
+<label for="email" id="lemail" hidden>Correo electrónico</label><input id="email" type="email" autocomplete="email" hidden>
+<label for="telefono" id="ltelefono" hidden>Teléfono</label><input id="telefono" type="tel" autocomplete="tel" hidden>
+<label for="fecha_nac" id="lfecha_nac" hidden>Fecha de nacimiento</label><input id="fecha_nac" type="date" hidden>
+<p class="msg" id="msg" role="status"></p><button id="send" type="submit">Guardar mis datos</button>
+</form><div class="msg" id="state">Validando enlace seguro…</div></div></main>
+<script>
+(function(){
+'use strict';
+const API=(window.RM_API_URL||'https://api.rmdental.cl').replace(/\/+$/,'');
+const token=new URLSearchParams(location.search).get('token');
+const $=id=>document.getElementById(id);
+let fields=[];
+async function load(){
+  if(!token){$('state').className='msg err';$('state').textContent='El enlace no es válido. Solicita uno nuevo a la clínica.';return;}
+  try{
+    const r=await fetch(API+'/solicitudes-datos/'+encodeURIComponent(token));const d=await r.json();
+    if(!r.ok)throw new Error(d.error||'El enlace venció o ya fue utilizado.');
+    fields=d.campos||[];$('intro').textContent='Hola '+(d.nombre||'').split(' ')[0]+'. Completa los campos que la clínica solicitó.';
+    fields.forEach(k=>{if(!['nombre','email','telefono','fecha_nac'].includes(k))return;$(k).hidden=false;$('l'+k).hidden=false;$(k).value=(d.datos&&d.datos[k])||'';$(k).required=true;});
+    $('state').hidden=true;$('f').hidden=false;
+  }catch(e){$('state').className='msg err';$('state').textContent=e.message||'No se pudo validar el enlace.';}
+}
+$('f').addEventListener('submit',async e=>{
+  e.preventDefault();const b=$('send'),body={};fields.forEach(k=>{if($(k))body[k]=$(k).value.trim();});
+  b.disabled=true;$('msg').className='msg';$('msg').textContent='Guardando…';
+  try{const r=await fetch(API+'/solicitudes-datos/'+encodeURIComponent(token),{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});const d=await r.json();if(!r.ok)throw new Error(d.error||'No se pudieron guardar tus datos.');
+    $('f').hidden=true;$('state').hidden=false;$('state').className='msg ok';$('state').textContent='Tus datos se actualizaron correctamente. Gracias por mantener tu información al día.';
+  }catch(err){$('msg').className='msg err';$('msg').textContent=err.message||'No se pudo guardar.';b.disabled=false;}
+});
+load();
+})();
+</script></body></html>
