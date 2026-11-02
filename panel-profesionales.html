@@ -159,6 +159,15 @@ table.tb td.n,table.tb th.n{text-align:right;font-variant-numeric:tabular-nums}
 .pnew-meta{display:flex;gap:7px;align-items:center;flex-wrap:wrap}
 .pnew-count{display:inline-flex;align-items:center;justify-content:center;min-width:27px;height:27px;padding:0 8px;border-radius:99px;background:#b42318;color:white;font-weight:700;font-size:13px}
 .pnew-empty{padding:12px;color:var(--mut);font-size:14px}
+.pinc-count{background:#b45309}
+.opt .pinc-badge{color:#fff;font-size:12px}
+.pinc-badge{display:inline-flex;align-items:center;justify-content:center;min-width:20px;height:20px;padding:0 6px;margin-left:8px;border-radius:99px;background:#b45309;color:#fff;font-size:12px;font-weight:700;vertical-align:middle}
+.pinc-tags{display:flex;flex-wrap:wrap;gap:6px;justify-content:flex-end;align-content:flex-start}
+.pinc-tags .tg{white-space:nowrap}
+.pinc-more{padding:8px 4px;color:var(--mut);font-size:13px}
+.pinc-filters{display:flex;gap:7px;flex-wrap:wrap;margin-top:12px}
+.pinc-filters button{border:1px solid var(--line);background:var(--bg);color:var(--ink);border-radius:99px;padding:5px 12px;font:inherit;font-size:13px;cursor:pointer}
+.pinc-filters button.on{border-color:var(--teal);background:rgba(23,169,184,.12);font-weight:700}
 .ag-live-wrap{overflow:auto;margin-top:12px}
 .ag-live{border-collapse:separate;border-spacing:0;width:100%;min-width:640px;font-size:13px}
 .ag-live th,.ag-live td{border-right:1px solid var(--line);border-bottom:1px solid var(--line);padding:7px;vertical-align:top;min-width:150px}
@@ -206,7 +215,7 @@ table.tb td.n,table.tb th.n{text-align:right;font-variant-numeric:tabular-nums}
   <aside class="side-nav noprint" aria-label="Navegación principal">
     <div class="side-label">Espacio de trabajo</div>
     <button class="side-link" type="button" data-go="agenda"><span class="side-ic">▦</span>Agenda</button>
-    <button class="side-link" type="button" data-go="pacientes"><span class="side-ic">♟</span>Pacientes</button>
+    <button class="side-link" type="button" data-go="pacientes"><span class="side-ic">♟</span>Pacientes<span class="pinc-badge" data-pinc-badge hidden title="Pacientes con anamnesis o ficha pendiente"></span></button>
     <button class="side-link" type="button" data-go="profesionales"><span class="side-ic">✚</span>Profesionales</button>
     <button class="side-link" type="button" data-go="horarios"><span class="side-ic">◷</span>Horarios</button>
     <div class="side-divider"></div>
@@ -226,7 +235,7 @@ table.tb td.n,table.tb th.n{text-align:right;font-variant-numeric:tabular-nums}
   <h1>Panel de profesionales</h1>
   <p class="lead">Elige una sección para comenzar.</p>
   <div class="menu">
-    <button class="opt" data-go="pacientes"><div class="ic">🦷</div><b>Pacientes</b><span>Lista de pacientes y ficha completa de cada uno: datos personales, citas, tratamientos, atenciones, pagos y anamnesis.</span></button>
+    <button class="opt" data-go="pacientes"><div class="ic">🦷</div><b>Pacientes<span class="pinc-badge" data-pinc-badge hidden title="Pacientes con anamnesis o ficha pendiente"></span></b><span>Lista de pacientes y ficha completa de cada uno: datos personales, citas, tratamientos, atenciones, pagos y anamnesis.</span></button>
     <button class="opt" data-go="profesionales"><div class="ic">🩺</div><b>Profesionales</b><span>El equipo de la clínica: especialidad, contacto y rol.</span></button>
     <button class="opt" data-go="admin"><div class="ic">🗂️</div><b>Administrativo</b><span>Documentos clínicos, usuarios, finanzas de la clínica y tu cuenta.</span></button>
   </div>
@@ -239,6 +248,15 @@ table.tb td.n,table.tb th.n{text-align:right;font-variant-numeric:tabular-nums}
   <div class="card" id="pl-new-inbox" style="margin-top:12px" aria-live="polite">
     <div class="pnew-head"><div><h2 style="margin:0">Nuevos pacientes ingresados</h2><p class="lead" style="margin:4px 0 0">Ingresos recibidos por sucursal, web, WhatsApp o call center.</p></div><div class="pnew-meta"><span id="pl-new-count" class="pnew-count" hidden>0</span><button class="btn sec" id="pl-new-refresh" type="button">Actualizar</button></div></div>
     <div class="pnew-list" id="pl-new-list"><span class="pnew-empty">Revisando nuevos ingresos…</span></div>
+  </div>
+  <div class="card" id="pl-inc-box" style="margin-top:12px" aria-live="polite">
+    <div class="pnew-head"><div><h2 style="margin:0">Pacientes con información pendiente</h2><p class="lead" style="margin:4px 0 0">Pacientes que aún no completan su anamnesis o cuya ficha clínica está incompleta. El aviso se mantiene hasta que se complete.</p></div><div class="pnew-meta"><span id="pl-inc-count" class="pnew-count pinc-count" hidden>0</span><button class="btn sec" id="pl-inc-refresh" type="button">Actualizar</button></div></div>
+    <div class="pinc-filters" id="pl-inc-filters" hidden>
+      <button type="button" class="on" data-f="todos">Todos</button>
+      <button type="button" data-f="anam">Sin anamnesis</button>
+      <button type="button" data-f="ficha">Ficha incompleta</button>
+    </div>
+    <div class="pnew-list" id="pl-inc-list"><span class="pnew-empty">Revisando información pendiente…</span></div>
   </div>
   <div class="card" style="margin-top:12px">
     <label for="pl-q" style="margin-top:0">Buscar por nombre, RUT o correo</label>
@@ -673,7 +691,10 @@ function show(v){
   if(v==="pacientes"){
     if(typeof cargarPacientes==="function")cargarPacientes();
     if(typeof cargarNuevosPacientes==="function")cargarNuevosPacientes();
-    pacientesTimer=setInterval(()=>{if(!$('v-pacientes').hidden)cargarNuevosPacientes()},45000);
+    if(typeof cargarIncompletos==="function")cargarIncompletos({visible:true});
+    pacientesTimer=setInterval(()=>{if(!$('v-pacientes').hidden){cargarNuevosPacientes();cargarIncompletos({visible:true})}},45000);
+  }else if(loggedIn&&typeof cargarIncompletos==="function"){
+    cargarIncompletos({throttle:true});
   }
   if(v==="agenda"){
     if(typeof initAgenda==="function")initAgenda();
@@ -1444,6 +1465,58 @@ async function cargarNuevosPacientes(){
   });
 }
 
+/* --- Pacientes con anamnesis o ficha clínica pendiente --- */
+var INC={lista:[],total:0,filtro:"todos",ts:0}; // var: boot() puede llamar a cargarIncompletos antes de que se ejecute esta línea
+function pintarBadgesInc(n){
+  document.querySelectorAll("[data-pinc-badge]").forEach(e=>{e.textContent=n>99?"99+":String(n);e.hidden=!n;e.title=n+(n===1?" paciente":" pacientes")+" con anamnesis o ficha pendiente"});
+}
+async function cargarIncompletos(opts){
+  opts=opts||{};
+  if(opts.throttle&&INC&&Date.now()-INC.ts<60000)return;
+  const root=$("pl-inc-list"),count=$("pl-inc-count"),filt=$("pl-inc-filters");
+  const r=await api("/pro/pacientes/incompletos");
+  if(r.status===401){if(opts.visible)sesionVencida();return}
+  INC.ts=Date.now();
+  if(!r.ok){
+    if(root&&opts.visible){root.innerHTML='<span class="pnew-empty">'+esc(r.d.error||"No se pudo revisar la información pendiente.")+'</span>';count.hidden=true;filt.hidden=true}
+    return;
+  }
+  INC.lista=r.d.pacientes||[];INC.total=r.d.total||0;
+  pintarBadgesInc(INC.total);
+  if(root)pintarIncompletos();
+}
+function pintarIncompletos(){
+  const root=$("pl-inc-list"),count=$("pl-inc-count"),filt=$("pl-inc-filters");
+  count.textContent=String(INC.total);count.hidden=!INC.total;filt.hidden=!INC.total;
+  root.innerHTML="";
+  if(!INC.total){root.innerHTML='<span class="pnew-empty">Todos los pacientes tienen su anamnesis y ficha completas.</span>';return}
+  const f=INC.filtro;
+  const L=INC.lista.filter(p=>f==="anam"?p.sin_anamnesis:f==="ficha"?(p.sin_ficha||p.ficha_faltantes.length>0):true);
+  if(!L.length){root.innerHTML='<span class="pnew-empty">No hay pacientes en este filtro.</span>';return}
+  L.forEach(p=>{
+    const tags=[];
+    if(p.sin_anamnesis)tags.push('<span class="tg grave">Sin anamnesis</span>');
+    if(p.sin_ficha)tags.push('<span class="tg warn">Sin ficha clínica</span>');
+    else if(p.ficha_faltantes.length)tags.push('<span class="tg warn">Ficha incompleta</span>');
+    const det=p.sin_ficha?"No tiene ficha clínica registrada.":p.ficha_faltantes.length?"Falta en la ficha: "+p.ficha_faltantes.join(", ")+".":"";
+    const b=document.createElement("button");b.type="button";b.className="pnew-item";
+    b.innerHTML='<span><b>'+esc(p.nombre||"Paciente sin nombre")+'</b><small>'+esc(p.rut||"Sin RUT")+' · '+esc(p.telefono||"Sin teléfono")+'</small>'+(det?'<small>'+esc(det)+'</small>':"")+'</span><span class="pinc-tags">'+tags.join("")+'</span>';
+    b.addEventListener("click",()=>{
+      openPaciente(p);
+      if(rol()!=="secretaria")irTab(p.sin_anamnesis?"anam":"ficha");
+    });
+    root.appendChild(b);
+  });
+  if(INC.total>INC.lista.length)root.insertAdjacentHTML("beforeend",'<div class="pinc-more">Se muestran los '+INC.lista.length+' más recientes de '+INC.total+'. Usa el buscador para encontrar a los demás.</div>');
+}
+$("pl-inc-refresh").addEventListener("click",()=>cargarIncompletos({visible:true}));
+$("pl-inc-filters").addEventListener("click",e=>{
+  const b=e.target.closest("[data-f]");if(!b)return;
+  INC.filtro=b.dataset.f;
+  document.querySelectorAll("#pl-inc-filters button").forEach(x=>x.classList.toggle("on",x===b));
+  pintarIncompletos();
+});
+
 /* --- Ficha del paciente --- */
 function openPaciente(p,ingreso){
   PD={p:{id:p.id,rut:p.rut,nombre:p.nombre,email:p.email,telefono:p.telefono,fecha_nac:p.fecha_nac,riesgo:p.riesgo||null},ficha:null,hecho:{},ingreso:ingreso||null};
@@ -1484,6 +1557,8 @@ async function pintarFicha(t){
   box.innerHTML=t==="datos"?htmlDatos(d):t==="anam"?htmlAnam(d):htmlFichas(d);
   const b=$("an-pdf");if(b)b.onclick=verPdf;
   const send=$('pd-send-requests');if(send)send.onclick=solicitarDatosPaciente;
+  const sol=$('an-solicitar');
+  if(sol)sol.onclick=()=>{irTab("datos");const c=document.querySelector('#pd-requests input[value="anamnesis"]');if(c){c.checked=true;const a=document.querySelector('#tab-datos .pd-actions');if(a)a.scrollIntoView({behavior:"smooth",block:"center"})}};
 }
 function htmlDatos(d){
   const p=d.paciente,o=d.origen,e=edadDe(p.fecha_nac);
@@ -1530,7 +1605,7 @@ async function solicitarDatosPaciente(){
 function htmlAnam(d){
   if(!d.clinico)return'<div class="card"><span class="empty">No tienes permiso para ver datos clínicos.</span></div>';
   const a=d.anamnesis;
-  if(!a)return'<div class="card"><h2 style="margin-top:0">Anamnesis</h2><span class="empty">El paciente aún no responde la encuesta de salud.</span></div>';
+  if(!a)return'<div class="card"><h2 style="margin-top:0">Anamnesis</h2><span class="empty">El paciente aún no responde la encuesta de salud.</span><p style="margin:12px 0 0"><button class="btn" id="an-solicitar" type="button">Solicitar anamnesis al paciente</button></p></div>';
   let f="";try{if(a.fecha)f=fmtCita(a.fecha)}catch(e){}
   let h='<div class="card"><div class="head"><h2 style="margin:0">Encuesta de salud'+(f?" · "+esc(f):"")+'</h2><button class="btn sec" id="an-pdf" type="button">Ver PDF</button></div>'+
     riesgoBadge({riesgo:a.riesgo})+'<div style="margin-top:12px">';
