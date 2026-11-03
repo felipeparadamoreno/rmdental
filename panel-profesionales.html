@@ -82,6 +82,36 @@ legend{font-weight:700;padding:0 8px;color:var(--teal-d)}
 .chartbox .lbl{fill:var(--ink);font:600 12px Arial,Helvetica,sans-serif}
 .chartbox .val{fill:var(--ink);font:700 12px Arial,Helvetica,sans-serif}
 .chartbox .ax{stroke:var(--line);stroke-width:1}
+/* ===== Finanzas: donas, listas y etiquetas ===== */
+.fz-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,400px),1fr));gap:16px;margin-top:16px}
+.fz-card h2{margin:0 0 2px;font-size:17px}.fz-card .sub{color:var(--mut);font-size:13px;margin:0 0 14px}
+.dn{display:flex;gap:18px;align-items:center;flex-wrap:wrap}
+.dn svg{width:168px;height:168px;flex:none}
+.dn .dn-c1{fill:var(--ink);font:700 19px Arial,Helvetica,sans-serif}
+.dn .dn-c2{fill:var(--mut);font:600 11px Arial,Helvetica,sans-serif}
+.dn .dn-track{stroke:var(--line)}
+.dn-leg{list-style:none;margin:0;padding:0;display:grid;gap:9px;flex:1;min-width:160px;font-size:14px}
+.dn-leg li{display:grid;grid-template-columns:12px minmax(0,1fr) auto;gap:8px;align-items:start}
+.dn-leg i{width:12px;height:12px;border-radius:3px;display:inline-block;margin-top:4px}
+.dn-leg small{display:block;color:var(--mut);font-size:12px}
+.dn-leg b{font-variant-numeric:tabular-nums;text-align:right}
+.fz-n{display:inline-flex;align-items:center;justify-content:center;min-width:18px;height:18px;padding:0 5px;margin-left:6px;border-radius:99px;background:rgba(23,169,184,.18);font-size:11px}
+.tabs button.on .fz-n{background:rgba(255,255,255,.3)}
+.fz-bar{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-top:14px}
+.fz-bar input{flex:1;min-width:200px;width:auto}
+.fz-row{--c4:190px;display:grid;grid-template-columns:minmax(0,1.6fr) minmax(0,.7fr) minmax(0,.9fr) var(--c4);gap:6px 16px;align-items:center;border:1px solid var(--line);border-radius:12px;padding:12px 16px;margin-top:8px;background:var(--card)}
+.fz-row small{display:block;color:var(--mut);font-size:12px}
+.fz-row .m{font-weight:700;font-variant-numeric:tabular-nums;font-size:16px}
+.fz-row .acts{display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end;align-items:center}
+.fz-row .btn{padding:6px 12px;font-size:13px}
+.fz-row.t{--c4:280px}
+#fz-msg:empty{margin:0;min-height:0}
+.fz-chips{display:flex;gap:5px;flex-wrap:wrap;margin-top:5px}
+.fz-chips .tg{font-weight:600}
+@media(max-width:760px){.fz-row,.fz-row.t{grid-template-columns:1fr}.fz-row .acts{justify-content:flex-start}.dn{justify-content:center}}
+.tg.a1{background:#fff6dc;color:#6b4e00}.tg.a2{background:#ffe9d2;color:#8a3d00}.tg.a3{background:#fde8e8;color:#8f1a1a}.tg.a4{background:#8f1a1a;color:#fff}
+.tg.p-urgente{background:#fde8e8;color:#8f1a1a}.tg.p-alta{background:#ffe9d2;color:#8a3d00}.tg.p-media{background:#fff6dc;color:#6b4e00}.tg.p-baja{background:#eceff0;color:#4a5a5e}
+
 .mov .m-m{font-weight:700;font-variant-numeric:tabular-nums;white-space:nowrap}
 .mov.anul{opacity:.55}.mov.anul b{text-decoration:line-through}
 .tg.cargo{background:#fde8e8;color:#8f1a1a}.tg.pago{background:#e1f4e8;color:#17743b}
@@ -320,7 +350,7 @@ html{scroll-behavior:smooth}
   <div class="menu">
     <button class="opt" data-go="pacientes"><div class="ic">🦷</div><b>Pacientes<span class="pinc-badge" data-pinc-badge hidden title="Pacientes con anamnesis o ficha pendiente"></span></b><span>Lista de pacientes y ficha completa de cada uno: datos personales, citas, tratamientos, atenciones, pagos y anamnesis.</span></button>
     <button class="opt" data-go="profesionales"><div class="ic">🩺</div><b>Profesionales</b><span>El equipo de la clínica: especialidad, contacto y rol.</span></button>
-    <button class="opt" data-go="admin"><div class="ic">🗂️</div><b>Administrativo</b><span>Documentos clínicos, usuarios, finanzas de la clínica y tu cuenta.</span></button>
+    <button class="opt" data-go="admin"><div class="ic">🗂️</div><b>Administrativo</b><span>Documentos clínicos, usuarios y tu cuenta.</span></button>
   </div>
 </section>
 
@@ -409,7 +439,6 @@ html{scroll-behavior:smooth}
   <p class="lead">Gestión de la clínica y de tu cuenta.</p>
   <div class="menu">
     <button class="opt" data-go="docs"><div class="ic">📄</div><b>Emisión de documentos clínicos</b><span>Informes, certificados, indicaciones, órdenes de examen y consentimientos, con el logo de la Red.</span></button>
-    <button class="opt" data-go="dueno" id="m-dueno" hidden><div class="ic">📊</div><b>Panel del dueño</b><span>Cuánto dinero ha entrado, cuánto falta por entrar y quiénes tienen deuda.</span></button>
     <button class="opt" data-go="usu" id="m-usu" hidden><div class="ic">👥</div><b>Usuarios</b><span>Crea cuentas para profesionales y secretaría, asigna roles, genera claves y desactiva accesos.</span></button>
     <a class="opt" href="segunda-opinion.html" style="text-decoration:none"><div class="ic">💬</div><b>Emitir segunda opinión</b><span>Abre el formulario de segunda opinión con tu misma sesión.</span></a>
     <button class="opt" data-go="clave"><div class="ic">🔑</div><b>Cambiar mi clave</b><span>Actualiza la clave con la que entras al panel.</span></button>
@@ -590,18 +619,66 @@ html{scroll-behavior:smooth}
     </div>
   </div>
 </section>
-<!-- FINANZAS DEL PACIENTE -->
+<!-- FINANZAS -->
 <section id="v-fin" hidden class="noprint">
   <button class="back" data-go="agenda">← Volver al inicio</button>
-  <h1>Finanzas del paciente</h1>
-  <p class="lead">Historial de cargos y pagos. Solo lo ve el personal de la clínica.</p>
-  <div class="card">
-    <label for="f-q">Paciente (nombre o RUT) *</label>
-    <input id="f-q" placeholder="Escribe al menos 2 letras o el RUT" autocomplete="off">
-    <div class="res" id="f-res"></div>
-    <div class="chip" id="f-sel" hidden><span id="f-selt"></span><button type="button" id="f-cambiar">Cambiar</button></div>
-    <div id="f-risk"></div>
+  <h1>Finanzas</h1>
+  <p class="lead" id="fz-lead">Cobros, deudas y tratamientos pendientes de la clínica.</p>
+  <div class="tabs" id="fz-tabs" role="tablist" aria-label="Secciones de finanzas" hidden>
+    <button type="button" role="tab" class="on" data-fz="res" aria-selected="true">Resumen</button>
+    <button type="button" role="tab" data-fz="deu" aria-selected="false">Pacientes con deuda<span class="fz-n" id="fz-n-deu" hidden></span></button>
+    <button type="button" role="tab" data-fz="trat" aria-selected="false">Tratamientos pendientes<span class="fz-n" id="fz-n-trat" hidden></span></button>
+    <button type="button" role="tab" data-fz="buscar" aria-selected="false">Buscar paciente</button>
   </div>
+  <p class="msg" id="fz-msg" role="alert"></p>
+
+  <div class="fz-panel" id="fz-p-res" hidden>
+    <div class="card">
+      <label for="fz-meses">Período para ingresos y medios de pago</label>
+      <select id="fz-meses"><option value="1">Este mes</option><option value="3">Últimos 3 meses</option><option value="6" selected>Últimos 6 meses</option><option value="12">Últimos 12 meses</option></select>
+      <div class="kpis" id="fz-kpis"></div>
+    </div>
+    <div class="fz-grid">
+      <div class="card fz-card"><h2>Cobrado y por cobrar</h2><p class="sub">Sobre todo lo cargado a los pacientes.</p><div id="fz-d-cartera"></div></div>
+      <div class="card fz-card"><h2>Deuda según antigüedad</h2><p class="sub">Días transcurridos desde cada cargo impago.</p><div id="fz-d-ant"></div></div>
+      <div class="card fz-card"><h2>Tratamientos pendientes</h2><p class="sub">Valor de los planes que aún no se realizan.</p><div id="fz-d-trat"></div></div>
+      <div class="card fz-card"><h2>Ingresos por medio de pago</h2><p class="sub" id="fz-sub-medios"></p><div id="fz-d-medios"></div></div>
+    </div>
+    <div class="card" style="margin-top:16px"><h2 style="margin-top:0">Ingresos por mes</h2><div class="chartbox" id="fz-ing"></div></div>
+  </div>
+
+  <div class="fz-panel" id="fz-p-deu" hidden>
+    <div class="card">
+      <div class="kpis" id="fz-deu-kpis"></div>
+      <div class="fz-bar"><input id="fz-deu-q" type="search" maxlength="60" placeholder="Buscar por nombre o RUT" aria-label="Buscar entre los pacientes con deuda" autocomplete="off"></div>
+      <div class="pinc-filters" id="fz-deu-f" role="group" aria-label="Filtrar por antigüedad">
+        <button type="button" class="on" data-a="0">Todos</button><button type="button" data-a="1">0-30 días</button><button type="button" data-a="2">31-60 días</button><button type="button" data-a="3">61-90 días</button><button type="button" data-a="4">Más de 90 días</button>
+      </div>
+      <div id="fz-deu-list"></div>
+    </div>
+  </div>
+
+  <div class="fz-panel" id="fz-p-trat" hidden>
+    <div class="card">
+      <div class="kpis" id="fz-trat-kpis"></div>
+      <div class="fz-bar"><input id="fz-trat-q" type="search" maxlength="60" placeholder="Buscar por nombre o RUT" aria-label="Buscar entre los pacientes con tratamientos pendientes" autocomplete="off"></div>
+      <div class="pinc-filters" id="fz-trat-f" role="group" aria-label="Filtrar tratamientos pendientes">
+        <button type="button" class="on" data-t="todos">Todos</button><button type="button" data-t="urg">Urgentes y altos</button><button type="button" data-t="acep">Con tratamientos aceptados</button><button type="button" data-t="deuda">También con deuda</button>
+      </div>
+      <div id="fz-trat-list"></div>
+    </div>
+  </div>
+
+  <div class="fz-panel" id="fz-p-buscar" hidden>
+    <div class="card">
+      <label for="fz-q">Paciente (nombre o RUT)</label>
+      <input id="fz-q" placeholder="Escribe al menos 2 letras o el RUT" autocomplete="off">
+      <div class="res" id="fz-res"></div>
+      <p class="msg" style="color:var(--mut)">Al elegir un paciente se abre su ficha en la pestaña Pagos, con el detalle de cargos y pagos.</p>
+    </div>
+  </div>
+
+  <!-- Detalle financiero del paciente: el script lo mueve a la pestaña Pagos de la ficha (ver "Reordenamiento") -->
   <div id="f-body" hidden>
     <div class="card" style="margin-top:16px">
       <div class="kpis" id="f-kpis"></div>
@@ -634,23 +711,6 @@ html{scroll-behavior:smooth}
   </div>
 </section>
 
-<!-- PANEL DEL DUEÑO -->
-<section id="v-dueno" hidden class="noprint">
-  <button class="back" data-go="admin">← Volver a Administrativo</button>
-  <h1>Panel del dueño</h1>
-  <p class="lead">Dinero que ha entrado, dinero que falta por entrar y pacientes con deuda.</p>
-  <div class="card">
-    <label for="d-meses">Período</label>
-    <select id="d-meses"><option value="1">Este mes</option><option value="3">Últimos 3 meses</option><option value="6" selected>Últimos 6 meses</option><option value="12">Últimos 12 meses</option></select>
-    <div class="kpis" id="d-kpis"></div>
-    <p class="msg" id="d-msg" role="alert"></p>
-  </div>
-  <div class="split" style="margin-top:16px">
-    <div class="card"><h2 style="margin-top:0">Ingresos por mes</h2><div class="chartbox" id="d-ing"></div></div>
-    <div class="card"><h2 style="margin-top:0">Por cobrar según antigüedad</h2><div class="chartbox" id="d-ant"></div></div>
-  </div>
-  <div class="card" style="margin-top:16px"><h2 style="margin-top:0">Mayores deudas</h2><div class="tbwrap" id="d-deud"></div></div>
-</section>
 <!-- HISTORIAL DE ATENCIÓN -->
 <section id="v-aten" hidden class="noprint">
   <button class="back" data-go="agenda">← Volver al inicio</button>
@@ -757,14 +817,14 @@ function rutOk(r){
 /* Vistas */
 let pacientesTimer=null, agendaTimer=null;
 function show(v){
-  ["login","menu","pacientes","paciente","profesionales","horarios","admin","docs","ficha","agenda","trat","trib","fin","dueno","aten","usu","clave"].forEach(n=>{const el=$("v-"+n);if(el)el.hidden=n!==v;});
+  ["login","menu","pacientes","paciente","profesionales","horarios","admin","docs","ficha","agenda","trat","trib","fin","aten","usu","clave"].forEach(n=>{const el=$("v-"+n);if(el)el.hidden=n!==v;});
   const loggedIn=v!=="login";
   const workspace=$("workspace"),loginWrap=$("login-wrap");
   if(workspace)workspace.hidden=!loggedIn;
   if(loginWrap)loginWrap.hidden=loggedIn;
   let active=v;
   if(["paciente","ficha","trib"].includes(v))active="pacientes";
-  else if(["docs","dueno","usu","clave"].includes(v))active="admin";
+  else if(["docs","usu","clave"].includes(v))active="admin";
   document.querySelectorAll(".side-link[data-go]").forEach(b=>{
     const on=b.dataset.go===active;b.classList.toggle("active",on);
     if(on)b.setAttribute("aria-current","page");else b.removeAttribute("aria-current");
@@ -1327,7 +1387,6 @@ $("f-tb").addEventListener("submit",async e=>{
 function rol(){return (ME&&ME.rol)||"profesional"}   // profesional | secretaria | dueno
 function puedeEditarFin(){return rol()==="secretaria"||rol()==="dueno"}
 function aplicarRol(){
-  const m=$("m-dueno");if(m)m.hidden=rol()!=="dueno";
   const mu=$("m-usu");if(mu)mu.hidden=rol()!=="dueno";
   const a=$("m-aten");if(a)a.hidden=rol()==="secretaria";
 }
@@ -1359,26 +1418,9 @@ function barrasSvg(items,opt){
 const MESES=["ene","feb","mar","abr","may","jun","jul","ago","sep","oct","nov","dic"];
 const ROJO="#d64545",AMARILLO="#f2b705",VERDE="#2e9e5b";
 
-/* ===== Finanzas del paciente ===== */
-let fPac=null,fT;
-document.addEventListener("click",e=>{if(e.target.closest('[data-go="fin"]')){$("fc-fecha").value=hoyCL();$("fp-fecha").value=hoyCL();$("f-forms").hidden=!puedeEditarFin()}});
-$("f-q").addEventListener("input",()=>{
-  clearTimeout(fT);const q=$("f-q").value.trim(),box=$("f-res");
-  if(q.length<2){box.innerHTML="";return}
-  fT=setTimeout(async()=>{
-    const r=await api("/pro/pacientes?q="+encodeURIComponent(q));
-    if(r.status===401)return sesionVencida();
-    box.innerHTML="";
-    if(!r.ok||!r.d.pacientes.length){box.innerHTML='<span class="empty">Sin resultados.</span>';return}
-    r.d.pacientes.forEach(p=>{const b=document.createElement("button");b.type="button";b.textContent=p.nombre+" · "+p.rut;b.onclick=()=>fPick(p);box.appendChild(b)});
-  },250);
-});
-function fPick(p){
-  fPac=p;$("f-res").innerHTML="";$("f-q").hidden=true;$("f-q").value="";
-  $("f-selt").textContent=p.nombre+" · "+p.rut;$("f-sel").hidden=false;$("f-risk").innerHTML=riesgoBadge(p);
-  $("f-body").hidden=false;$("f-forms").hidden=!puedeEditarFin();fLoad();
-}
-$("f-cambiar").addEventListener("click",()=>{fPac=null;$("f-risk").innerHTML="";$("f-sel").hidden=true;$("f-body").hidden=true;$("f-q").hidden=false;$("f-q").focus()});
+/* ===== Finanzas del paciente (el detalle vive en la pestaña Pagos de la ficha) ===== */
+let fPac=null;
+function fPick(p){fPac=p;$("f-body").hidden=false;$("f-forms").hidden=!puedeEditarFin();fLoad()}
 async function fLoad(){
   if(!fPac)return;
   const list=$("f-list");list.innerHTML='<span class="empty">Cargando…</span>';
@@ -1432,27 +1474,179 @@ $("f-cargo").addEventListener("submit",e=>{e.preventDefault();
 $("f-pago").addEventListener("submit",e=>{e.preventDefault();
   enviarFin("f-pago","fp-msg","fp-btn","/pro/finanzas/pagos",{monto:$("fp-monto").value,fecha:$("fp-fecha").value,medio:$("fp-medio").value,nota:$("fp-nota").value},()=>{$("fp-monto").value="";$("fp-nota").value=""})});
 
-/* ===== Panel del dueño ===== */
-async function dLoad(){
-  const m=$("d-msg");m.className="msg";m.textContent="Cargando…";
-  const r=await api("/pro/finanzas/resumen?meses="+encodeURIComponent($("d-meses").value));
-  if(r.status===401)return sesionVencida();
-  if(r.status===403){m.className="msg err";m.textContent="Esta sección es solo para el dueño de la clínica.";return}
-  if(!r.ok){m.className="msg err";m.textContent="No se pudo cargar el resumen.";return}
-  m.textContent="";const d=r.d;
-  $("d-kpis").innerHTML=
-    '<div class="kpi k-ver"><small><i></i>Ha entrado</small><b>'+esc(clp(d.ingresado_periodo))+'</b></div>'+
-    '<div class="kpi k-ama"><small><i></i>Falta por entrar</small><b>'+esc(clp(d.por_cobrar))+'</b></div>'+
-    '<div class="kpi"><small>Pacientes con deuda</small><b>'+esc(d.pacientes_con_deuda)+'</b></div>';
-  $("d-ing").innerHTML=barrasSvg(d.meses.map(x=>({label:MESES[parseInt(x.mes.slice(5),10)-1],value:x.ingresos,color:VERDE})),{compacto:true});
-  $("d-ant").innerHTML=barrasSvg(d.antiguedad.map(x=>({label:x.rango.replace(" días","d").replace("Más de ","+"),value:x.monto,color:AMARILLO})),{compacto:true});
-  const box=$("d-deud");
-  if(!d.deudores.length){box.innerHTML='<span class="empty">No hay pacientes con deuda.</span>';return}
-  box.innerHTML='<table class="tb"><thead><tr><th>Paciente</th><th>RUT</th><th class="n">Debe</th><th class="n">Días</th></tr></thead><tbody>'+
-    d.deudores.map(x=>'<tr><td>'+esc(x.nombre)+'</td><td>'+esc(x.rut)+'</td><td class="n">'+esc(clp(x.saldo))+'</td><td class="n">'+esc(x.dias)+'</td></tr>').join("")+'</tbody></table>';
+/* ===== Finanzas de la clínica: donas, deudas y tratamientos pendientes ===== */
+const NARANJA="#ef8a2b",TEAL="#17a9b8",AZUL="#3a6fd8",GRIS="#9aa9ad",MORADO="#8a5cd0",ROJO_OSC="#9c2b2b";
+const FZ={d:null,tab:"res",aDeu:0,tTrat:"todos",qDeu:"",qTrat:"",seq:0};
+
+/* Dona en SVG: items=[{label,value,color,sub?}], centro={valor,texto}. La leyenda en HTML repite los montos (no depende solo del color). */
+function donaSvg(items,centro){
+  const total=items.reduce((a,i)=>a+Math.max(i.value,0),0),R=64,C=2*Math.PI*R,SW=26;
+  let g='<circle class="dn-track" cx="100" cy="100" r="'+R+'" fill="none" stroke-width="'+SW+'"/>';
+  const vis=items.filter(i=>i.value>0),sep=vis.length>1?2:0;let off=0;
+  vis.forEach(i=>{
+    const len=i.value/total*C,dash=Math.max(len-sep,.5);
+    g+='<circle cx="100" cy="100" r="'+R+'" fill="none" stroke="'+i.color+'" stroke-width="'+SW+'" stroke-dasharray="'+dash.toFixed(2)+' '+(C-dash).toFixed(2)+'" stroke-dashoffset="'+(-off).toFixed(2)+'" transform="rotate(-90 100 100)"/>';
+    off+=len;
+  });
+  g+='<text class="dn-c1" x="100" y="102" text-anchor="middle">'+esc(centro.valor)+'</text><text class="dn-c2" x="100" y="120" text-anchor="middle">'+esc(centro.texto)+'</text>';
+  const desc=items.map(i=>i.label+" "+clp(i.value)).join(", ");
+  return'<svg viewBox="0 0 200 200" role="img" aria-label="'+esc(centro.texto+": "+desc)+'">'+g+'</svg>';
 }
-$("d-meses").addEventListener("change",dLoad);
-document.addEventListener("click",e=>{if(e.target.closest('[data-go="dueno"]'))dLoad()});
+function donaHtml(items,centro,vacio){
+  const total=items.reduce((a,i)=>a+Math.max(i.value,0),0);
+  if(total<=0)return'<span class="empty">'+esc(vacio||"Sin datos todavía.")+'</span>';
+  const leg=items.map(i=>{
+    const pc=i.value>0?Math.max(Math.round(i.value/total*100),1):0;
+    return'<li><i style="background:'+i.color+'"></i><span>'+esc(i.label)+(i.sub?'<small>'+esc(i.sub)+'</small>':'')+'</span><b>'+esc(clp(i.value))+'<small>'+pc+'%</small></b></li>';
+  }).join("");
+  return'<div class="dn">'+donaSvg(items,centro)+'<ul class="dn-leg">'+leg+'</ul></div>';
+}
+
+const FZ_PRIO={urgente:"Urgente",alta:"Alta",media:"Media",baja:"Baja"};
+const norm=t=>String(t||"").normalize("NFD").replace(/[\u0300-\u036f]/g,"").toLowerCase();
+const cubo=d=>d<=30?1:d<=60?2:d<=90?3:4;
+const telHref=t=>{const n=String(t||"").replace(/[^\d+]/g,"");return n.length>=8?"tel:"+n:""};
+function fzAbrir(x,tab){
+  openPaciente({id:x.paciente_id,rut:x.rut,nombre:x.nombre,email:x.email,telefono:x.telefono,fecha_nac:x.fecha_nac});
+  irTab(tab);
+}
+function fzTab(t){
+  FZ.tab=t;
+  document.querySelectorAll("#fz-tabs button").forEach(b=>{const on=b.dataset.fz===t;b.classList.toggle("on",on);b.setAttribute("aria-selected",on?"true":"false")});
+  ["res","deu","trat","buscar"].forEach(n=>{$("fz-p-"+n).hidden=n!==t});
+}
+function fzInit(){
+  const dueno=rol()==="dueno";
+  $("fz-tabs").hidden=!dueno;
+  $("fz-lead").textContent=dueno?"Cobros, deudas y tratamientos pendientes de la clínica.":"Busca un paciente para ver sus cargos y pagos.";
+  $("fz-msg").textContent="";
+  if(!dueno){fzTab("buscar");return}
+  fzTab(FZ.tab);fzLoad();
+}
+async function fzLoad(){
+  const m=$("fz-msg"),mine=++FZ.seq;m.className="msg";m.textContent="Cargando…";
+  const r=await api("/pro/finanzas/panel?meses="+encodeURIComponent($("fz-meses").value));
+  if(mine!==FZ.seq)return;
+  if(r.status===401)return sesionVencida();
+  if(r.status===403){m.className="msg err";m.textContent="El resumen de finanzas es solo para el dueño de la clínica.";return}
+  if(!r.ok){m.className="msg err";m.textContent="No se pudo cargar el panel de finanzas.";return}
+  m.textContent="";FZ.d=r.d;fzPintar();
+}
+function fzPintar(){
+  const d=FZ.d;if(!d)return;
+  const pt=d.pendientes,pe=pt.por_estado,ids=new Set(d.deudores.map(x=>x.paciente_id));
+  const meses=parseInt($("fz-meses").value,10),periodo=meses===1?"este mes":"los últimos "+meses+" meses";
+  const totMedios=d.medios.reduce((a,x)=>a+x.monto,0),pct=d.facturado>0?Math.round(d.cobrado/d.facturado*100):0;
+
+  $("fz-kpis").innerHTML=
+    '<div class="kpi k-ver"><small><i></i>Ha entrado</small><b>'+esc(clp(d.ingresado_periodo))+'</b></div>'+
+    '<div class="kpi k-ama"><small><i></i>Falta por cobrar</small><b>'+esc(clp(d.por_cobrar))+'</b></div>'+
+    '<div class="kpi"><small>Pacientes con deuda</small><b>'+esc(d.pacientes_con_deuda)+'</b></div>'+
+    '<div class="kpi"><small>Tratamientos pendientes</small><b>'+esc(clp(pt.total_monto))+'</b></div>';
+
+  $("fz-d-cartera").innerHTML=donaHtml(
+    [{label:"Cobrado",value:d.cobrado,color:VERDE},{label:"Por cobrar",value:d.por_cobrar,color:AMARILLO}],
+    {valor:pct+"%",texto:"cobrado"},"Aún no hay cargos registrados.");
+
+  const col=[AMARILLO,NARANJA,ROJO,ROJO_OSC];
+  $("fz-d-ant").innerHTML=donaHtml(
+    d.antiguedad.map((x,i)=>({label:x.rango,value:x.monto,color:col[i]})),
+    {valor:compactoCLP(d.por_cobrar),texto:"por cobrar"},"No hay deuda pendiente.");
+
+  if(!pt.disponible)$("fz-d-trat").innerHTML='<span class="empty">Faltan instalar las tablas de planes de tratamiento (migracion-odontograma-planes.sql).</span>';
+  else if(pt.total_items>0&&pt.total_monto===0)$("fz-d-trat").innerHTML='<span class="empty">Hay '+esc(pt.total_items)+' tratamientos pendientes, pero sin valor asignado en el plan.</span>';
+  else $("fz-d-trat").innerHTML=donaHtml(
+    [{label:"En curso o agendado",value:pe.en_curso,color:TEAL},{label:"Aceptado, por realizar",value:pe.aceptado,color:AZUL},{label:"Propuesto, sin aceptar",value:pe.propuesto,color:GRIS}],
+    {valor:compactoCLP(pt.total_monto),texto:"pendiente"},"No hay tratamientos pendientes.");
+
+  const mc=[TEAL,AZUL,VERDE,NARANJA,MORADO,GRIS];
+  $("fz-sub-medios").textContent="Pagos recibidos en "+periodo+".";
+  $("fz-d-medios").innerHTML=donaHtml(
+    d.medios.map((x,i)=>({label:x.medio,value:x.monto,color:mc[i%mc.length]})),
+    {valor:compactoCLP(totMedios),texto:"recibido"},"No hay pagos en este período.");
+
+  $("fz-ing").innerHTML=barrasSvg(d.meses.map(x=>({label:MESES[parseInt(x.mes.slice(5),10)-1],value:x.ingresos,color:VERDE})),{compacto:true});
+
+  const nd=$("fz-n-deu"),nt=$("fz-n-trat");
+  nd.textContent=d.pacientes_con_deuda;nd.hidden=!d.pacientes_con_deuda;
+  nt.textContent=pt.total_pacientes;nt.hidden=!pt.total_pacientes;
+
+  $("fz-deu-kpis").innerHTML=
+    '<div class="kpi k-ama"><small><i></i>Total por cobrar</small><b>'+esc(clp(d.por_cobrar))+'</b></div>'+
+    '<div class="kpi"><small>Pacientes con deuda</small><b>'+esc(d.pacientes_con_deuda)+'</b></div>'+
+    '<div class="kpi k-rojo"><small><i></i>Con más de 90 días</small><b>'+esc(clp(d.antiguedad[3].monto))+'</b></div>';
+  $("fz-trat-kpis").innerHTML=
+    '<div class="kpi"><small>Pacientes</small><b>'+esc(pt.total_pacientes)+'</b></div>'+
+    '<div class="kpi"><small>Tratamientos</small><b>'+esc(pt.total_items)+'</b></div>'+
+    '<div class="kpi k-ama"><small><i></i>Valor pendiente</small><b>'+esc(clp(pt.total_monto))+'</b></div>';
+  fzListaDeu(ids);fzListaTrat(ids);
+}
+function fzListaDeu(ids){
+  const d=FZ.d,box=$("fz-deu-list"),q=norm(FZ.qDeu),conTrat=new Set(d.pendientes.lista.map(x=>x.paciente_id));
+  const L=d.deudores.filter(x=>(!FZ.aDeu||cubo(x.dias)===FZ.aDeu)&&(!q||norm(x.nombre+" "+x.rut).includes(q)));
+  if(!d.deudores.length){box.innerHTML='<p class="empty" style="margin-top:14px">No hay pacientes con deuda.</p>';return}
+  if(!L.length){box.innerHTML='<p class="empty" style="margin-top:14px">Ningún paciente coincide con el filtro.</p>';return}
+  box.innerHTML="";
+  L.forEach(x=>{
+    const row=document.createElement("div");row.className="fz-row";
+    const tel=telHref(x.telefono);
+    row.innerHTML='<div><b>'+esc(x.nombre)+'</b><small>'+esc(x.rut)+(x.telefono?' · '+esc(x.telefono):'')+'</small>'+(conTrat.has(x.paciente_id)?'<div class="fz-chips"><span class="tg">Tiene tratamientos pendientes</span></div>':'')+'</div>'+
+      '<div><small>Debe</small><span class="m">'+esc(clp(x.saldo))+'</span></div>'+
+      '<div><small>Antigüedad</small><span class="tg a'+cubo(x.dias)+'">'+esc(x.dias)+' '+(x.dias===1?'día':'días')+'</span></div>'+
+      '<div class="acts">'+(tel?'<a class="btn sec" href="'+esc(tel)+'">Llamar</a>':'')+'<button type="button" class="btn">Ver pagos</button></div>';
+    row.querySelector("button").onclick=()=>fzAbrir(x,"pagos");
+    box.appendChild(row);
+  });
+}
+function fzListaTrat(){
+  const d=FZ.d,box=$("fz-trat-list"),q=norm(FZ.qTrat),pt=d.pendientes,deben=new Map(d.deudores.map(x=>[x.paciente_id,x.saldo]));
+  if(!pt.disponible){box.innerHTML='<p class="empty" style="margin-top:14px">Faltan instalar las tablas de planes de tratamiento.</p>';return}
+  if(!pt.lista.length){box.innerHTML='<p class="empty" style="margin-top:14px">No hay pacientes con tratamientos pendientes.</p>';return}
+  const L=pt.lista.filter(x=>{
+    if(q&&!norm(x.nombre+" "+x.rut).includes(q))return false;
+    if(FZ.tTrat==="urg")return x.prioridad==="urgente"||x.prioridad==="alta";
+    if(FZ.tTrat==="acep")return x.monto_aceptado>0;
+    if(FZ.tTrat==="deuda")return deben.has(x.paciente_id);
+    return true;
+  });
+  if(!L.length){box.innerHTML='<p class="empty" style="margin-top:14px">Ningún paciente coincide con el filtro.</p>';return}
+  box.innerHTML="";
+  L.forEach(x=>{
+    const row=document.createElement("div");row.className="fz-row t";
+    const mas=x.cantidad>x.procedimientos.length?'<span class="tg">+'+(x.cantidad-x.procedimientos.length)+' más</span>':"";
+    row.innerHTML='<div><b>'+esc(x.nombre)+'</b><small>'+esc(x.rut)+'</small><div class="fz-chips">'+x.procedimientos.map(t=>'<span class="tg">'+esc(t)+'</span>').join("")+mas+'</div></div>'+
+      '<div><small>Tratamientos</small><span class="m">'+esc(x.cantidad)+'</span></div>'+
+      '<div><small>Valor</small><span class="m">'+(x.monto>0?esc(clp(x.monto)):"Sin valor")+'</span>'+(x.monto>0?'<small>Aceptado '+esc(compactoCLP(x.monto_aceptado))+' · Propuesto '+esc(compactoCLP(x.monto_propuesto))+'</small>':'')+'</div>'+
+      '<div class="acts"><span class="tg p-'+esc(x.prioridad)+'">'+esc(FZ_PRIO[x.prioridad]||"Media")+'</span>'+(deben.has(x.paciente_id)?'<span class="tg a3">Debe '+esc(compactoCLP(deben.get(x.paciente_id)))+'</span>':'')+'<button type="button" class="btn">Ver plan</button></div>';
+    row.querySelector("button").onclick=()=>fzAbrir(x,"trat");
+    box.appendChild(row);
+  });
+}
+$("fz-tabs").addEventListener("click",e=>{const b=e.target.closest("[data-fz]");if(b)fzTab(b.dataset.fz)});
+$("fz-meses").addEventListener("change",fzLoad);
+$("fz-deu-q").addEventListener("input",e=>{FZ.qDeu=e.target.value;if(FZ.d)fzListaDeu()});
+$("fz-trat-q").addEventListener("input",e=>{FZ.qTrat=e.target.value;if(FZ.d)fzListaTrat()});
+$("fz-deu-f").addEventListener("click",e=>{
+  const b=e.target.closest("[data-a]");if(!b)return;FZ.aDeu=parseInt(b.dataset.a,10);
+  document.querySelectorAll("#fz-deu-f button").forEach(x=>x.classList.toggle("on",x===b));if(FZ.d)fzListaDeu();
+});
+$("fz-trat-f").addEventListener("click",e=>{
+  const b=e.target.closest("[data-t]");if(!b)return;FZ.tTrat=b.dataset.t;
+  document.querySelectorAll("#fz-trat-f button").forEach(x=>x.classList.toggle("on",x===b));if(FZ.d)fzListaTrat();
+});
+let fzT;
+$("fz-q").addEventListener("input",()=>{
+  clearTimeout(fzT);const q=$("fz-q").value.trim(),box=$("fz-res");
+  if(q.length<2){box.innerHTML="";return}
+  fzT=setTimeout(async()=>{
+    const r=await api("/pro/pacientes?q="+encodeURIComponent(q));
+    if(r.status===401)return sesionVencida();
+    box.innerHTML="";
+    if(!r.ok||!r.d.pacientes.length){box.innerHTML='<span class="empty">Sin resultados.</span>';return}
+    r.d.pacientes.forEach(p=>{const b=document.createElement("button");b.type="button";b.textContent=p.nombre+" · "+p.rut;b.onclick=()=>{openPaciente(p);irTab("pagos")};box.appendChild(b)});
+  },250);
+});
+document.addEventListener("click",e=>{if(e.target.closest('[data-go="fin"]'))fzInit()});
 
 /* ===== Historial de atención ===== */
 let hPac=null,hT,hCorrige=null;
