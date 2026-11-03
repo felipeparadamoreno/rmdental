@@ -53,7 +53,7 @@
    "email": "contacto@rmdental.cl",
    "address": {
     "@type": "PostalAddress",
-    "streetAddress": "Av. Providencia 1234, of. 56",
+    "streetAddress": "La Concepción 81",
     "addressLocality": "Providencia",
     "addressRegion": "Región Metropolitana",
     "addressCountry": "CL"
@@ -773,7 +773,7 @@ dialog::backdrop{background:rgba(6,18,22,.62)}
 
 <footer class="foot">
   <div class="wrap">
-    <div><b>RM Dental</b> · Red Metropolitana Dental<br>Av. Providencia 1234, of. 56, Santiago</div>
+    <div><b>RM Dental</b> · Red Metropolitana Dental<br>La Concepción 81, Providencia, Santiago</div>
     <div><span class="mono">contacto@rmdental.cl</span><br>Lun · Mié · Vie 09:00–15:00 · Sáb 09:00–13:00</div>
   </div>
 </footer>
@@ -1131,12 +1131,37 @@ dialog::backdrop{background:rgba(6,18,22,.62)}
     b.addEventListener("click",function(){agendar(motivo)});return b;
   }
   function quitarBotones(){[].slice.call(turns.querySelectorAll(".rm-ans-b")).forEach(function(b){b.remove()})}
+  function iniciales(n){var p=String(n).replace(/^\s*(dr|dra)\.?\s+/i,"").split(/\s+/).filter(Boolean);return((p[0]||"").charAt(0)+(p.length>1?p[p.length-1].charAt(0):"")).toUpperCase()}
+  /* tarjeta de perfil: foto (o iniciales), nombre, especialidad y comunas; enlaza a su página si existe */
+  function perfil(p){
+    var card=el(p.url?"a":"div","rm-pf");
+    if(p.url)card.href=p.url;
+    var av=el("span","rm-pf-av",iniciales(p.nombre));
+    if(p.foto){
+      var im=document.createElement("img");im.alt="";im.width=44;im.height=44;im.loading="lazy";im.src=p.foto;
+      im.addEventListener("load",function(){av.textContent="";av.appendChild(im)});
+    }
+    card.appendChild(av);
+    var t=el("span","rm-pf-t");
+    t.appendChild(el("b","",p.nombre));
+    var sub=[p.especialidad].concat((p.comunas||[]).length?[p.comunas.join(" · ")]:[]).filter(Boolean).join(" — ");
+    if(sub)t.appendChild(el("small","",sub));
+    card.appendChild(t);
+    if(p.url){var go=el("span","rm-pf-go");go.innerHTML='<svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-chev"/></svg>';card.appendChild(go)}
+    return card;
+  }
   function bloque(r,motivo){
     var w=el("div","rm-bot"+(r.urgente?" urgent":""));
     w.appendChild(el("p","rm-ans-t",r.respuesta));
+    var pf=r.perfiles||[];
+    if(pf.length){
+      var cards=el("div","rm-pfs");
+      pf.forEach(function(p){cards.appendChild(perfil(p))});
+      w.appendChild(cards);
+    }
     var chips=el("div","rm-ans-l");
-    (r.profesionales||[]).forEach(function(p){chips.appendChild(el("span","rm-tag",p.nombre+(p.especialidad?" · "+p.especialidad:"")))});
-    (r.clinicas||[]).forEach(function(c){chips.appendChild(el("span","rm-tag",c.nombre+" · "+(c.direccion?c.direccion+", ":"")+c.comuna))});
+    if(!pf.length)(r.profesionales||[]).forEach(function(p){chips.appendChild(el("span","rm-tag",p.nombre+(p.especialidad?" · "+p.especialidad:"")))});
+    (r.clinicas||[]).forEach(function(c){chips.appendChild(el("span","rm-tag",c.nombre+" · "+(c.direccion?(c.direccion.indexOf(c.comuna)>-1?c.direccion:c.direccion+", "+c.comuna):c.comuna)))});
     if(chips.children.length)w.appendChild(chips);
     if((r.horas||[]).length){
       var h=el("div","rm-ans-h");h.appendChild(el("span","rm-ans-k","Próximas horas"));
