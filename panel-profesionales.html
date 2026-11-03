@@ -192,6 +192,62 @@ table.tb td.n,table.tb th.n{text-align:right;font-variant-numeric:tabular-nums}
 @media(max-width:560px){.hz-row{grid-template-columns:1fr 1fr}.hz-row select:first-child{grid-column:1/-1}}
 @media(max-width:560px){.pnew-item{grid-template-columns:1fr}.ag-live th,.ag-live td{min-width:130px}}
 
+
+/* ===== Animaciones y transiciones (fluidez) =====
+   Solo se activan si el usuario no pidió "reducir movimiento" en su sistema. */
+html{scroll-behavior:smooth}
+.btn,.side-link,.opt,.slot,.types button,.tabs button,.res button,.chip button,.back,.pinc-filters button,.pnew-item,.prow,.kpi,.card,.ag-live .ag-event,input,select,textarea{transition:background-color .22s ease,color .22s ease,border-color .22s ease,box-shadow .22s ease,transform .22s cubic-bezier(.2,.8,.2,1),opacity .22s ease}
+@media (prefers-reduced-motion:no-preference){
+  @keyframes rm-up{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+  @keyframes rm-fade{from{opacity:0}to{opacity:1}}
+  @keyframes rm-pop{0%{transform:scale(.6);opacity:0}70%{transform:scale(1.12)}100%{transform:scale(1);opacity:1}}
+  @keyframes rm-pulse{0%,100%{opacity:.6}50%{opacity:1}}
+  @keyframes rm-slide{from{opacity:0;transform:translateX(-10px)}to{opacity:1;transform:none}}
+
+  /* Entrada de la app tras iniciar sesión y al cambiar de pantalla */
+  .workspace:not([hidden]),#v-login:not([hidden]){animation:rm-fade .45s ease both}
+  .side-nav>*{animation:rm-slide .45s cubic-bezier(.2,.8,.2,1) backwards}
+  .side-nav>*:nth-child(1){animation-delay:.02s}.side-nav>*:nth-child(2){animation-delay:.05s}.side-nav>*:nth-child(3){animation-delay:.08s}
+  .side-nav>*:nth-child(4){animation-delay:.11s}.side-nav>*:nth-child(5){animation-delay:.14s}.side-nav>*:nth-child(6){animation-delay:.17s}
+  .side-nav>*:nth-child(n+7){animation-delay:.2s}
+  .workspace-main>section:not([hidden])>*{animation:rm-up .45s cubic-bezier(.2,.8,.2,1) backwards}
+  .workspace-main>section:not([hidden])>*:nth-child(1){animation-delay:0s}
+  .workspace-main>section:not([hidden])>*:nth-child(2){animation-delay:.05s}
+  .workspace-main>section:not([hidden])>*:nth-child(3){animation-delay:.1s}
+  .workspace-main>section:not([hidden])>*:nth-child(4){animation-delay:.15s}
+  .workspace-main>section:not([hidden])>*:nth-child(5){animation-delay:.2s}
+  .workspace-main>section:not([hidden])>*:nth-child(n+6){animation-delay:.25s}
+  .tabp:not([hidden]){animation:rm-up .35s cubic-bezier(.2,.8,.2,1) backwards}
+  #docwrap:not([hidden]),#a-sel:not([hidden]),#t-body:not([hidden]),#tb-body:not([hidden]),#f-body:not([hidden]),#h-body:not([hidden]),#f-forms:not([hidden]){animation:rm-up .35s cubic-bezier(.2,.8,.2,1) backwards}
+
+  /* Menú lateral */
+  .side-link:hover:not(.active){transform:translateX(3px)}
+  .side-link.active{animation:rm-fade .3s ease both}
+  .side-link:active{transform:scale(.97)}
+  .pinc-badge,.pnew-count{animation:rm-pop .4s cubic-bezier(.2,.8,.2,1) both}
+
+  /* Botones */
+  .btn:hover:not([disabled]){transform:translateY(-1px);box-shadow:0 8px 18px rgba(14,127,140,.28)}
+  .btn.sec:hover:not([disabled]){background:rgba(23,169,184,.1)}
+  .btn:active:not([disabled]){transform:translateY(0) scale(.97);box-shadow:none}
+  .btn[disabled]{animation:rm-pulse 1.1s ease-in-out infinite}
+
+  /* Tarjetas, listas y horas */
+  .card:hover{box-shadow:0 8px 24px rgba(16,38,43,.07)}
+  .opt:active{transform:translateY(-1px) scale(.99)}
+  .pnew-item:hover,.prow:hover{transform:translateX(3px)}
+  .kpi:hover{transform:translateY(-2px);box-shadow:0 6px 16px rgba(16,38,43,.08)}
+  .slot:hover:not(:disabled),.sch-time:hover:not([disabled]){transform:translateY(-2px)}
+  .slot:active:not(:disabled){transform:scale(.95)}
+  .types button:hover,.tabs button:hover{transform:translateY(-1px)}
+  .tabs button:active,.types button:active{transform:scale(.96)}
+  .res button:hover{transform:translateX(3px)}
+  .ag-live .ag-event:hover{transform:scale(1.02);box-shadow:0 6px 16px rgba(16,38,43,.18);position:relative;z-index:2}
+  .chip{animation:rm-pop .3s cubic-bezier(.2,.8,.2,1) both}
+  .msg:not(:empty){animation:rm-up .3s ease both}
+}
+@media (prefers-reduced-motion:reduce){*{transition-duration:.01ms!important;animation-duration:.01ms!important;scroll-behavior:auto!important}}
+@media print{*{animation:none!important;transition:none!important}}
 </style>
 </head>
 <body>
