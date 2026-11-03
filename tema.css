@@ -362,3 +362,29 @@ button.band[aria-pressed="true"] span{color:var(--on-accent)}
   .menu-list{max-height:calc(100vh - 90px);max-height:calc(100dvh - 90px);overflow-y:auto}
   .menu-list .ml-sep{margin:.5rem 0 0;padding:.6rem .8rem 0;border-top:1px solid var(--line);font-size:.72rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
 }
+
+
+/* ===== Buscador "Pregúntale a RMDental" (IA) ===== */
+.rm-search{max-width:600px;gap:.9rem;padding:.7rem .7rem .7rem 1.4rem;box-shadow:0 12px 34px rgba(4,165,184,.16)}
+.rm-search .ico.chat{width:1.9rem;height:1.9rem;flex:none;color:var(--accent);fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;padding-right:.9rem;box-sizing:content-box;border-right:1px solid var(--line)}
+.rm-search textarea{flex:1;min-width:0;border:0;outline:0;background:transparent;resize:none;font:inherit;font-size:1rem;line-height:1.35;color:var(--fg);padding:.2rem 0;overflow:hidden}
+.rm-search textarea::placeholder{color:var(--muted)}
+.rm-search button{width:3.4rem;height:3.4rem;background:var(--accent);box-shadow:0 6px 16px rgba(5,128,142,.35)}
+.rm-search button:hover{background:var(--cta-hover)}
+.rm-search button .ico{width:1.35rem;height:1.35rem;fill:none;stroke:#fff;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round}
+.rm-search.busy button{opacity:.6;pointer-events:none}
+.rm-ai{display:flex;align-items:center;gap:.5rem;margin:1.1rem 0 0;font-weight:600;font-size:.98rem;color:var(--fg)}
+.rm-ai .ico{width:1.3rem;height:1.3rem;color:var(--teal)}
+.rm-ex{margin:.9rem 0 0;font-size:.85rem;font-style:italic;color:var(--muted)}
+.rm-ex button{all:unset;cursor:pointer;font-style:italic;color:var(--muted);text-decoration:underline;text-decoration-color:transparent;text-underline-offset:3px}
+.rm-ex button:hover,.rm-ex button:focus-visible{color:var(--accent);text-decoration-color:currentColor}
+.rm-ans{max-width:600px;margin-top:1rem;padding:1rem 1.2rem;background:var(--surface);border:1px solid var(--line);border-radius:20px;box-shadow:var(--shadow)}
+.rm-ans.urgent{border-color:var(--danger)}
+.rm-ans-t{margin:0;font-size:.95rem;line-height:1.5}
+.rm-ans-l,.rm-ans-h{display:flex;flex-wrap:wrap;align-items:center;gap:.45rem;margin-top:.75rem}
+.rm-ans-k{font-size:.75rem;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.rm-tag{background:var(--accent-soft);color:var(--accent);font-size:.8rem;font-weight:500;padding:.3rem .8rem;border-radius:999px}
+.rm-tag.rm-hr{background:var(--surface);border:1px solid var(--line);color:var(--fg)}
+.rm-ans-b{margin-top:.9rem;border:0;border-radius:999px;background:var(--accent);color:#fff;font:inherit;font-weight:600;font-size:.9rem;padding:.6rem 1.3rem;cursor:pointer}
+.rm-ans-b:hover{background:var(--cta-hover)}
+@media (max-width:520px){.rm-search{padding:.55rem .55rem .55rem 1rem}.rm-search .ico.chat{display:none}.rm-search{border-radius:32px}.rm-search textarea{font-size:.9rem;height:4rem}}
