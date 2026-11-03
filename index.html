@@ -1153,6 +1153,7 @@ dialog::backdrop{background:rgba(6,18,22,.62)}
   function bloque(r,motivo){
     var w=el("div","rm-bot"+(r.urgente?" urgent":""));
     w.appendChild(el("p","rm-ans-t",r.respuesta));
+    if(r.charla)return w;
     var pf=r.perfiles||[];
     if(pf.length){
       var cards=el("div","rm-pfs");
