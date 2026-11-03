@@ -106,6 +106,21 @@ legend{font-weight:700;padding:0 8px;color:var(--teal-d)}
 .fz-row .btn{padding:6px 12px;font-size:13px}
 .fz-row.t{--c4:280px}
 #fz-msg:empty{margin:0;min-height:0}
+dialog#fz-dlg{border:1px solid var(--line);border-radius:16px;padding:0;background:var(--card);color:var(--ink);width:min(440px,calc(100% - 32px));box-shadow:0 20px 50px rgba(0,0,0,.28)}
+dialog#fz-dlg::backdrop{background:rgba(8,20,24,.55)}
+#fz-dlg .dlg-h{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:18px 20px 6px}
+#fz-dlg h2{margin:0;font-size:18px}
+#fz-dlg .dlg-x{border:0;background:none;color:var(--mut);font-size:18px;cursor:pointer;padding:4px 8px;border-radius:8px}
+#fz-dlg .dlg-x:hover{background:rgba(23,169,184,.12);color:var(--ink)}
+#fz-dlg #fz-dlg-b{padding:4px 20px 20px}
+#fz-dlg .ct-sub{color:var(--mut);font-size:13px;margin:0 0 12px}
+#fz-dlg .ct{border:1px solid var(--line);border-radius:12px;padding:11px 14px;margin-top:8px}
+#fz-dlg .ct small{display:block;color:var(--mut);font-size:12px;font-weight:700;letter-spacing:.04em;text-transform:uppercase}
+#fz-dlg .ct b{display:block;font-size:16px;margin:2px 0 0;word-break:break-word}
+#fz-dlg .ct .none{color:var(--mut);font-weight:400}
+#fz-dlg .ct .acts{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}
+#fz-dlg .ct .btn{padding:6px 12px;font-size:13px}
+#fz-dlg .debe{margin-top:12px;font-size:14px}
 .fz-chips{display:flex;gap:5px;flex-wrap:wrap;margin-top:5px}
 .fz-chips .tg{font-weight:600}
 @media(max-width:760px){.fz-row,.fz-row.t{grid-template-columns:1fr}.fz-row .acts{justify-content:flex-start}.dn{justify-content:center}}
@@ -711,6 +726,12 @@ html{scroll-behavior:smooth}
   </div>
 </section>
 
+
+<!-- Cuadro de contacto del paciente (Finanzas) -->
+<dialog id="fz-dlg" class="noprint" aria-labelledby="fz-dlg-t">
+  <div class="dlg-h"><h2 id="fz-dlg-t">Contactar</h2><button type="button" class="dlg-x" id="fz-dlg-x" aria-label="Cerrar">✕</button></div>
+  <div id="fz-dlg-b"></div>
+</dialog>
 <!-- HISTORIAL DE ATENCIÓN -->
 <section id="v-aten" hidden class="noprint">
   <button class="back" data-go="agenda">← Volver al inicio</button>
@@ -1589,12 +1610,12 @@ function fzListaDeu(ids){
   box.innerHTML="";
   L.forEach(x=>{
     const row=document.createElement("div");row.className="fz-row";
-    const tel=telHref(x.telefono);
     row.innerHTML='<div><b>'+esc(x.nombre)+'</b><small>'+esc(x.rut)+(x.telefono?' · '+esc(x.telefono):'')+'</small>'+(conTrat.has(x.paciente_id)?'<div class="fz-chips"><span class="tg">Tiene tratamientos pendientes</span></div>':'')+'</div>'+
       '<div><small>Debe</small><span class="m">'+esc(clp(x.saldo))+'</span></div>'+
       '<div><small>Antigüedad</small><span class="tg a'+cubo(x.dias)+'">'+esc(x.dias)+' '+(x.dias===1?'día':'días')+'</span></div>'+
-      '<div class="acts">'+(tel?'<a class="btn sec" href="'+esc(tel)+'">Llamar</a>':'')+'<button type="button" class="btn">Ver pagos</button></div>';
-    row.querySelector("button").onclick=()=>fzAbrir(x,"pagos");
+      '<div class="acts"><button type="button" class="btn sec b-cont">Contactar</button><button type="button" class="btn b-pagos">Ver pagos</button></div>';
+    row.querySelector(".b-cont").onclick=()=>fzContactar(x);
+    row.querySelector(".b-pagos").onclick=()=>fzAbrir(x,"pagos");
     box.appendChild(row);
   });
 }
@@ -1634,6 +1655,29 @@ $("fz-trat-f").addEventListener("click",e=>{
   const b=e.target.closest("[data-t]");if(!b)return;FZ.tTrat=b.dataset.t;
   document.querySelectorAll("#fz-trat-f button").forEach(x=>x.classList.toggle("on",x===b));if(FZ.d)fzListaTrat();
 });
+/* Cuadro de contacto */
+function waHref(t){
+  let n=String(t||"").replace(/\D/g,"");
+  if(n.length===9&&n[0]==="9")n="56"+n;
+  return /^56\d{9}$/.test(n)?"https://wa.me/"+n:"";
+}
+function copiar(txt,btn){
+  const ok=()=>{const o=btn.textContent;btn.textContent="Copiado";setTimeout(()=>btn.textContent=o,1200)};
+  try{navigator.clipboard.writeText(txt).then(ok,()=>{})}catch(e){}
+}
+function fzContactar(x){
+  const dlg=$("fz-dlg"),b=$("fz-dlg-b");
+  $("fz-dlg-t").textContent="Contactar a "+x.nombre;
+  const tel=telHref(x.telefono),wa=waHref(x.telefono),mail=/^[^\s@<>"]+@[^\s@<>"]+\.[^\s@<>"]+$/.test(x.email||"")?x.email:"";
+  b.innerHTML='<p class="ct-sub">'+esc(x.rut)+(x.fecha_nac?' · Nac. '+esc(fechaL(x.fecha_nac)):'')+'</p>'+
+    '<div class="ct"><small>Teléfono</small>'+(x.telefono?'<b>'+esc(x.telefono)+'</b><div class="acts">'+(tel?'<a class="btn" href="'+esc(tel)+'">Llamar</a>':'')+(wa?'<a class="btn sec" href="'+esc(wa)+'" target="_blank" rel="noopener noreferrer">WhatsApp</a>':'')+'<button type="button" class="btn sec" data-cp="'+esc(x.telefono)+'">Copiar</button></div>':'<b class="none">No registrado</b>')+'</div>'+
+    '<div class="ct"><small>Correo</small>'+(x.email?'<b>'+esc(x.email)+'</b><div class="acts">'+(mail?'<a class="btn" href="mailto:'+esc(mail)+'">Enviar correo</a>':'')+'<button type="button" class="btn sec" data-cp="'+esc(x.email)+'">Copiar</button></div>':'<b class="none">No registrado</b>')+'</div>'+
+    (x.saldo!=null?'<p class="debe">Debe <b>'+esc(clp(x.saldo))+'</b>'+(x.dias!=null?' · '+esc(x.dias)+' '+(x.dias===1?'día':'días')+' desde el cargo más antiguo':'')+'</p>':'');
+  b.querySelectorAll("[data-cp]").forEach(c=>c.onclick=()=>copiar(c.dataset.cp,c));
+  if(typeof dlg.showModal==="function")dlg.showModal();else dlg.setAttribute("open","");
+}
+$("fz-dlg-x").addEventListener("click",()=>$("fz-dlg").close());
+$("fz-dlg").addEventListener("click",e=>{if(e.target===$("fz-dlg"))$("fz-dlg").close()});
 let fzT;
 $("fz-q").addEventListener("input",()=>{
   clearTimeout(fzT);const q=$("fz-q").value.trim(),box=$("fz-res");
