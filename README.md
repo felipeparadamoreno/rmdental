@@ -35,3 +35,7 @@ Las horas ocupadas se leen de tu calendario con `calendario-rm-dental.gs` (se in
 `tema.css` define el diseño de todo el sitio (colores, tipografía Poppins, botones, tarjetas, encabezado con punto verde "en línea"). Se carga al final del `<head>` de cada página y reemplaza los estilos propios de cada una. Para cambiar colores, edita las variables al inicio de `tema.css`. El logo del encabezado es `logo.png`. Suban ambos archivos junto con los `.html`.
 
 La carpeta `img/` tiene las fotos del inicio (son de ejemplo, tomadas de la maqueta). Reemplázalas por fotos reales y suban la carpeta junto con los `.html`.
+
+
+## Panel profesional: odontograma y planes de tratamiento
+La ficha profesional usa `panel-profesionales.html`, `odontograma.css` y `odontograma-ui.js`. Mantén estos tres archivos juntos en la raíz publicada por Netlify. La API requiere la migración `migracion-odontograma-planes.sql` y el archivo `odontograma-route.js` en el servidor; sigue las instrucciones del ZIP de la API.
