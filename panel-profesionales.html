@@ -262,6 +262,18 @@ html{scroll-behavior:smooth}
 .ag-dlg h3{margin:0 0 6px;font-size:17px}
 .ag-dlg-a{display:flex;gap:8px;justify-content:flex-end;margin-top:12px}
 @media (prefers-reduced-motion:no-preference){.ag-menu{animation:rm-pop .18s cubic-bezier(.2,.8,.2,1) both;transform-origin:top left}.ag-ov{animation:rm-fade .2s ease both}.ag-dlg{animation:rm-up .28s cubic-bezier(.2,.8,.2,1) both}}
+
+/* Agenda semanal */
+.ag-seg{display:inline-flex;border:1px solid var(--teal);border-radius:10px;overflow:hidden}
+.ag-seg button{border:0;background:transparent;color:var(--teal-d);font:inherit;font-weight:700;padding:9px 14px;cursor:pointer}
+.ag-seg button.on{background:var(--teal);color:#fff}
+.ag-nav{padding:9px 14px}
+.ag-week{min-width:900px;table-layout:fixed}
+.ag-week th{text-align:center}.ag-week th span{color:var(--mut);font-weight:700;text-transform:uppercase;font-size:11px}
+.ag-week th.hoy{background:rgba(23,169,184,.16);color:var(--teal-d)}
+.ag-week td.hoy{background:rgba(23,169,184,.05)}
+.ag-week .ag-event{padding:4px 6px}
+.ag-week th,.ag-week td{min-width:104px}.ag-week th:first-child,.ag-week td:first-child{min-width:76px}
 </style>
 </head>
 <body>
@@ -426,7 +438,7 @@ html{scroll-behavior:smooth}
   <p class="lead">Consulta las citas por box, distribuye las reservas pendientes y agenda nuevas atenciones.</p>
   <p><button class="btn" type="button" id="b-go-boxes">Editar boxes de la clínica</button></p>
   <div class="card" id="agenda-vista-dia" style="margin:12px 0">
-    <div class="section-head"><div><h2 style="margin:0">Agenda de la clínica por box</h2><p class="lead" style="margin:4px 0 0">Vista operativa de citas asignadas. Se actualiza automáticamente cada 30 segundos.</p></div><div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap"><input type="date" id="agenda-dia-fecha" style="width:auto"><button class="btn sec" id="agenda-dia-refresh" type="button">Actualizar</button></div></div>
+    <div class="section-head"><div><h2 style="margin:0">Agenda de la clínica por box</h2><p class="lead" style="margin:4px 0 0">Vista operativa de citas asignadas. Se actualiza automáticamente cada 30 segundos.</p></div><div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap"><div class="ag-seg" role="tablist" aria-label="Vista de la agenda"><button type="button" id="ag-v-dia" class="on" role="tab" aria-selected="true">Día</button><button type="button" id="ag-v-sem" role="tab" aria-selected="false">Semana</button></div><button class="btn sec ag-nav" id="ag-prev" type="button" aria-label="Anterior">‹</button><button class="btn sec ag-nav" id="ag-hoy" type="button">Hoy</button><button class="btn sec ag-nav" id="ag-next" type="button" aria-label="Siguiente">›</button><input type="date" id="agenda-dia-fecha" style="width:auto"><select id="ag-box-filtro" style="width:auto" hidden aria-label="Filtrar por box"></select><button class="btn sec" id="agenda-dia-refresh" type="button">Actualizar</button></div></div>
     <div id="agenda-dia-resumen" class="note" style="margin-top:10px;color:var(--mut)"></div>
     <div id="agenda-dia-grid"><span class="empty">Cargando agenda…</span></div>
   </div>
@@ -973,6 +985,49 @@ $("f-agenda").addEventListener("submit",async e=>{
 // Agenda diaria en tiempo real: una columna por box y bloques de 30 minutos.
 const minutosHora=h=>{const m=/^(\d{2}):(\d{2})$/.exec(String(h||''));return m?Number(m[1])*60+Number(m[2]):null};
 function horaDesdeMin(m){return String(Math.floor(m/60)).padStart(2,'0')+':'+String(m%60).padStart(2,'0')}
+// ---- Vista semanal ----
+let agVista='dia';
+try{if(localStorage.getItem('rm_ag_vista')==='semana')agVista='semana'}catch(_){}
+const agSumarDias=(f,n)=>new Date(Date.parse(f+'T12:00:00Z')+n*86400000).toISOString().slice(0,10);
+const DIAS_CORTOS=['Dom','Lun','Mar','Mié','Jue','Vie','Sáb'];
+function agPintarVista(){
+  $('ag-v-dia').classList.toggle('on',agVista==='dia');$('ag-v-sem').classList.toggle('on',agVista==='semana');
+  $('ag-v-dia').setAttribute('aria-selected',agVista==='dia');$('ag-v-sem').setAttribute('aria-selected',agVista==='semana');
+  $('ag-box-filtro').hidden=agVista!=='semana';
+}
+function agCambiarVista(v){agVista=v;try{localStorage.setItem('rm_ag_vista',v)}catch(_){}agPintarVista();$('agenda-dia-grid').innerHTML='<span class="empty">Cargando agenda…</span>';cargarAgendaDia()}
+function agMover(n){const f=$('agenda-dia-fecha').value||hoyCL();$('agenda-dia-fecha').value=agSumarDias(f,agVista==='semana'?7*n:n);cargarAgendaDia()}
+async function cargarAgendaSemana(){
+  const ref=$('agenda-dia-fecha').value||hoyCL(),root=$('agenda-dia-grid');
+  if(!root.querySelector('.ag-week'))root.innerHTML='<span class="empty">Cargando agenda de la semana…</span>';
+  const r=await api('/pro/agenda/semana?fecha='+encodeURIComponent(ref));
+  if(r.status===401)return sesionVencida();
+  if(!r.ok){root.innerHTML='<p class="msg err">'+esc(r.d.error||'No se pudo cargar la agenda.')+'</p>';return;}
+  const dias=r.d.dias||[],boxes=r.d.boxes||[];
+  const sel=$('ag-box-filtro'),prev=sel.value;
+  sel.innerHTML='<option value="">Todos los boxes</option>'+boxes.map(b=>'<option value="'+Number(b.id)+'">Box '+esc(b.nombre)+'</option>').join('');
+  sel.value=boxes.some(b=>String(b.id)===prev)?prev:'';
+  const filtro=sel.value,todas=r.d.citas||[],citas=filtro?todas.filter(c=>String(c.box_id)===filtro):todas;
+  agendaDiaCache={fecha:ref,boxes,citas:todas};
+  const f0=dias[0].split('-').reverse().join('/'),f6=dias[6].split('-').reverse().join('/');
+  $('agenda-dia-resumen').textContent='Semana '+f0+' al '+f6+' · '+citas.length+' cita(s)'+(filtro?' en este box':'')+' · Reservas sin box: '+citas.filter(c=>!c.box_id).length;
+  if(!boxes.length){root.innerHTML='<div class="pnew-empty">No hay boxes activos. En “Editar boxes de la clínica” agrega boxes y asocia profesionales para habilitar la agenda.</div>';return;}
+  const hoy=hoyCL(),start=8*60,end=21*60,step=30,rows=[];
+  for(let m=start;m<end;m+=step)rows.push(m);
+  let html='<div class="ag-live-wrap"><table class="ag-live ag-week"><thead><tr><th>Hora</th>'+dias.map(d=>{const dt=new Date(d+'T12:00:00Z');return '<th class="'+(d===hoy?'hoy':'')+'"><span>'+DIAS_CORTOS[dt.getUTCDay()]+'</span> <b>'+dt.getUTCDate()+'</b></th>'}).join('')+'</tr></thead><tbody>';
+  rows.forEach(m=>{
+    html+='<tr><td>'+horaDesdeMin(m)+'</td>';
+    dias.forEach(d=>{
+      const delDia=citas.filter(c=>c.fecha===d);
+      const ini=delDia.filter(c=>{const a=minutosHora(c.hora);return a!==null&&a>=m&&a<m+step});
+      const cont=delDia.filter(c=>{const a=minutosHora(c.hora),du=Number(c.duracion_min)||30;return a!==null&&a<m&&a+du>m});
+      html+='<td class="'+(d===hoy?'hoy':'')+'">'+ini.map(c=>'<div class="ag-event" data-cita="'+Number(c.id)+'" title="Clic derecho: correr, ampliar o eliminar"><b>'+esc(c.paciente||'Paciente')+'</b><small>'+esc(c.hora)+' · '+(Number(c.duracion_min)||30)+' min'+(c.box_nombre?' · Box '+esc(c.box_nombre):' · sin box')+'</small></div>').join('')+cont.map(c=>'<div class="ag-cont" data-cita="'+Number(c.id)+'" title="'+esc(c.paciente||'Paciente')+' (continúa)"></div>').join('')+'</td>';
+    });
+    html+='</tr>';
+  });
+  html+='</tbody></table></div>';
+  root.innerHTML=html;
+}
 // ---- Menú contextual de la agenda (clic derecho): Correr / Ampliar / Eliminar ----
 let agendaDiaCache={fecha:'',boxes:[],citas:[]};
 const agMenu=document.createElement('div');agMenu.className='ag-menu';agMenu.hidden=true;document.body.appendChild(agMenu);
@@ -997,7 +1052,7 @@ function agAccion(a,c){
     const horas=[];for(let m=7*60;m<=21*60;m+=30)horas.push(horaDesdeMin(m));
     const opH=horas.map(h=>'<option'+(h===c.hora?' selected':'')+'>'+h+'</option>').join('');
     const opB=(agendaDiaCache.boxes||[]).map(b=>'<option value="'+Number(b.id)+'"'+(Number(b.id)===Number(c.box_id)?' selected':'')+'>'+esc(b.nombre)+'</option>').join('');
-    agModal('Correr cita · '+quien,'<label>Fecha</label><input type="date" id="ag-f" value="'+esc(agendaDiaCache.fecha)+'"><label>Hora</label><select id="ag-h">'+opH+'</select><label>Box</label><select id="ag-b">'+opB+'</select>',async ov=>{
+    agModal('Correr cita · '+quien,'<label>Fecha</label><input type="date" id="ag-f" value="'+esc(c.fecha||agendaDiaCache.fecha)+'"><label>Hora</label><select id="ag-h">'+opH+'</select><label>Box</label><select id="ag-b">'+opB+'</select>',async ov=>{
       const r=await api('/pro/agenda/citas/'+c.id+'/mover',{fecha:ov.querySelector('#ag-f').value,hora:ov.querySelector('#ag-h').value,box_id:Number(ov.querySelector('#ag-b').value)||null},'PUT');
       if(r.status===401){sesionVencida();return 'Sesión vencida.'}
       return r.ok?null:(r.d.error||'No se pudo mover la cita.');
@@ -1032,6 +1087,7 @@ document.addEventListener('click',e=>{if(!agMenu.contains(e.target))agCerrarMenu
 document.addEventListener('keydown',e=>{if(e.key==='Escape')agCerrarMenu()});
 window.addEventListener('scroll',()=>{if(!agMenu.hidden&&Date.now()-(agMenu._t||0)>600)agCerrarMenu()},true);
 async function cargarAgendaDia(){
+  if(agVista==='semana')return cargarAgendaSemana();
   const fecha=$('agenda-dia-fecha').value||hoyCL(),root=$('agenda-dia-grid');
   root.innerHTML='<span class="empty">Cargando agenda del día…</span>';
   const r=await api('/pro/agenda/dia?fecha='+encodeURIComponent(fecha));
@@ -1059,6 +1115,13 @@ async function cargarAgendaDia(){
   root.innerHTML=html;
 }
 $('agenda-dia-fecha').addEventListener('change',cargarAgendaDia);
+$('ag-v-dia').addEventListener('click',()=>agCambiarVista('dia'));
+$('ag-v-sem').addEventListener('click',()=>agCambiarVista('semana'));
+$('ag-prev').addEventListener('click',()=>agMover(-1));
+$('ag-next').addEventListener('click',()=>agMover(1));
+$('ag-hoy').addEventListener('click',()=>{$('agenda-dia-fecha').value=hoyCL();cargarAgendaDia()});
+$('ag-box-filtro').addEventListener('change',cargarAgendaDia);
+agPintarVista();
 $('agenda-dia-refresh').addEventListener('click',()=>{cargarAgendaDia();cargarPendientesAgenda()});
 
 // Distribución centralizada de boxes y pacientes recibidos por web/WhatsApp.
