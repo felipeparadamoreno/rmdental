@@ -248,6 +248,20 @@ html{scroll-behavior:smooth}
 }
 @media (prefers-reduced-motion:reduce){*{transition-duration:.01ms!important;animation-duration:.01ms!important;scroll-behavior:auto!important}}
 @media print{*{animation:none!important;transition:none!important}}
+
+/* Agenda: menú de clic derecho, diálogos y bloques de duración */
+.ag-live .ag-event,.ag-live .ag-cont{cursor:context-menu}
+.ag-live .ag-cont{margin:2px 0;min-height:24px;border-left:3px solid var(--teal);border-radius:0 7px 7px 0;background:repeating-linear-gradient(45deg,rgba(23,169,184,.14),rgba(23,169,184,.14) 6px,rgba(23,169,184,.06) 6px,rgba(23,169,184,.06) 12px)}
+.ag-menu{position:fixed;z-index:1000;min-width:190px;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:6px;box-shadow:0 14px 36px rgba(16,38,43,.22)}
+.ag-menu-h{padding:6px 10px 8px;font-size:12px;font-weight:700;color:var(--mut);border-bottom:1px solid var(--line);margin-bottom:4px}
+.ag-menu button{display:block;width:100%;text-align:left;border:0;background:transparent;color:var(--ink);font:inherit;font-size:14px;font-weight:700;padding:9px 10px;border-radius:8px;cursor:pointer}
+.ag-menu button:hover{background:rgba(23,169,184,.12)}
+.ag-menu button.danger{color:var(--err)}.ag-menu button.danger:hover{background:rgba(179,38,30,.1)}
+.ag-ov{position:fixed;inset:0;z-index:1001;background:rgba(10,24,28,.5);display:flex;align-items:center;justify-content:center;padding:16px}
+.ag-dlg{width:100%;max-width:380px;background:var(--card);color:var(--ink);border:1px solid var(--line);border-radius:16px;padding:22px;box-shadow:0 24px 60px rgba(0,0,0,.3)}
+.ag-dlg h3{margin:0 0 6px;font-size:17px}
+.ag-dlg-a{display:flex;gap:8px;justify-content:flex-end;margin-top:12px}
+@media (prefers-reduced-motion:no-preference){.ag-menu{animation:rm-pop .18s cubic-bezier(.2,.8,.2,1) both;transform-origin:top left}.ag-ov{animation:rm-fade .2s ease both}.ag-dlg{animation:rm-up .28s cubic-bezier(.2,.8,.2,1) both}}
 </style>
 </head>
 <body>
@@ -938,7 +952,7 @@ async function loadCitas(){
     d.innerHTML='<div><b>'+esc(fmtCita(c.inicio))+'</b><br><small>'+esc(c.motivo||"")+'</small></div><div><span class="tg '+esc(c.estado)+'">'+esc(c.estado)+'</span></div>';
     if(c.estado==="agendada"&&new Date(c.inicio)>new Date()){
       const x=document.createElement("button");x.type="button";x.className="btn sec";x.style.padding="6px 12px";x.textContent="Cancelar";
-      x.onclick=async()=>{if(!confirm("¿Cancelar esta cita?"))return;await api("/pro/citas/"+c.id+"/cancelar",{});loadCitas();loadSlots()};
+      x.onclick=async()=>{if(!confirm("¿Cancelar esta cita?"))return;await api("/pro/citas/"+c.id+"/cancelar",{});loadCitas();loadSlots();if(typeof cargarAgendaDia==='function'){cargarAgendaDia();if(typeof cargarPendientesAgenda==='function')cargarPendientesAgenda()}};
       d.lastChild.appendChild(document.createTextNode(" "));d.lastChild.appendChild(x);
     }
     box.appendChild(d);
@@ -959,13 +973,72 @@ $("f-agenda").addEventListener("submit",async e=>{
 // Agenda diaria en tiempo real: una columna por box y bloques de 30 minutos.
 const minutosHora=h=>{const m=/^(\d{2}):(\d{2})$/.exec(String(h||''));return m?Number(m[1])*60+Number(m[2]):null};
 function horaDesdeMin(m){return String(Math.floor(m/60)).padStart(2,'0')+':'+String(m%60).padStart(2,'0')}
+// ---- Menú contextual de la agenda (clic derecho): Correr / Ampliar / Eliminar ----
+let agendaDiaCache={fecha:'',boxes:[],citas:[]};
+const agMenu=document.createElement('div');agMenu.className='ag-menu';agMenu.hidden=true;document.body.appendChild(agMenu);
+function agCerrarMenu(){agMenu.hidden=true;agMenu.innerHTML=''}
+function agRefrescar(){cargarAgendaDia();if(typeof cargarPendientesAgenda==='function')cargarPendientesAgenda()}
+function agModal(titulo,cuerpo,onOk,okTxt){
+  const ov=document.createElement('div');ov.className='ag-ov';
+  ov.innerHTML='<div class="ag-dlg" role="dialog" aria-modal="true"><h3>'+esc(titulo)+'</h3><div>'+cuerpo+'</div><p class="msg err ag-dlg-m"></p><div class="ag-dlg-a"><button type="button" class="btn sec" data-x>Cancelar</button><button type="button" class="btn" data-ok>'+esc(okTxt||'Guardar')+'</button></div></div>';
+  document.body.appendChild(ov);
+  const onKey=e=>{if(e.key==='Escape')cerrar()};
+  const cerrar=()=>{ov.remove();document.removeEventListener('keydown',onKey)};
+  document.addEventListener('keydown',onKey);
+  ov.addEventListener('mousedown',e=>{if(e.target===ov)cerrar()});
+  ov.querySelector('[data-x]').onclick=cerrar;
+  const ok=ov.querySelector('[data-ok]'),m=ov.querySelector('.ag-dlg-m');
+  ok.onclick=async()=>{ok.disabled=true;m.textContent='';const err=await onOk(ov);if(err){m.textContent=err;ok.disabled=false}else{cerrar();agRefrescar()}};
+  const f=ov.querySelector('select,input');if(f)f.focus();
+}
+function agAccion(a,c){
+  const quien=(c.paciente||'Paciente')+' · '+c.hora;
+  if(a==='mover'){
+    const horas=[];for(let m=7*60;m<=21*60;m+=30)horas.push(horaDesdeMin(m));
+    const opH=horas.map(h=>'<option'+(h===c.hora?' selected':'')+'>'+h+'</option>').join('');
+    const opB=(agendaDiaCache.boxes||[]).map(b=>'<option value="'+Number(b.id)+'"'+(Number(b.id)===Number(c.box_id)?' selected':'')+'>'+esc(b.nombre)+'</option>').join('');
+    agModal('Correr cita · '+quien,'<label>Fecha</label><input type="date" id="ag-f" value="'+esc(agendaDiaCache.fecha)+'"><label>Hora</label><select id="ag-h">'+opH+'</select><label>Box</label><select id="ag-b">'+opB+'</select>',async ov=>{
+      const r=await api('/pro/agenda/citas/'+c.id+'/mover',{fecha:ov.querySelector('#ag-f').value,hora:ov.querySelector('#ag-h').value,box_id:Number(ov.querySelector('#ag-b').value)||null},'PUT');
+      if(r.status===401){sesionVencida();return 'Sesión vencida.'}
+      return r.ok?null:(r.d.error||'No se pudo mover la cita.');
+    },'Mover');
+  }else if(a==='ampliar'){
+    const durs=[15,30,45,60,75,90,105,120,150,180,240],act=Number(c.duracion_min)||30;
+    const op=durs.map(d=>'<option value="'+d+'"'+(d===act?' selected':'')+'>'+d+' min'+(d>=60?' ('+(d/60).toString().replace('.',',')+' h)':'')+'</option>').join('');
+    agModal('Duración · '+quien,'<label>Duración de la cita</label><select id="ag-d">'+op+'</select>',async ov=>{
+      const r=await api('/pro/agenda/citas/'+c.id+'/duracion',{duracion_min:Number(ov.querySelector('#ag-d').value)},'PUT');
+      if(r.status===401){sesionVencida();return 'Sesión vencida.'}
+      return r.ok?null:(r.d.error||'No se pudo cambiar la duración.');
+    },'Guardar');
+  }else if(a==='eliminar'){
+    agModal('Eliminar cita','<p style="margin:0">¿Eliminar la cita de <b>'+esc(quien)+'</b>? Saldrá de la agenda y quedará registrada como cancelada.</p>',async()=>{
+      const r=await api('/pro/agenda/citas/'+c.id,null,'DELETE');
+      if(r.status===401){sesionVencida();return 'Sesión vencida.'}
+      return r.ok?null:(r.d.error||'No se pudo eliminar la cita.');
+    },'Eliminar');
+  }
+}
+$('agenda-dia-grid').addEventListener('contextmenu',e=>{
+  const t=e.target.closest('[data-cita]');if(!t)return;
+  const c=(agendaDiaCache.citas||[]).find(x=>String(x.id)===t.dataset.cita);if(!c)return;
+  e.preventDefault();
+  agMenu.innerHTML='<div class="ag-menu-h">'+esc(c.paciente||'Paciente')+' · '+esc(c.hora)+'</div><button type="button" data-a="mover">↔ Correr</button><button type="button" data-a="ampliar">↕ Ampliar</button><button type="button" class="danger" data-a="eliminar">✕ Eliminar</button>';
+  agMenu.hidden=false;agMenu._t=Date.now();
+  agMenu.style.left=Math.max(8,Math.min(e.clientX,innerWidth-agMenu.offsetWidth-8))+'px';
+  agMenu.style.top=Math.max(8,Math.min(e.clientY,innerHeight-agMenu.offsetHeight-8))+'px';
+  agMenu.onclick=ev=>{const b=ev.target.closest('button[data-a]');if(!b)return;agCerrarMenu();agAccion(b.dataset.a,c)};
+});
+document.addEventListener('click',e=>{if(!agMenu.contains(e.target))agCerrarMenu()});
+document.addEventListener('keydown',e=>{if(e.key==='Escape')agCerrarMenu()});
+window.addEventListener('scroll',()=>{if(!agMenu.hidden&&Date.now()-(agMenu._t||0)>600)agCerrarMenu()},true);
 async function cargarAgendaDia(){
   const fecha=$('agenda-dia-fecha').value||hoyCL(),root=$('agenda-dia-grid');
   root.innerHTML='<span class="empty">Cargando agenda del día…</span>';
   const r=await api('/pro/agenda/dia?fecha='+encodeURIComponent(fecha));
   if(r.status===401)return sesionVencida();
   if(!r.ok){root.innerHTML='<p class="msg err">'+esc(r.d.error||'No se pudo cargar la agenda.')+'</p>';return;}
-  const boxes=r.d.boxes||[],citas=r.d.citas||[];
+  const boxes=r.d.boxes||[],citas=(r.d.citas||[]).filter(c=>c.estado!=='cancelada');
+  agendaDiaCache={fecha,boxes,citas};
   $('agenda-dia-resumen').textContent=citas.length+' cita(s) registradas · '+boxes.length+' box(es) activos · Reservas sin box: '+citas.filter(c=>!c.box_id).length;
   if(!boxes.length){root.innerHTML='<div class="pnew-empty">No hay boxes activos. En “Editar boxes de la clínica” agrega boxes y asocia profesionales para habilitar la agenda por box.</div>';return;}
   const start=8*60,end=21*60,step=30,rows=[];
@@ -975,7 +1048,8 @@ async function cargarAgendaDia(){
     html+='<tr><td>'+horaDesdeMin(m)+'</td>';
     boxes.forEach(b=>{
       const matches=citas.filter(c=>Number(c.box_id)===Number(b.id)&&minutosHora(c.hora)>=m&&minutosHora(c.hora)<m+step);
-      html+='<td>'+matches.map(c=>'<div class="ag-event"><b>'+esc(c.paciente||'Paciente')+'</b><small>'+esc(c.hora)+' · '+esc(c.profesional||'Profesional pendiente')+'</small><small>'+esc(c.motivo||c.estado||'')+'</small></div>').join('')+'</td>';
+      const cont=citas.filter(c=>{const a=minutosHora(c.hora),d=Number(c.duracion_min)||30;return Number(c.box_id)===Number(b.id)&&a!==null&&!(a>=m&&a<m+step)&&a<m+step&&a+d>m});
+      html+='<td>'+matches.map(c=>'<div class="ag-event" data-cita="'+Number(c.id)+'" title="Clic derecho: correr, ampliar o eliminar"><b>'+esc(c.paciente||'Paciente')+'</b><small>'+esc(c.hora)+' · '+(Number(c.duracion_min)||30)+' min · '+esc(c.profesional||'Profesional pendiente')+'</small><small>'+esc(c.motivo||c.estado||'')+'</small></div>').join('')+cont.map(c=>'<div class="ag-cont" data-cita="'+Number(c.id)+'" title="'+esc(c.paciente||'Paciente')+' (continúa) · clic derecho para opciones"></div>').join('')+'</td>';
     });
     html+='</tr>';
   });
