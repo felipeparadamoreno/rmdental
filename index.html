@@ -1086,12 +1086,12 @@ dialog::backdrop{background:rgba(6,18,22,.62)}
   })();
 </script>
 <script>
-/* Buscador inteligente (DeepSeek vía api.rmdental.cl). Todo el texto se inserta con textContent. */
+/* Buscador inteligente con conversación (DeepSeek vía api.rmdental.cl). Todo el texto se inserta con textContent. */
 (function(){
   var f=document.getElementById("rm-search");if(!f)return;
   var q=document.getElementById("rm-q"),ans=document.getElementById("rm-ans"),sel=document.getElementById("reason");
   var API=(window.RM_API_URL||"https://api.rmdental.cl").replace(/\/+$/,"");
-  var busy=false;
+  var busy=false,hist=[],turns=null,reply=null,rin=null;
   function pick(t){
     t=(t||"").toLowerCase();var v="Otro";
     if(/implant/.test(t))v="Mantención profesional de implantes";
@@ -1107,47 +1107,72 @@ dialog::backdrop{background:rgba(6,18,22,.62)}
     var a=document.getElementById("agenda");if(a)a.scrollIntoView({behavior:"smooth"});
   }
   function el(tag,cls,txt){var n=document.createElement(tag);if(cls)n.className=cls;if(txt)n.textContent=txt;return n}
-  function render(r,motivo){
-    ans.textContent="";ans.hidden=false;ans.classList.toggle("urgent",!!r.urgente);
-    ans.appendChild(el("p","rm-ans-t",r.respuesta));
+  function setBusy(v){busy=v;f.classList.toggle("busy",v);if(rin){rin.disabled=v;reply.classList.toggle("busy",v)}}
+  function scrollEnd(){var r=ans.getBoundingClientRect();if(r.bottom>window.innerHeight)ans.scrollIntoView({behavior:"smooth",block:"end"})}
+  /* panel de conversación: turnos + cuadro para responder */
+  function abrir(){
+    ans.textContent="";ans.hidden=false;ans.classList.remove("urgent");
+    turns=el("div","rm-turns");ans.appendChild(turns);
+    reply=el("form","rm-reply");reply.setAttribute("aria-label","Responder a RMDental");
+    rin=el("input");rin.type="text";rin.maxLength=300;rin.placeholder="Responde a RMDental…";rin.setAttribute("aria-label","Responder a RMDental");rin.autocomplete="off";
+    var rb=el("button");rb.type="submit";rb.setAttribute("aria-label","Enviar respuesta");
+    rb.innerHTML='<svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-send"/></svg>';
+    reply.appendChild(rin);reply.appendChild(rb);reply.hidden=true;ans.appendChild(reply);
+    reply.addEventListener("submit",function(e){e.preventDefault();var t=rin.value.replace(/\s+/g," ").trim();if(!t||busy)return;rin.value="";consultar(t,true)});
+  }
+  function cargando(){
+    var ld=el("div","rm-load");ld.setAttribute("role","status");
+    var d=el("span","rm-dots");for(var i=0;i<3;i++)d.appendChild(document.createElement("i"));
+    ld.appendChild(d);ld.appendChild(el("span","rm-load-t","RMDental está buscando para ti…"));
+    return ld;
+  }
+  function boton(motivo){
+    var b=el("button","rm-ans-b","Agendar hora");b.type="button";
+    b.addEventListener("click",function(){agendar(motivo)});return b;
+  }
+  function quitarBotones(){[].slice.call(turns.querySelectorAll(".rm-ans-b")).forEach(function(b){b.remove()})}
+  function bloque(r,motivo){
+    var w=el("div","rm-bot"+(r.urgente?" urgent":""));
+    w.appendChild(el("p","rm-ans-t",r.respuesta));
     var chips=el("div","rm-ans-l");
     (r.profesionales||[]).forEach(function(p){chips.appendChild(el("span","rm-tag",p.nombre+(p.especialidad?" · "+p.especialidad:"")))});
     if(r.comuna)(r.clinicas||[]).forEach(function(c){chips.appendChild(el("span","rm-tag",c.nombre+" · "+c.comuna))});
-    if(chips.children.length)ans.appendChild(chips);
+    if(chips.children.length)w.appendChild(chips);
     if((r.horas||[]).length){
       var h=el("div","rm-ans-h");h.appendChild(el("span","rm-ans-k","Próximas horas"));
       r.horas.forEach(function(x){h.appendChild(el("span","rm-tag rm-hr",x.texto))});
-      ans.appendChild(h);
+      w.appendChild(h);
     }
-    if(!r.urgente){
-      var b=el("button","rm-ans-b","Agendar hora");b.type="button";
-      b.addEventListener("click",function(){agendar(r.motivo||motivo)});
-      ans.appendChild(b);
-    }
+    if(!r.urgente)w.appendChild(boton(r.motivo||motivo));
+    return w;
   }
-  function enviar(){
-    var t=q.value.replace(/\s+/g," ").trim();
-    if(!t){q.focus();return}
-    if(busy)return;busy=true;f.classList.add("busy");
-    ans.hidden=false;ans.classList.remove("urgent");ans.textContent="";
-    var ld=el("div","rm-load");ld.setAttribute("role","status");
-    ld.appendChild(el("span","rm-dots"));for(var i=0;i<3;i++)ld.firstChild.appendChild(document.createElement("i"));
-    ld.appendChild(el("span","rm-load-t","RMDental está buscando para ti…"));
-    ans.appendChild(ld);
+  function consultar(t,esRespuesta){
+    if(busy)return;
+    if(!esRespuesta){hist=[];abrir()}
+    else turns.appendChild(el("div","rm-me",t));
+    setBusy(true);
+    var ld=cargando();turns.appendChild(ld);scrollEnd();
     var ctl=window.AbortController?new AbortController():null,timer=setTimeout(function(){if(ctl)ctl.abort()},15000);
-    fetch(API+"/buscador/consulta",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({q:t}),signal:ctl?ctl.signal:undefined})
+    fetch(API+"/buscador/consulta",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({q:t,historial:hist.slice(-6)}),signal:ctl?ctl.signal:undefined})
       .then(function(r){if(!r.ok)throw new Error("http "+r.status);return r.json()})
-      .then(function(r){if(!r||!r.ok)throw new Error("resp");render(r,pick(t))})
-      .catch(function(){
-        /* sin IA: se mantiene el comportamiento anterior (preselecciona el motivo y abre el agendador) */
-        ans.hidden=true;agendar(pick(t));
+      .then(function(r){
+        if(!r||!r.ok)throw new Error("resp");
+        quitarBotones();ld.replaceWith(bloque(r,pick(t)));
+        hist.push({role:"user",content:t},{role:"assistant",content:r.respuesta});
+        ans.classList.toggle("urgent",!!r.urgente);
+        reply.hidden=false;
       })
-      .then(function(){clearTimeout(timer);busy=false;f.classList.remove("busy")});
+      .catch(function(){
+        if(!esRespuesta){ans.hidden=true;agendar(pick(t));return}
+        var w=el("div","rm-bot");w.appendChild(el("p","rm-ans-t","No pude responder en este momento. Puedes agendar tu hora directamente."));w.appendChild(boton(pick(t)));
+        quitarBotones();ld.replaceWith(w);
+      })
+      .then(function(){clearTimeout(timer);setBusy(false);if(rin&&!reply.hidden){rin.focus({preventScroll:true})}scrollEnd()});
   }
-  f.addEventListener("submit",function(e){e.preventDefault();enviar()});
-  q.addEventListener("keydown",function(e){if(e.key==="Enter"&&!e.shiftKey&&!e.isComposing){e.preventDefault();enviar()}});
+  f.addEventListener("submit",function(e){e.preventDefault();var t=q.value.replace(/\s+/g," ").trim();if(!t){q.focus();return}consultar(t,false)});
+  q.addEventListener("keydown",function(e){if(e.key==="Enter"&&!e.shiftKey&&!e.isComposing){e.preventDefault();f.requestSubmit()}});
   var ex=document.getElementById("rm-ex");
-  if(ex)ex.addEventListener("click",function(){q.value=ex.textContent;q.focus();enviar()});
+  if(ex)ex.addEventListener("click",function(){q.value=ex.textContent;q.focus();f.requestSubmit()});
   [].slice.call(document.querySelectorAll(".rm-chip[data-reason]")).forEach(function(c){
     c.addEventListener("click",function(){setReason(c.getAttribute("data-reason"))});
   });
