@@ -419,3 +419,8 @@ button.band[aria-pressed="true"] span{color:var(--on-accent)}
 .rm-reply button .ico{width:1.1rem;height:1.1rem;fill:none;stroke:#fff;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round}
 .rm-reply.busy{opacity:.6}
 .rm-reply[hidden]{display:none}
+
+/* la conversación hace scroll dentro de su cuadro; la foto del hero no se estira con ella */
+.rm-turns{position:relative;max-height:20rem;overflow-y:auto;overscroll-behavior:contain;padding-right:.3rem;scroll-behavior:smooth;scrollbar-width:thin;scrollbar-color:var(--line) transparent}
+@media (min-width:861px){.rm-art{max-height:660px}}
+@media (prefers-reduced-motion:reduce){.rm-turns{scroll-behavior:auto}}
