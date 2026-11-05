@@ -3,192 +3,287 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Red Metropolitana Dental - Odontología de Confianza</title>
+    <title>Red Metropolitana Dental - Dentistas independientes, más cerca de ti</title>
+    <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <script>
         tailwind.config = {
             theme: {
                 extend: {
                     colors: {
-                        brand: {
-                            50: '#f0fdfa',
-                            100: '#ccfbf1',
-                            500: '#00A99D',
-                            600: '#008A90',
-                            700: '#006B70',
-                            900: '#134e4a',
+                        rmd: {
+                            50: '#e6f7f8',
+                            100: '#cceef0',
+                            200: '#99dde1',
+                            300: '#66cbd2',
+                            400: '#33bac3',
+                            500: '#00A99D', // Secondary turquoise
+                            600: '#008A90', // Primary deep teal
+                            700: '#006d72',
+                            800: '#004f53',
+                            900: '#003134',
                         }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
                     }
                 }
             }
         }
     </script>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        @keyframes pulse-glow {
-            0%, 100% { opacity: 1; transform: scale(1); }
-            50% { opacity: 0.6; transform: scale(1.15); }
+        body { font-family: 'Inter', sans-serif; }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.6);
         }
-        .pulse-light {
-            animation: pulse-glow 1.5s infinite ease-in-out;
+        .hero-bg {
+            background: linear-gradient(135deg, #e6f7f8 0%, #f0fdf4 50%, #e0f2fe 100%);
+        }
+        .custom-shadow {
+            box-shadow: 0 20px 40px -15px rgba(0, 138, 144, 0.12);
+        }
+        .pulse-whatsapp {
+            animation: pulse-green 2s infinite;
+        }
+        @keyframes pulse-green {
+            0% { box-shadow: 0 0 0 0 rgba(37, 211, 102, 0.6); }
+            70% { box-shadow: 0 0 0 14px rgba(37, 211, 102, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(37, 211, 102, 0); }
         }
     </style>
 </head>
-<body class="bg-slate-50 font-sans text-slate-800 antialiased">
+<body class="bg-slate-50 text-slate-800 antialiased selection:bg-rmd-500 selection:text-white">
 
-    <!-- Top Bar -->
-    <div class="bg-slate-900 text-slate-200 text-xs py-2 px-4 border-b border-slate-800">
-        <div class="max-w-7xl mx-auto flex justify-between items-center">
-            <div class="flex items-center gap-6">
-                <span class="flex items-center gap-2">
-                    <i class="fa-solid fa-phone text-brand-500"></i>
-                    <span>Call Center: <strong>600 800 3400</strong></span>
-                </span>
-                <span class="hidden md:flex items-center gap-2">
-                    <i class="fa-solid fa-clock text-brand-500"></i>
-                    <span>Atención Lunes a Sábado</span>
-                </span>
-            </div>
-            <div class="flex items-center gap-4">
-                <a href="https://wa.me/56900000000" target="_blank" class="flex items-center gap-1.5 text-emerald-400 hover:text-emerald-300 font-medium">
-                    <i class="fa-brands fa-whatsapp text-sm"></i>
-                    <span>Agenda Automatizada WA</span>
+    <!-- TOP ANNOUNCEMENT BAR WITH CALL CENTER -->
+    <div class="bg-rmd-900 text-white text-xs sm:text-sm py-2 px-4">
+        <div class="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-2">
+            <div class="flex items-center gap-2">
+                <span class="bg-rmd-600 text-white text-[10px] uppercase font-bold px-2 py-0.5 rounded-full">Call Center</span>
+                <a href="tel:6008003400" class="font-bold hover:text-rmd-300 transition-colors flex items-center gap-1">
+                    <i class="fa-solid fa-phone text-xs"></i> 600 800 3400
                 </a>
-                <span class="text-slate-600">|</span>
-                <a href="#" class="hover:text-white transition">Portal Pacientes</a>
+                <span class="hidden md:inline text-slate-400">| Atención Lunes a Sábado</span>
+            </div>
+            <div class="flex items-center gap-3">
+                <i class="fa-solid fa-sparkles text-amber-300"></i>
+                <span>Evaluación clínica: <strong>$10.000</strong> con Cirujano Dentista Acreditado</span>
+                <button onclick="openBookingModal()" class="underline hover:text-rmd-200 font-semibold ml-1">Agendar</button>
             </div>
         </div>
     </div>
 
-    <!-- Header Navigation -->
-    <header class="sticky top-0 z-40 bg-white/95 backdrop-blur-md shadow-sm border-b border-slate-100">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between items-center h-20">
-                <!-- Logo Red Metropolitana Dental -->
-                <a href="#" class="flex items-center gap-3 group">
-                    <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-brand-600 to-teal-400 flex items-center justify-center text-white shadow-md shadow-brand-500/20 group-hover:scale-105 transition-transform">
-                        <i class="fa-solid fa-tooth text-xl"></i>
-                    </div>
-                    <div>
-                        <div class="text-xl font-extrabold tracking-tight text-slate-900 leading-none">
-                            <span class="text-brand-500">Red</span>Metropolitana<span class="text-slate-400 font-light">Dental</span>
-                        </div>
-                        <span class="text-[10px] uppercase tracking-widest text-slate-400 font-semibold">Región Metropolitana</span>
-                    </div>
-                </a>
+    <!-- NAVIGATION HEADER -->
+    <header class="sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-slate-100 transition-all">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+            <!-- LOGO FIEL CON COLOR ORIGINAL Y DENTISTA -->
+            <a href="#" class="flex items-center gap-2 group">
+                <div class="flex items-center gap-1.5">
+                    <span class="text-2xl sm:text-3xl font-extrabold text-rmd-600 tracking-tight leading-none">Red</span>
+                    <span class="text-2xl sm:text-3xl font-light text-slate-700 tracking-tight leading-none">Metropolitana</span>
+                    <span class="text-2xl sm:text-3xl font-extrabold text-rmd-500 tracking-tight leading-none">Dental</span>
+                </div>
+            </a>
 
-                <!-- Desktop Menu -->
-                <nav class="hidden lg:flex items-center gap-8 font-medium text-sm text-slate-600">
-                    <a href="#servicios" class="hover:text-brand-600 transition">Servicios</a>
-                    <a href="#dentistas" class="hover:text-brand-600 transition">Encuentra un dentista</a>
-                    <a href="#asistente-ia" class="flex items-center gap-1.5 text-brand-600 font-semibold hover:text-brand-700">
-                        <i class="fa-solid fa-wand-magic-sparkles text-xs"></i>
-                        <span>Consultas IA</span>
-                    </a>
-                    <a href="#presupuestos" class="hover:text-brand-600 transition">Presupuestos</a>
-                    <a href="#nosotros" class="hover:text-brand-600 transition">Nosotros</a>
-                    <a href="#contacto" class="hover:text-brand-600 transition">Contacto</a>
-                    <a href="#" class="hover:text-brand-600 transition">Mi cuenta</a>
-                </nav>
-
-                <!-- CTA Agendar Hora con Luz Parpadeante -->
-                <div class="flex items-center gap-3">
-                    <div class="relative inline-block">
-                        <!-- Luz Verde Parpadeante -->
-                        <span class="absolute -top-1 -right-1 flex h-4 w-4 z-10">
-                          <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-                          <span class="relative inline-flex rounded-full h-4 w-4 bg-emerald-500 border-2 border-white"></span>
-                        </span>
-                        
-                        <a href="#agendar" class="bg-brand-500 hover:bg-brand-600 text-white font-semibold px-5 py-2.5 rounded-full text-sm shadow-lg shadow-brand-500/25 transition-all flex items-center gap-2">
-                            <i class="fa-regular fa-calendar-check"></i>
-                            <span>Agendar hora</span>
-                        </a>
+            <!-- DESKTOP MENU EXACTO SOLICITADO -->
+            <nav class="hidden lg:flex items-center gap-7 text-sm font-medium text-slate-600">
+                <!-- Dropdown Servicios -->
+                <div class="relative group py-2">
+                    <button class="flex items-center gap-1 hover:text-rmd-600 transition-colors">
+                        Servicios <i class="fa-solid fa-chevron-down text-xs opacity-60"></i>
+                    </button>
+                    <div class="absolute top-full left-0 w-64 bg-white rounded-2xl shadow-xl border border-slate-100 p-3 hidden group-hover:block transition-all opacity-0 group-hover:opacity-100">
+                        <a href="#servicios" class="block px-3 py-2 rounded-lg hover:bg-rmd-50 text-slate-700 hover:text-rmd-600 font-medium">Ortodoncia e Invisal</a>
+                        <a href="#servicios" class="block px-3 py-2 rounded-lg hover:bg-rmd-50 text-slate-700 hover:text-rmd-600 font-medium">Implantes Dentales</a>
+                        <a href="#servicios" class="block px-3 py-2 rounded-lg hover:bg-rmd-50 text-slate-700 hover:text-rmd-600 font-medium">Estética Dental</a>
+                        <a href="#servicios" class="block px-3 py-2 rounded-lg hover:bg-rmd-50 text-slate-700 hover:text-rmd-600 font-medium">Endodoncia</a>
+                        <a href="#servicios" class="block px-3 py-2 rounded-lg hover:bg-rmd-50 text-slate-700 hover:text-rmd-600 font-medium">Limpieza Profunda</a>
                     </div>
                 </div>
+                <a href="#dentistas" class="hover:text-rmd-600 transition-colors">Encuentra un dentista</a>
+                <a href="#presupuestos" class="hover:text-rmd-600 transition-colors">Presupuestos</a>
+                <a href="#nosotros" class="hover:text-rmd-600 transition-colors">Nosotros</a>
+                <a href="#contacto" class="hover:text-rmd-600 transition-colors">Contacto</a>
+                <a href="#ia-assistant" class="text-rmd-600 hover:text-rmd-700 font-semibold flex items-center gap-1.5 bg-rmd-50 px-3 py-1.5 rounded-full border border-rmd-100">
+                    <i class="fa-solid fa-robot"></i> Consulta IA
+                </a>
+            </nav>
+
+            <!-- RIGHT CTA & USER -->
+            <div class="hidden sm:flex items-center gap-3">
+                <a href="https://wa.me/56912345678?text=Hola,%20quiero%20agendar%20una%20hora%20con%20el%20asistente%20automatizado" target="_blank" class="text-xs font-semibold text-emerald-600 bg-emerald-50 hover:bg-emerald-100 border border-emerald-200 px-3 py-2 rounded-full flex items-center gap-1.5 transition-colors">
+                    <i class="fa-brands fa-whatsapp text-sm text-emerald-500"></i> WhatsApp
+                </a>
+                <a href="#" class="text-sm font-semibold text-slate-700 hover:text-rmd-600 px-2 py-2">
+                    Mi cuenta
+                </a>
+                
+                <!-- BOTÓN AGENDAR HORA CON LUZ VERDE PARPADEANTE -->
+                <div class="relative inline-block">
+                    <!-- Luz parpadeante verde (efecto halo/ping + punto sólido) -->
+                    <span class="absolute -top-1 -right-1 flex h-4 w-4 z-10 pointer-events-none">
+                        <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                        <span class="relative inline-flex rounded-full h-4 w-4 bg-emerald-500 border-2 border-white shadow-sm"></span>
+                    </span>
+
+                    <button onclick="openBookingModal()" class="bg-rmd-600 hover:bg-rmd-700 text-white text-sm font-semibold px-5 py-2.5 rounded-full shadow-lg shadow-rmd-600/25 transition-all transform hover:-translate-y-0.5 active:translate-y-0">
+                        Agendar hora
+                    </button>
+                </div>
+            </div>
+
+            <!-- MOBILE MENU BUTTON -->
+            <button onclick="toggleMobileMenu()" class="lg:hidden p-2 text-slate-600 hover:text-rmd-600 focus:outline-none">
+                <i class="fa-solid fa-bars text-2xl"></i>
+            </button>
+        </div>
+
+        <!-- MOBILE MENU DROPDOWN -->
+        <div id="mobileMenu" class="hidden lg:hidden border-t border-slate-100 bg-white px-4 pt-3 pb-6 space-y-3">
+            <a href="#servicios" class="block py-2 text-slate-700 font-medium">Servicios</a>
+            <a href="#dentistas" class="block py-2 text-slate-700 font-medium">Encuentra un dentista</a>
+            <a href="#presupuestos" class="block py-2 text-slate-700 font-medium">Presupuestos</a>
+            <a href="#nosotros" class="block py-2 text-slate-700 font-medium">Nosotros</a>
+            <a href="#contacto" class="block py-2 text-slate-700 font-medium">Contacto</a>
+            <a href="tel:6008003400" class="block py-2 text-rmd-600 font-bold"><i class="fa-solid fa-phone mr-2"></i>Call Center: 600 800 3400</a>
+            <div class="pt-3 border-t border-slate-100 flex flex-col gap-3">
+                <a href="#" class="text-center py-2 text-slate-700 font-medium">Mi cuenta</a>
+                <a href="https://wa.me/56912345678" target="_blank" class="w-full bg-emerald-600 text-white font-semibold py-2.5 rounded-full text-center flex items-center justify-center gap-2">
+                    <i class="fa-brands fa-whatsapp text-lg"></i> Agenda Automática WhatsApp
+                </a>
+                <button onclick="openBookingModal()" class="w-full bg-rmd-600 text-white font-semibold py-3 rounded-full text-center shadow-md">
+                    Agendar hora
+                </button>
             </div>
         </div>
     </header>
 
-    <!-- Hero Section -->
-    <section class="relative bg-gradient-to-b from-brand-50/60 via-white to-slate-50 py-16 lg:py-24 overflow-hidden">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+    <!-- HERO SECTION DE DESTACADO DE CONSULTAS IA -->
+    <section class="relative hero-bg overflow-hidden pt-8 pb-16 lg:py-20">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="grid lg:grid-cols-12 gap-12 items-center">
                 
-                <div class="lg:col-span-7 space-y-6">
-                    <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-brand-100/80 border border-brand-500/20 text-brand-700 text-xs font-semibold">
-                        <i class="fa-solid fa-sparkles text-brand-500"></i>
-                        UNA RED, MÁS SONRISAS
+                <!-- LEFT CONTENT -->
+                <div class="lg:col-span-7 space-y-6 text-left">
+                    
+                    <div class="inline-flex items-center gap-2 bg-gradient-to-r from-rmd-500 to-teal-600 text-white px-4 py-1.5 rounded-full text-xs sm:text-sm font-bold tracking-wide uppercase shadow-md shadow-rmd-500/20">
+                        <i class="fa-solid fa-sparkles animate-spin"></i>
+                        Potenciado con Inteligencia Artificial
                     </div>
-                    
-                    <h1 class="text-4xl sm:text-5xl lg:text-6xl font-black text-slate-900 tracking-tight leading-none">
-                        Dentistas independientes, <span class="text-transparent bg-clip-text bg-gradient-to-r from-brand-500 to-teal-600">más cerca de ti</span>
+
+                    <h1 class="text-4xl sm:text-5xl lg:text-6xl font-black text-slate-900 tracking-tight leading-[1.15]">
+                        Dentistas independientes, <br class="hidden sm:inline"/>
+                        <span class="text-transparent bg-clip-text bg-gradient-to-r from-rmd-600 via-rmd-500 to-teal-500">
+                            más cerca de ti
+                        </span>
                     </h1>
-                    
-                    <p class="text-slate-600 text-lg max-w-2xl leading-relaxed">
-                        Conectamos a pacientes con dentistas independientes de confianza en toda la Región Metropolitana. Atención personalizada con inteligencia artificial.
+
+                    <p class="text-lg text-slate-600 max-w-2xl leading-relaxed">
+                        Conectamos a pacientes con cirujanos dentistas independientes de confianza en toda la Región Metropolitana. Haz tu consulta con nuestra **IA Clínica** o agendamiento directo.
                     </p>
 
-                    <!-- Buscador Inteligente IA -->
-                    <div class="bg-white p-3 rounded-2xl shadow-xl shadow-slate-200/60 border border-slate-200/80 max-w-xl">
-                        <div class="relative flex items-center">
-                            <i class="fa-solid fa-robot text-brand-500 text-lg absolute left-4"></i>
-                            <input type="text" placeholder="Pregúntale a RMDental: busca dentista, tratamiento o disponibilidad..." class="w-full pl-12 pr-12 py-3 bg-slate-50 rounded-xl text-slate-800 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500/40">
-                            <button class="absolute right-2 bg-brand-500 text-white p-2.5 rounded-lg hover:bg-brand-600 transition shadow-md">
-                                <i class="fa-solid fa-paper-plane text-sm"></i>
-                            </button>
+                    <!-- BUSCADOR E INTERACCIÓN DESTACADA DE IA -->
+                    <div id="ia-assistant" class="bg-white p-4 sm:p-5 rounded-3xl shadow-2xl border-2 border-rmd-200 relative overflow-hidden">
+                        <div class="flex items-center justify-between mb-2">
+                            <span class="text-xs font-bold text-rmd-700 flex items-center gap-2 uppercase tracking-wider">
+                                <span class="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-ping"></span>
+                                RMDental IA: Asistente Clínico 24/7
+                            </span>
+                            <span class="text-[11px] text-slate-400 bg-slate-100 px-2 py-0.5 rounded-md font-medium">Búsqueda Inteligente</span>
                         </div>
-                        
-                        <div class="mt-3 flex items-center gap-2 flex-wrap text-xs text-slate-500 px-2">
-                            <span class="font-semibold text-slate-700">Atajos rápidos con IA:</span>
-                            <button class="bg-slate-100 hover:bg-brand-50 text-slate-600 hover:text-brand-600 px-2.5 py-1 rounded-md transition">Limpieza dental</button>
-                            <button class="bg-slate-100 hover:bg-brand-50 text-slate-600 hover:text-brand-600 px-2.5 py-1 rounded-md transition">Ortodoncia</button>
-                            <button class="bg-slate-100 hover:bg-brand-50 text-slate-600 hover:text-brand-600 px-2.5 py-1 rounded-md transition">Implantes</button>
-                            <button class="bg-slate-100 hover:bg-brand-50 text-slate-600 hover:text-brand-600 px-2.5 py-1 rounded-md transition">Estética dental</button>
+
+                        <form onsubmit="handleAISearch(event)" class="relative flex items-center">
+                            <div class="absolute left-4 text-rmd-600 text-xl">
+                                <i class="fa-solid fa-robot"></i>
+                            </div>
+                            <input type="text" id="aiSearchInput" 
+                                placeholder="Escribe tu síntoma o búsqueda (ej: 'Tengo dolor de muela en Providencia')..." 
+                                class="w-full pl-12 pr-28 py-4 bg-slate-50 border border-slate-200 focus:bg-white rounded-2xl text-slate-800 placeholder-slate-400 text-sm focus:outline-none focus:ring-2 focus:ring-rmd-500 transition-all"
+                            >
+                            <button type="submit" class="absolute right-2 bg-gradient-to-r from-rmd-600 to-rmd-500 hover:from-rmd-700 hover:to-rmd-600 text-white px-4 py-2.5 rounded-xl text-xs font-bold flex items-center gap-1.5 shadow-md">
+                                <span>Preguntar</span> <i class="fa-solid fa-sparkles"></i>
+                            </button>
+                        </form>
+
+                        <!-- Panel de Respuesta Simulado de la IA -->
+                        <div id="aiResponsePanel" class="hidden mt-4 p-3.5 bg-rmd-50/80 rounded-2xl border border-rmd-100 text-xs text-slate-700 space-y-2 animate-fade-in">
+                            <div class="flex items-center gap-2 font-bold text-rmd-700">
+                                <i class="fa-solid fa-user-doctor"></i> Recomendación RMDental IA:
+                            </div>
+                            <p id="aiResponseText" class="leading-relaxed">Analizando tu consulta...</p>
+                            <div class="pt-2 flex justify-end gap-2">
+                                <button onclick="openBookingModal('Recomendado por IA')" class="bg-rmd-600 text-white px-3 py-1.5 rounded-lg text-xs font-bold">Agendar este tratamiento</button>
+                            </div>
+                        </div>
+
+                        <!-- Quick tags de sugerencia -->
+                        <div class="flex flex-wrap items-center gap-2 pt-3 text-xs">
+                            <span class="text-slate-400 font-medium flex items-center gap-1">
+                                <i class="fa-solid fa-bolt text-amber-500"></i> Ejemplos:
+                            </span>
+                            <button onclick="fillSearch('Necesito urgencia por dolor de muela en Providencia')" class="px-3 py-1 bg-slate-100 hover:bg-rmd-100 hover:text-rmd-700 text-slate-600 rounded-full font-medium transition-colors">Dolor de muela</button>
+                            <button onclick="fillSearch('Limpieza dental para este sábado')" class="px-3 py-1 bg-slate-100 hover:bg-rmd-100 hover:text-rmd-700 text-slate-600 rounded-full font-medium transition-colors">Limpieza profilaxis</button>
+                            <button onclick="fillSearch('Evaluación ortodoncia brackets invisibles')" class="px-3 py-1 bg-slate-100 hover:bg-rmd-100 hover:text-rmd-700 text-slate-600 rounded-full font-medium transition-colors">Brackets / Invisal</button>
                         </div>
                     </div>
 
-                    <div class="flex items-center gap-4 text-xs font-semibold text-slate-600 pt-2">
-                        <div class="flex items-center gap-2 bg-white px-4 py-2 rounded-xl border border-slate-200 shadow-sm">
-                            <i class="fa-solid fa-circle-check text-emerald-500"></i>
-                            <span>Evaluación: $10.000 con Cirujano Dentista</span>
+                    <!-- Evaluation Badge -->
+                    <div class="inline-flex items-center gap-3 bg-white/90 border border-rmd-200 rounded-full px-5 py-2.5 shadow-sm text-sm font-medium text-slate-700">
+                        <div class="w-6 h-6 rounded-full bg-rmd-100 text-rmd-600 flex items-center justify-center font-bold text-xs">
+                            <i class="fa-solid fa-circle-check"></i>
                         </div>
+                        <span><strong>Evaluación: $10.000.</strong> La realiza un cirujano dentista. Call Center: <strong>600 800 3400</strong></span>
                     </div>
+
                 </div>
 
-                <!-- Tarjeta Lateral de Disponibilidad -->
-                <div class="lg:col-span-5">
-                    <div class="relative bg-white rounded-3xl p-6 shadow-2xl border border-slate-100">
-                        <div class="flex items-center justify-between border-b pb-4 mb-4">
+                <!-- RIGHT GRAPHIC & QUICK BOOKING CARD -->
+                <div class="lg:col-span-5 relative">
+                    <div class="relative mx-auto max-w-md lg:max-w-none rounded-3xl overflow-hidden shadow-2xl border-4 border-white">
+                        <img src="https://images.unsplash.com/photo-1588776814546-1ffcf47267a5?auto=format&fit=crop&w=800&q=80" 
+                             alt="Paciente sonriendo en atención dental" 
+                             class="w-full h-[440px] object-cover"
+                             onerror="this.src='https://placehold.co/800x800/00A99D/FFFFFF?text=RMDental+Paciente'">
+                        
+                        <div class="absolute inset-0 bg-gradient-to-t from-slate-900/40 via-transparent to-transparent"></div>
+                    </div>
+
+                    <!-- Floating Booking Card -->
+                    <div class="glass-card absolute -bottom-8 -left-4 sm:left-4 right-4 sm:right-auto p-5 rounded-3xl custom-shadow max-w-xs border border-white/80">
+                        <div class="flex items-center justify-between border-b border-slate-100 pb-3 mb-3">
                             <div>
-                                <span class="text-xs uppercase font-bold tracking-wider text-brand-600">Agenda en línea</span>
-                                <h3 class="text-xl font-bold text-slate-800">Primera fecha disponible</h3>
+                                <span class="text-[10px] font-bold tracking-wider text-rmd-600 uppercase block">AGENDA EN LÍNEA / IA</span>
+                                <span class="text-xs text-slate-500 font-medium">Primera fecha disponible</span>
                             </div>
-                            <span class="bg-emerald-100 text-emerald-700 text-xs font-bold px-2.5 py-1 rounded-full flex items-center gap-1">
-                                <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span> Hoy Disponible
-                            </span>
+                            <span class="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-ping"></span>
                         </div>
 
-                        <div class="bg-brand-50 rounded-2xl p-4 mb-6 border border-brand-100 text-center">
-                            <span class="text-slate-500 text-xs uppercase font-semibold">Próximo cupo</span>
-                            <div class="text-2xl font-black text-brand-700">Miércoles 11 de Noviembre</div>
-                            <span class="text-xs text-slate-600">Atención presencial de 30 minutos</span>
+                        <div class="space-y-1 mb-4">
+                            <h4 class="text-lg font-bold text-slate-900 leading-tight">Miércoles 11 de noviembre</h4>
+                            <p class="text-xs text-slate-500 font-medium"><i class="fa-regular fa-clock mr-1 text-rmd-500"></i> Atención de 30 minutos</p>
                         </div>
 
-                        <div class="space-y-3 mb-6 text-sm text-slate-600">
-                            <div class="flex justify-between border-b border-slate-100 pb-2">
-                                <span>Lunes, miércoles y viernes</span>
-                                <span class="font-semibold text-slate-800">09:00 – 15:00</span>
+                        <button onclick="openBookingModal()" class="w-full bg-rmd-600 hover:bg-rmd-700 text-white text-sm font-semibold py-2.5 rounded-xl transition-all shadow-md">
+                            Agendar hora ahora
+                        </button>
+
+                        <div class="mt-3 pt-3 border-t border-slate-100 text-[11px] text-slate-500 space-y-1">
+                            <div class="flex justify-between">
+                                <span>Lunes a Viernes</span>
+                                <span class="font-semibold text-slate-700">09:00 - 19:00</span>
                             </div>
                             <div class="flex justify-between">
-                                <span>Sábado</span>
-                                <span class="font-semibold text-slate-800">09:00 – 13:00</span>
+                                <span>Call Center Central</span>
+                                <span class="font-semibold text-rmd-600">600 800 3400</span>
                             </div>
                         </div>
-
-                        <a href="#agendar" class="block w-full text-center bg-brand-500 hover:bg-brand-600 text-white font-bold py-3.5 rounded-xl shadow-lg shadow-brand-500/30 transition">
-                            Agendar Hora Ahora
-                        </a>
                     </div>
                 </div>
 
@@ -196,75 +291,321 @@
         </div>
     </section>
 
-    <!-- Asistente de IA Destacado -->
-    <section id="asistente-ia" class="py-16 bg-slate-900 text-white relative overflow-hidden">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-            <div class="grid lg:grid-cols-2 gap-12 items-center">
-                <div>
-                    <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-brand-500/20 text-brand-300 text-xs font-semibold mb-4 border border-brand-500/30">
-                        <i class="fa-solid fa-brain"></i>
-                        TECNOLOGÍA RMDENTAL IA
-                    </div>
-                    <h2 class="text-3xl sm:text-4xl font-black tracking-tight mb-4">
-                        Consultas dentales guiadas por Inteligencia Artificial
-                    </h2>
-                    <p class="text-slate-300 mb-6 leading-relaxed">
-                        ¿Tienes dudas sobre un tratamiento o dolor repentino? Nuestro asistente virtual impulsado por IA evalúa tus síntomas, te orienta en segundos y te conecta de inmediato con el cirujano dentista idóneo en tu comuna.
-                    </p>
-                    <ul class="space-y-3 text-sm text-slate-300">
-                        <li class="flex items-center gap-3">
-                            <i class="fa-solid fa-circle-check text-brand-400"></i>
-                            Recomendación inteligente de especialidades (Endodoncia, Ortodoncia, Implante).
-                        </li>
-                        <li class="flex items-center gap-3">
-                            <i class="fa-solid fa-circle-check text-brand-400"></i>
-                            Disponibilidad y agendamiento 24/7 sin esperas al teléfono.
-                        </li>
-                        <li class="flex items-center gap-3">
-                            <i class="fa-solid fa-circle-check text-brand-400"></i>
-                            Asistente integrado directamente en nuestro canal oficial de WhatsApp.
-                        </li>
-                    </ul>
-                </div>
+    <!-- TESTIMONIALS & BENEFITS -->
+    <section id="nosotros" class="py-20 bg-gradient-to-b from-slate-50 to-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center max-w-2xl mx-auto mb-14">
+                <span class="text-xs font-bold text-rmd-600 uppercase tracking-widest bg-rmd-50 px-3 py-1 rounded-full border border-rmd-100">Testimonios Reales</span>
+                <h2 class="text-3xl sm:text-4xl font-extrabold text-slate-900 mt-3">Lo que dicen nuestros pacientes</h2>
+                <p class="text-slate-600 text-sm mt-2">Transparencia y atención humana garantizada en cada consulta dental.</p>
+            </div>
+
+            <div class="grid md:grid-cols-3 gap-8">
                 
-                <div class="bg-slate-800/80 rounded-2xl p-6 border border-slate-700 shadow-2xl backdrop-blur">
-                    <div class="flex items-center gap-3 border-b border-slate-700 pb-4 mb-4">
-                        <div class="w-10 h-10 rounded-full bg-brand-500 flex items-center justify-center text-white font-bold">
-                            <i class="fa-solid fa-bot"></i>
+                <!-- Testimonial 1 -->
+                <div class="bg-white p-8 rounded-3xl border border-slate-100 shadow-sm relative space-y-4">
+                    <div class="flex text-amber-400 text-sm gap-1">
+                        <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i>
+                    </div>
+                    <p class="text-slate-600 text-sm italic">
+                        "La atención fue impecable. Pude agendar por la web fácilmente por $10.000 para mi evaluación inicial en Providencia. Totalmente recomendado por la transparencia."
+                    </p>
+                    <div class="flex items-center gap-3 pt-2">
+                        <div class="w-10 h-10 rounded-full bg-rmd-100 text-rmd-600 font-bold flex items-center justify-center text-sm">
+                            VT
                         </div>
                         <div>
-                            <h4 class="font-bold text-sm">Asistente Virtual RMDental IA</h4>
-                            <span class="text-xs text-emerald-400 flex items-center gap-1">
-                                <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span> En línea 24/7
-                            </span>
-                        </div>
-                    </div>
-                    <div class="space-y-3 text-xs mb-4">
-                        <div class="bg-slate-700/60 p-3 rounded-xl max-w-[85%]">
-                            Hola 👋 ¿En qué te puedo ayudar hoy? Puedes indicarme tu síntoma o la comuna donde buscas atención.
-                        </div>
-                        <div class="bg-brand-600/40 p-3 rounded-xl max-w-[85%] ml-auto text-right text-brand-100 border border-brand-500/30">
-                            Necesito una evaluación de ortodoncia cerca de Providencia para este fin de semana.
-                        </div>
-                        <div class="bg-slate-700/60 p-3 rounded-xl max-w-[85%] space-y-2">
-                            <span>Te sugiero agendar con la Dra. Catalina Bravo en Providencia. Tiene cupos disponibles este Sábado 09:00 - 13:00 hrs.</span>
-                            <a href="https://wa.me/56900000000" target="_blank" class="block text-center bg-emerald-500 hover:bg-emerald-600 text-white font-bold py-2 rounded-lg transition mt-2">
-                                <i class="fa-brands fa-whatsapp mr-1"></i> Agendar con IA en WhatsApp
-                            </a>
+                            <h4 class="font-bold text-slate-900 text-sm">Valentina Torres</h4>
+                            <p class="text-xs text-slate-400">Paciente en Providencia</p>
                         </div>
                     </div>
                 </div>
+
+                <!-- Testimonial 2 -->
+                <div class="bg-white p-8 rounded-3xl border border-slate-100 shadow-sm relative space-y-4">
+                    <div class="flex text-amber-400 text-sm gap-1">
+                        <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i>
+                    </div>
+                    <p class="text-slate-600 text-sm italic">
+                        "Me preocupaba el costo del tratamiento de ortodoncia, pero en Red Metropolitana Dental me dieron un presupuesto claro desde la primera sesión sin sorpresas."
+                    </p>
+                    <div class="flex items-center gap-3 pt-2">
+                        <div class="w-10 h-10 rounded-full bg-rmd-100 text-rmd-600 font-bold flex items-center justify-center text-sm">
+                            CP
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-slate-900 text-sm">Cristóbal Peña</h4>
+                            <p class="text-xs text-slate-400">Paciente en Santiago Centro</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Testimonial 3 -->
+                <div class="bg-white p-8 rounded-3xl border border-slate-100 shadow-sm relative space-y-4">
+                    <div class="flex text-amber-400 text-sm gap-1">
+                        <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i>
+                    </div>
+                    <p class="text-slate-600 text-sm italic">
+                        "Encontré a un especialista excelente cerca de mi casa en Las Condes. El sistema de búsqueda inteligente me ayudó muchísimo a filtrar lo que necesitaba."
+                    </p>
+                    <div class="flex items-center gap-3 pt-2">
+                        <div class="w-10 h-10 rounded-full bg-rmd-100 text-rmd-600 font-bold flex items-center justify-center text-sm">
+                            AM
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-slate-900 text-sm">Andrea Morales</h4>
+                            <p class="text-xs text-slate-400">Paciente en Las Condes</p>
+                        </div>
+                    </div>
+                </div>
+
             </div>
         </div>
     </section>
 
-    <!-- WhatsApp Floating Button -->
-    <a href="https://wa.me/56900000000" target="_blank" class="fixed bottom-6 right-6 z-50 flex items-center gap-3 bg-emerald-500 hover:bg-emerald-600 text-white p-4 rounded-full shadow-2xl transition-all hover:scale-105 group">
-        <i class="fa-brands fa-whatsapp text-2xl"></i>
-        <span class="max-w-0 overflow-hidden group-hover:max-w-xs transition-all duration-300 ease-in-out whitespace-nowrap text-sm font-bold pr-2">
-            Agenda 24/7 con IA
-        </span>
+    <!-- FOOTER -->
+    <footer id="contacto" class="bg-slate-900 text-slate-400 pt-16 pb-12 border-t border-slate-800">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-10 pb-12 border-b border-slate-800">
+                
+                <!-- Col 1 -->
+                <div class="space-y-4">
+                    <div class="flex items-center gap-2">
+                        <div class="w-8 h-8 rounded-lg bg-rmd-600 flex items-center justify-center text-white text-base font-bold">
+                            <i class="fa-solid fa-tooth"></i>
+                        </div>
+                        <span class="text-xl font-bold text-white tracking-tight">Red<span class="text-rmd-400">Metropolitana</span></span>
+                    </div>
+                    <p class="text-xs leading-relaxed">
+                        Conectamos pacientes con cirujanos dentistas independientes en la Región Metropolitana de Chile. Atención humana, transparente y profesional.
+                    </p>
+                </div>
+
+                <!-- Col 2 -->
+                <div class="space-y-3">
+                    <h4 class="text-white text-sm font-bold uppercase tracking-wider">Servicios</h4>
+                    <ul class="space-y-2 text-xs">
+                        <li><a href="#servicios" class="hover:text-white transition-colors">Ortodoncia e Invisal</a></li>
+                        <li><a href="#servicios" class="hover:text-white transition-colors">Implantes Dentales</a></li>
+                        <li><a href="#servicios" class="hover:text-white transition-colors">Estética Dental</a></li>
+                        <li><a href="#servicios" class="hover:text-white transition-colors">Endodoncia y Profilaxis</a></li>
+                    </ul>
+                </div>
+
+                <!-- Col 3 -->
+                <div class="space-y-3">
+                    <h4 class="text-white text-sm font-bold uppercase tracking-wider">Enlaces Rápidos</h4>
+                    <ul class="space-y-2 text-xs">
+                        <li><a href="#dentistas" class="hover:text-white transition-colors">Encuentra un Dentista</a></li>
+                        <li><a href="#" class="hover:text-white transition-colors">Presupuesto Estimado</a></li>
+                        <li><a href="#" class="hover:text-white transition-colors">Portal de Odontólogos</a></li>
+                        <li><a href="#" class="hover:text-white transition-colors">Preguntas Frecuentes</a></li>
+                    </ul>
+                </div>
+
+                <!-- Col 4 -->
+                <div class="space-y-3">
+                    <h4 class="text-white text-sm font-bold uppercase tracking-wider">Contacto</h4>
+                    <div class="space-y-2 text-xs">
+                        <p><i class="fa-solid fa-envelope mr-2 text-rmd-400"></i> contacto@rmdental.cl</p>
+                        <p><i class="fa-solid fa-phone mr-2 text-rmd-400"></i> +56 2 2345 6789</p>
+                        <p><i class="fa-solid fa-location-dot mr-2 text-rmd-400"></i> Región Metropolitana, Chile</p>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="pt-8 flex flex-col sm:flex-row items-center justify-between text-xs text-slate-500 gap-4">
+                <p>&copy; 2026 Red Metropolitana Dental (rmdental.cl). Todos los derechos reservados.</p>
+                <div class="flex gap-4">
+                    <a href="#" class="hover:text-slate-400">Términos y Condiciones</a>
+                    <a href="#" class="hover:text-slate-400">Política de Privacidad</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- BOOKING MODAL -->
+    <div id="bookingModal" class="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm hidden items-center justify-center p-4">
+        <div class="bg-white rounded-3xl max-w-md w-full p-6 shadow-2xl relative space-y-5 animate-fade-in">
+            <button onclick="closeBookingModal()" class="absolute top-5 right-5 text-slate-400 hover:text-slate-700 text-lg">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+
+            <div class="text-center space-y-1">
+                <div class="w-12 h-12 bg-rmd-100 text-rmd-600 rounded-full flex items-center justify-center mx-auto text-xl mb-2">
+                    <i class="fa-regular fa-calendar-check"></i>
+                </div>
+                <h3 class="text-xl font-bold text-slate-900">Agendar Evaluación Dental</h3>
+                <p class="text-xs text-slate-500">Valor consulta inicial: <strong>$10.000</strong></p>
+            </div>
+
+            <form onsubmit="submitBooking(event)" class="space-y-4">
+                <div>
+                    <label class="block text-xs font-semibold text-slate-700 mb-1">Dentista Seleccionado</label>
+                    <input type="text" id="selectedDentistInput" readonly value="Cualquier dentista disponible" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs text-slate-700 font-semibold focus:outline-none">
+                </div>
+
+                <div class="grid grid-cols-2 gap-3">
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-700 mb-1">Nombre Completo</label>
+                        <input type="text" required placeholder="Tu nombre" class="w-full border border-slate-200 rounded-xl px-3 py-2 text-xs focus:ring-2 focus:ring-rmd-500 focus:outline-none">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-700 mb-1">Teléfono RUT</label>
+                        <input type="tel" required placeholder="+56 9..." class="w-full border border-slate-200 rounded-xl px-3 py-2 text-xs focus:ring-2 focus:ring-rmd-500 focus:outline-none">
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-semibold text-slate-700 mb-1">Correo Electrónico</label>
+                    <input type="email" required placeholder="tu@email.com" class="w-full border border-slate-200 rounded-xl px-3 py-2 text-xs focus:ring-2 focus:ring-rmd-500 focus:outline-none">
+                </div>
+
+                <div>
+                    <label class="block text-xs font-semibold text-slate-700 mb-1">Fecha de Preferencia</label>
+                    <select class="w-full border border-slate-200 rounded-xl px-3 py-2 text-xs focus:ring-2 focus:ring-rmd-500 focus:outline-none">
+                        <option>Miércoles 11 de Noviembre - 10:00 hrs</option>
+    <!-- FLOATING WHATSAPP BUTTON WITH AUTOMATED IA BOT DIRECT -->
+    <a href="https://wa.me/56912345678?text=Hola!%20Quiero%20agendar%20una%20hora%20con%20el%20asistente%20automatizado%20de%20RMDental" 
+       target="_blank" 
+       class="fixed bottom-6 right-6 z-50 flex items-center gap-3 bg-emerald-500 hover:bg-emerald-600 text-white p-3.5 sm:px-5 sm:py-3.5 rounded-full shadow-2xl transition-all transform hover:scale-105 pulse-whatsapp">
+        <i class="fa-brands fa-whatsapp text-2xl sm:text-3xl"></i>
+        <div class="hidden sm:flex flex-col text-left">
+            <span class="text-xs font-bold leading-tight">Agenda Automatizada</span>
+            <span class="text-[10px] text-emerald-100 font-medium">WhatsApp 24/7 con IA</span>
+        </div>
     </a>
 
+    <!-- JAVASCRIPT LOGIC UPDATED -->
+    <script>
+        // Mobile menu toggle
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobileMenu');
+            menu.classList.toggle('hidden');
+        }
+
+        // Fill search tag
+        function fillSearch(text) {
+            document.getElementById('aiSearchInput').value = text;
+            handleAISearch(new Event('submit'));
+        }
+
+        // AI Search handler simulation
+        function handleAISearch(event) {
+            event.preventDefault();
+            const input = document.getElementById('aiSearchInput');
+            const query = input.value.trim();
+            if (!query) return;
+
+            const responsePanel = document.getElementById('aiResponsePanel');
+            const responseText = document.getElementById('aiResponseText');
+
+            responsePanel.classList.remove('hidden');
+            responseText.innerHTML = `<i class="fa-solid fa-spinner fa-spin text-rmd-600 mr-2"></i> Procesando tu requerimiento con IA RMDental...`;
+
+            setTimeout(() => {
+                if (query.toLowerCase().includes('dolor') || query.toLowerCase().includes('urgencia')) {
+                    responseText.innerHTML = `Detectamos posible <strong>urgencia o tratamiento endodóntico/restaurativo</strong>. Te recomendamos reservar con la <strong>Dra. Catalina Bravo</strong> o llamar a nuestro Call Center <strong>600 800 3400</strong>.`;
+                } else if (query.toLowerCase().includes('limpieza') || query.toLowerCase().includes('profilaxis')) {
+                    responseText.innerHTML = `Para profilaxis preventiva tenemos disponibilidad hoy mismo por <strong>$10.000</strong>. Puedes agendar vía WhatsApp automatizado o en nuestro calendario.`;
+                } else {
+                    responseText.innerHTML = `Para "${query}", hemos seleccionado 3 cirujanos dentistas independientes en la Región Metropolitana con disponibilidad esta semana.`;
+                }
+            }, 1000);
+        }
+
+        // Fill search tag
+        function fillSearch(text) {
+            document.getElementById('aiSearchInput').value = text;
+        }
+
+        // AI Search handler simulation
+        function handleAISearch(event) {
+            event.preventDefault();
+            const query = document.getElementById('aiSearchInput').value.trim();
+            if (!query) return;
+
+            showNotification(`Buscando dentistas para: "${query}"...`);
+            
+            // Scroll to dentists grid
+            const dentistasSection = document.getElementById('dentistas');
+            if(dentistasSection) {
+                dentistasSection.scrollIntoView({ behavior: 'smooth' });
+            }
+        }
+
+        // Commune filter logic
+        function filterDentists(commune) {
+            const cards = document.querySelectorAll('.dentist-card');
+            const buttons = document.querySelectorAll('.filter-btn');
+
+            buttons.forEach(btn => {
+                btn.classList.remove('bg-rmd-600', 'text-white', 'active');
+                btn.classList.add('bg-slate-100', 'text-slate-600');
+            });
+
+            event.target.classList.remove('bg-slate-100', 'text-slate-600');
+            event.target.classList.add('bg-rmd-600', 'text-white', 'active');
+
+            cards.forEach(card => {
+                if (commune === 'todas' || card.getAttribute('data-commune') === commune) {
+                    card.style.display = 'block';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        }
+
+        // Modal Controls
+        function openBookingModal(dentistName = 'Cualquier dentista disponible') {
+            document.getElementById('selectedDentistInput').value = dentistName;
+            const modal = document.getElementById('bookingModal');
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+        }
+
+        function closeBookingModal() {
+            const modal = document.getElementById('bookingModal');
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+        }
+
+        function showDetailsModal(name, commune, spec, rating) {
+            document.getElementById('modalDentistName').innerText = name;
+            document.getElementById('modalDentistSpec').innerText = `${spec} - ${commune}`;
+            document.getElementById('modalDentistRating').innerText = rating;
+
+            const modal = document.getElementById('detailsModal');
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+        }
+
+        function closeDetailsModal() {
+            const modal = document.getElementById('detailsModal');
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+        }
+
+        // Submit Booking Simulation
+        function submitBooking(event) {
+            event.preventDefault();
+            closeBookingModal();
+            showNotification('¡Reserva registrada con éxito! Te enviamos un correo de confirmación.');
+        }
+
+        // Custom Notification Toast
+        function showNotification(msg) {
+            const box = document.getElementById('notificationBox');
+            const msgEl = document.getElementById('notificationMessage');
+            msgEl.innerText = msg;
+
+            box.classList.remove('translate-y-20', 'opacity-0', 'pointer-events-none');
+            
+            setTimeout(() => {
+                box.classList.add('translate-y-20', 'opacity-0', 'pointer-events-none');
+            }, 4000);
+        }
+    </script>
 </body>
 </html>
