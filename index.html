@@ -527,7 +527,17 @@ dialog::backdrop{background:rgba(6,18,22,.62)}
             <span class="rm-badge">Búsqueda Inteligente</span>
           </div>
           <form class="rm-search" id="rm-search" role="search" aria-label="Pregúntale a RMDental">
-            <svg class="ico chat" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-bot"/></svg>
+            <svg class="rm-bot" viewBox="0 0 40 40" aria-hidden="true">
+              <rect class="bot-neck" x="13" y="32" width="14" height="6" rx="3"/>
+              <g class="bot-head">
+                <path class="ant" d="M13.5 10 10 4M26.5 10 30 4"/>
+                <circle class="tip tip-l" cx="10" cy="3.6" r="2.3"/><circle class="tip tip-r" cx="30" cy="3.6" r="2.3"/>
+                <rect class="bot-face" x="5" y="9" width="30" height="23" rx="9"/>
+                <rect class="bot-ear" x="1.4" y="17" width="3.2" height="8" rx="1.6"/><rect class="bot-ear" x="35.4" y="17" width="3.2" height="8" rx="1.6"/>
+                <circle class="eye" cx="14.5" cy="19.5" r="3.1"/><circle class="eye" cx="25.5" cy="19.5" r="3.1"/>
+                <path class="mouth" d="M16 26.5h8"/>
+              </g>
+            </svg>
             <textarea id="rm-q" rows="1" maxlength="300" placeholder="Escribe tu síntoma o búsqueda (ej: “Tengo dolor de muela en Providencia”)" aria-label="Escribe tu síntoma o búsqueda" autocomplete="off" spellcheck="false"></textarea>
             <button type="submit">Preguntar</button>
           </form>
@@ -1226,5 +1236,41 @@ dialog::backdrop{background:rgba(6,18,22,.62)}
 </script>
 <script>(function(){var f=document.getElementById("rm-search"),q=document.getElementById("rm-q");if(!f||!q)return;
 [].slice.call(document.querySelectorAll(".rm-chip[data-q]")).forEach(function(c){c.addEventListener("click",function(){q.value=c.getAttribute("data-q");q.focus();f.requestSubmit()})});})();</script>
+<script>(function(){
+var h=document.querySelector(".hero h1");if(!h)return;
+var reduce=window.matchMedia&&matchMedia("(prefers-reduced-motion:reduce)").matches;
+if(reduce)return;
+var full=h.textContent.trim();h.setAttribute("aria-label",full);
+var kids=[].slice.call(h.childNodes),n=0,total=full.replace(/\s/g,"").length;
+function wrapText(t){var frag=document.createDocumentFragment();t.split(/(\s+)/).forEach(function(w){
+ if(!w)return;if(/^\s+$/.test(w)){frag.appendChild(document.createTextNode(" "));return}
+ var ws=document.createElement("span");ws.className="w";ws.setAttribute("aria-hidden","true");
+ w.split("").forEach(function(c){var sp=document.createElement("span");sp.className="ch";sp.textContent=c;
+  var i=n++;sp.style.setProperty("--dx",(70+Math.random()*170).toFixed(0)+"px");sp.style.setProperty("--dy",(Math.random()*40-20).toFixed(0)+"px");
+  sp.style.setProperty("--r",(Math.random()*16-8).toFixed(1)+"deg");
+  sp.style.animationDelay=(((total-1-i)*38)+Math.random()*140+120).toFixed(0)+"ms";ws.appendChild(sp)});
+ frag.appendChild(ws)});return frag}
+kids.forEach(function(k){
+ if(k.nodeType===3){k.parentNode.replaceChild(wrapText(k.textContent),k)}
+ else if(k.nodeType===1){var t=k.textContent;k.textContent="";k.appendChild(wrapText(t))}
+});
+h.classList.add("dust-in");
+/* polvo: partículas que viajan de derecha a izquierda */
+var host=h.parentNode;host.style.position="relative";
+var cv=document.createElement("canvas");cv.className="dust";cv.setAttribute("aria-hidden","true");host.insertBefore(cv,h);
+var dpr=Math.min(window.devicePixelRatio||1,2),pad=60;
+var W=h.offsetWidth+pad*2+200,H=h.offsetHeight+pad*2;
+cv.style.left=(h.offsetLeft-pad)+"px";cv.style.top=(h.offsetTop-pad)+"px";cv.style.width=W+"px";cv.style.height=H+"px";
+cv.width=W*dpr;cv.height=H*dpr;var c=cv.getContext("2d");c.scale(dpr,dpr);
+var cols=["15,181,166","11,27,90","5,128,142","160,200,210"],P=[],N=90,i;
+for(i=0;i<N;i++){var tx=pad+Math.random()*(h.offsetWidth);P.push({x:W+Math.random()*120,y:pad+Math.random()*(H-pad*2),tx:tx,r:1+Math.random()*3.2,c:cols[i%4],d:Math.random()*900,l:1100+Math.random()*900,w:Math.random()*6.28,a:.25+Math.random()*.4})}
+var t0=performance.now();
+function frame(now){var t=now-t0,alive=false;c.clearRect(0,0,W,H);
+ P.forEach(function(p){var k=(t-p.d)/p.l;if(k<0){alive=true;return}if(k>1)return;alive=true;
+  var e=1-Math.pow(1-k,2.2),x=p.x+(p.tx-p.x)*e,y=p.y+Math.sin(p.w+k*7)*14*(1-k),al=p.a*Math.sin(Math.PI*Math.min(k*1.05,1));
+  c.beginPath();c.fillStyle="rgba("+p.c+","+al.toFixed(3)+")";c.arc(x,y,p.r*(1+(1-k)*.8),0,6.283);c.fill()});
+ if(alive&&t<3600)requestAnimationFrame(frame);else cv.remove()}
+requestAnimationFrame(frame);
+})();</script>
 </body>
 </html>

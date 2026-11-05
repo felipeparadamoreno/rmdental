@@ -540,3 +540,71 @@ a.rm-pf:hover,a.rm-pf:focus-visible{border-color:var(--accent);background:var(--
 .top .logo{height:62px}
 @media (max-width:1100px){.top .logo{height:48px}}
 @media (max-width:640px){.top .logo{height:34px}}
+
+/* ===== Cuadro del asistente más compacto y más arriba ===== */
+.hero-copy{padding-block:clamp(26px,4vw,60px) clamp(28px,4vw,56px)}
+.hero h1{margin-bottom:clamp(32px,5.5vw,84px)}
+.rm-card{width:min(100%,800px);border-radius:26px;padding:clamp(14px,1.5vw,20px) clamp(14px,1.7vw,24px) clamp(14px,1.4vw,18px)}
+.rm-card-h{padding-inline:clamp(0px,.8vw,12px)}
+.hero .rm-card p.rm-card-t{font-size:clamp(.92rem,1.15vw,1.2rem)}
+.rm-badge{font-size:.8rem;padding:.4rem 1rem}
+.rm-card .rm-search{margin-top:.8rem;padding:.35rem .4rem .35rem .9rem;gap:.7rem}
+.rm-card .rm-chips{margin-top:.9rem;gap:.5rem}
+.rm-chips-l{font-size:.88rem}
+@media (min-width:641px){
+  .rm-card .rm-search textarea{font-size:clamp(.8rem,.95vw,.98rem);height:2.3rem;padding:.4rem 0}
+  .rm-card .rm-search button{padding:.7rem 1.5rem;font-size:1rem;border-radius:14px}
+  .rm-card .rm-chip{font-size:.85rem;padding:.5rem 1rem}
+}
+
+/* ===== Robot animado ===== (115 bpm: 1 pose por pulso, ciclo de 6 pulsos) */
+.rm-bot{flex:none;width:2.7rem;height:2.7rem;overflow:visible}
+.rm-bot .bot-face,.rm-bot .bot-ear,.rm-bot .bot-neck{fill:#0AA79B}
+.rm-bot .bot-neck{opacity:.65}
+.rm-bot .ant{stroke:#0AA79B;stroke-width:2;stroke-linecap:round;fill:none}
+.rm-bot .tip{fill:#0AA79B;transform-box:fill-box;transform-origin:center;transition:fill .3s}
+.rm-bot .eye{fill:#fff;transition:fill .3s,filter .3s}
+.rm-bot .mouth{stroke:#fff;stroke-width:1.8;stroke-linecap:round;fill:none}
+.rm-bot .bot-head{transform-box:view-box;transform-origin:20px 34px;will-change:transform}
+.rm-bot .eye,.rm-bot .mouth{will-change:transform}
+@media (prefers-reduced-motion:no-preference){
+  .rm-bot .bot-head{animation:bot-sway 3.1304s infinite}
+  .rm-bot .eye,.rm-bot .mouth{animation:bot-look 3.1304s infinite}
+  .rm-search.busy .rm-bot .tip{animation:bot-tip 0.5217s ease-in-out infinite}
+  .rm-search.busy .rm-bot .tip-r{animation-delay:0.130s}
+}
+@keyframes bot-sway{
+  0%{transform:none;animation-timing-function:cubic-bezier(.5,0,.2,1)}
+  3%,16.667%{transform:translateX(2.4px) rotate(14deg);animation-timing-function:cubic-bezier(.5,0,.2,1)}
+  19.667%,33.333%{transform:none;animation-timing-function:cubic-bezier(.5,0,.2,1)}
+  36.333%,50%{transform:translateX(-2.4px) rotate(-14deg);animation-timing-function:cubic-bezier(.5,0,.2,1)}
+  53%,66.667%{transform:none;animation-timing-function:cubic-bezier(.5,0,.2,1)}
+  69.667%,83.333%{transform:translateY(-3px) scale(1.04);animation-timing-function:cubic-bezier(.5,0,.2,1)}
+  86.333%,100%{transform:none}
+}
+@keyframes bot-look{
+  0%{transform:none;animation-timing-function:cubic-bezier(.5,0,.2,1)}
+  3%,16.667%{transform:none;animation-timing-function:cubic-bezier(.5,0,.2,1)}
+  19.667%,33.333%{transform:none;animation-timing-function:cubic-bezier(.5,0,.2,1)}
+  36.333%,50%{transform:none;animation-timing-function:cubic-bezier(.5,0,.2,1)}
+  53%,66.667%{transform:none;animation-timing-function:cubic-bezier(.5,0,.2,1)}
+  69.667%,83.333%{transform:translateY(-2.6px);animation-timing-function:cubic-bezier(.5,0,.2,1)}
+  86.333%,100%{transform:none}
+}
+@keyframes bot-tip{0%,100%{transform:scale(1)}50%{transform:scale(1.9)}}
+/* pensando: ojos y antenas moradas */
+.rm-search.busy .rm-bot .eye{fill:#A855F7;filter:drop-shadow(0 0 2.5px #A855F7) drop-shadow(0 0 5px rgba(168,85,247,.7))}
+.rm-search.busy .rm-bot .tip{fill:#A855F7;filter:drop-shadow(0 0 3px rgba(168,85,247,.8))}
+.rm-search.busy .rm-bot .ant{stroke:#A855F7}
+
+/* ===== Título: polvo que se junta de derecha a izquierda ===== */
+.hero h1 .w{display:inline-block;white-space:nowrap}
+.hero h1.dust-in .ch{display:inline-block;opacity:0;animation:dust-in 1.25s cubic-bezier(.2,.7,.2,1) both}
+@keyframes dust-in{
+  0%{opacity:0;transform:translate(var(--dx),var(--dy)) rotate(var(--r)) scale(1.5);filter:blur(16px)}
+  55%{opacity:.75;filter:blur(5px)}
+  100%{opacity:1;transform:none;filter:blur(0)}
+}
+.dust{position:absolute;pointer-events:none;z-index:3}
+.nav a.l,.menu summary{white-space:nowrap}
+@media (min-width:1001px){.top .logo{height:clamp(44px,3.7vw,62px)}.nav{gap:clamp(1rem,1.9vw,2.2rem)}}
