@@ -1,611 +1,1267 @@
-<!DOCTYPE html>
-<html lang="es">
+<!doctype html>
+<html lang="es-CL">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Red Metropolitana Dental - Dentistas independientes, más cerca de ti</title>
-    <!-- Tailwind CSS CDN -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        rmd: {
-                            50: '#e6f7f8',
-                            100: '#cceef0',
-                            200: '#99dde1',
-                            300: '#66cbd2',
-                            400: '#33bac3',
-                            500: '#00A99D', // Secondary turquoise
-                            600: '#008A90', // Primary deep teal
-                            700: '#006d72',
-                            800: '#004f53',
-                            900: '#003134',
-                        }
-                    },
-                    fontFamily: {
-                        sans: ['Inter', 'sans-serif'],
-                    }
-                }
-            }
-        }
-    </script>
-    <!-- Google Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-    <!-- FontAwesome Icons -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <style>
-        body { font-family: 'Inter', sans-serif; }
-        .glass-card {
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(12px);
-            border: 1px solid rgba(255, 255, 255, 0.6);
-        }
-        .hero-bg {
-            background: linear-gradient(135deg, #e6f7f8 0%, #f0fdf4 50%, #e0f2fe 100%);
-        }
-        .custom-shadow {
-            box-shadow: 0 20px 40px -15px rgba(0, 138, 144, 0.12);
-        }
-        .pulse-whatsapp {
-            animation: pulse-green 2s infinite;
-        }
-        @keyframes pulse-green {
-            0% { box-shadow: 0 0 0 0 rgba(37, 211, 102, 0.6); }
-            70% { box-shadow: 0 0 0 14px rgba(37, 211, 102, 0); }
-            100% { box-shadow: 0 0 0 0 rgba(37, 211, 102, 0); }
-        }
-    </style>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<style>:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0}img{max-width:100%}[hidden]{display:none!important}.bands{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:.6rem}
+.band{display:grid;gap:.15rem;justify-items:center;padding:.75rem .6rem;border:1px solid var(--line);border-radius:12px;background:var(--surface);cursor:pointer;text-align:center}
+.band b{font-family:var(--font-display);font-size:1.05rem}
+.band span{font-size:.78rem;color:var(--muted)}
+.band:hover:not([disabled]){border-color:var(--accent)}
+.band[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:var(--bg)}
+.band[aria-pressed="true"] span{color:var(--bg)}
+.band[disabled]{opacity:.45;cursor:not-allowed}
+.reveal{display:grid;grid-template-rows:0fr;opacity:0;visibility:hidden;margin-top:0;transition:grid-template-rows .4s ease,opacity .3s ease,margin-top .4s ease,visibility 0s .4s}
+.reveal.open{grid-template-rows:1fr;opacity:1;visibility:visible;margin-top:1.2rem;transition:grid-template-rows .4s ease,opacity .35s ease .05s,margin-top .4s ease,visibility 0s}
+.reveal>div{overflow:hidden;min-height:0}
+@keyframes timeIn{from{opacity:0;transform:translateY(8px) scale(.96)}to{opacity:1;transform:none}}
+.time.enter{animation:timeIn .35s ease both}
+@media (prefers-reduced-motion:reduce){.reveal,.reveal.open{transition:none}.time.enter{animation:none}}
+</style>
+<title>RM Dental · Red Metropolitana Dental | Dentistas en Santiago</title>
+<meta name="description" content="RM Dental, Red Metropolitana Dental: cirujanos dentistas de la Universidad de Chile en Santiago. Agenda en línea, implantes, rehabilitación y presupuestos.">
+<meta name="keywords" content="dentista Santiago, cirujano dentista, clínica dental Santiago, mantención de implantes, rehabilitación oral, estética dental, presupuesto dental, segunda opinión dental, agendar hora dentista, Universidad de Chile">
+<meta name="robots" content="index,follow,max-image-preview:large,max-snippet:-1">
+<meta name="author" content="RM Dental">
+<meta http-equiv="content-language" content="es-CL">
+<meta name="geo.region" content="CL-RM">
+<meta name="geo.placename" content="Santiago, Chile">
+<meta name="theme-color" content="#05808E">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="es_CL">
+<meta property="og:site_name" content="RM Dental">
+<meta property="og:title" content="RM Dental · Red Metropolitana Dental | Dentistas en Santiago">
+<meta property="og:description" content="RM Dental, Red Metropolitana Dental: cirujanos dentistas de la Universidad de Chile en Santiago. Agenda en línea, implantes, rehabilitación y presupuestos.">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="RM Dental · Red Metropolitana Dental | Dentistas en Santiago">
+<meta name="twitter:description" content="RM Dental, Red Metropolitana Dental: cirujanos dentistas de la Universidad de Chile en Santiago. Agenda en línea, implantes, rehabilitación y presupuestos.">
+<link rel="canonical" href="https://rmdental.cl/">
+<link rel="alternate" hreflang="es-CL" href="https://rmdental.cl/">
+<meta property="og:url" content="https://rmdental.cl/">
+<link rel="icon" type="image/png" sizes="64x64" href="favicon.png"><link rel="icon" href="favicon.ico" sizes="any"><link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
+<script type="application/ld+json">
+{
+ "@context": "https://schema.org",
+ "@graph": [
+  {
+   "@type": "Dentist",
+   "@id": "#clinica",
+   "name": "RM Dental",
+   "alternateName": "Red Metropolitana Dental",
+   "description": "Clínica dental en Santiago atendida por cirujanos dentistas de la Universidad de Chile. Mantención de implantes, rehabilitación oral, estética dental, controles dentales y revisión de presupuestos.",
+   "medicalSpecialty": "Dentistry",
+   "email": "contacto@rmdental.cl",
+   "address": {
+    "@type": "PostalAddress",
+    "streetAddress": "La Concepción 81",
+    "addressLocality": "Providencia",
+    "addressRegion": "Región Metropolitana",
+    "addressCountry": "CL"
+   },
+   "areaServed": {
+    "@type": "AdministrativeArea",
+    "name": "Región Metropolitana, Chile"
+   },
+   "openingHoursSpecification": [
+    {
+     "@type": "OpeningHoursSpecification",
+     "dayOfWeek": [
+      "Monday",
+      "Wednesday",
+      "Friday"
+     ],
+     "opens": "09:00",
+     "closes": "15:00"
+    },
+    {
+     "@type": "OpeningHoursSpecification",
+     "dayOfWeek": "Saturday",
+     "opens": "09:00",
+     "closes": "13:00"
+    }
+   ],
+   "knowsAbout": [
+    "Mantención de implantes dentales",
+    "Rehabilitación oral",
+    "Estética dental",
+    "Controles dentales infantiles",
+    "Endodoncia",
+    "Resinas dentales"
+   ],
+   "hasOfferCatalog": {
+    "@type": "OfferCatalog",
+    "name": "Servicios dentales",
+    "itemListElement": [
+     {
+      "@type": "Offer",
+      "itemOffered": {
+       "@type": "Service",
+       "name": "Mantención profesional de implantes"
+      }
+     },
+     {
+      "@type": "Offer",
+      "itemOffered": {
+       "@type": "Service",
+       "name": "Control y limpieza dental"
+      }
+     },
+     {
+      "@type": "Offer",
+      "itemOffered": {
+       "@type": "Service",
+       "name": "Revisión y mejora de presupuestos dentales"
+      }
+     },
+     {
+      "@type": "Offer",
+      "itemOffered": {
+       "@type": "Service",
+       "name": "Controles dentales infantiles"
+      }
+     },
+     {
+      "@type": "Offer",
+      "itemOffered": {
+       "@type": "Service",
+       "name": "Rehabilitación oral"
+      }
+     },
+     {
+      "@type": "Offer",
+      "itemOffered": {
+       "@type": "Service",
+       "name": "Estética dental"
+      }
+     }
+    ]
+   }
+  },
+  {
+   "@type": "WebPage",
+   "name": "RM Dental · Red Metropolitana Dental, dentistas en Santiago",
+   "description": "RM Dental, Red Metropolitana Dental: cirujanos dentistas de la Universidad de Chile en Santiago. Agenda en línea, implantes, rehabilitación y presupuestos.",
+   "inLanguage": "es-CL",
+   "about": {
+    "@type": "Thing",
+    "name": "Clínica dental en Santiago"
+   },
+   "publisher": {
+    "@id": "#clinica"
+   }
+  }
+ ]
+}
+</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap">
+<style>
+/* Layout: encabezado fijo, hero asimétrico con la próxima hora libre, banda oscura de cifras como único momento fuerte, el resto sobrio sobre esmalte claro. */
+:root{
+  --bg:#F2F6F6;
+  --surface:#FFFFFF;
+  --field:#F7FAFA;
+  --fg:#0F2B32;
+  --muted:#4A6368;
+  --line:#D3E0E1;
+  --accent:#0B6E7A;
+  --accent-soft:#DCEEF0;
+  --cta:#C4441F;
+  --cta-fg:#FFFFFF;
+  --band:#0F2B32;
+  --band-fg:#EAF4F4;
+  --band-accent:#7FD0DA;
+  --taken:#A3B5B8;
+  --font-display:"Bricolage Grotesque","Trebuchet MS",system-ui,sans-serif;
+  --font-body:Arial,"Helvetica Neue",Helvetica,sans-serif;
+  --logo-plate:transparent;
+  --print:#FBFAF6;
+  --print-ink:#23373C;
+  --font-hand:"Caveat","Segoe Script","Bradley Hand",cursive;
+  --font-mono:Arial,"Helvetica Neue",Helvetica,sans-serif;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#0A171B;--surface:#102329;--field:#0C1C21;--fg:#E6F0F0;--muted:#93AAAE;--line:#1F3A42;
+    --accent:#5FC1CD;--accent-soft:#12353C;--cta:#E8673F;--cta-fg:#1A0A05;
+    --band:#0E3A43;--band-fg:#EAF4F4;--band-accent:#8FDCE6;--taken:#4B6469;--logo-plate:#FFFFFF;
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0A171B;--surface:#102329;--field:#0C1C21;--fg:#E6F0F0;--muted:#93AAAE;--line:#1F3A42;
+  --accent:#5FC1CD;--accent-soft:#12353C;--cta:#E8673F;--cta-fg:#1A0A05;
+  --band:#0E3A43;--band-fg:#EAF4F4;--band-accent:#8FDCE6;--taken:#4B6469;--logo-plate:#FFFFFF;
+  color-scheme:dark;
+}
+*,*::before,*::after{box-sizing:border-box}
+html{scroll-padding-top:72px}
+@media (prefers-reduced-motion:no-preference){html{scroll-behavior:smooth}}
+body{background:var(--bg);color:var(--fg);font-family:var(--font-body);font-size:16px;line-height:1.6}
+h1,h2,h3{font-family:var(--font-display);line-height:1.08;letter-spacing:-.02em;margin:0;text-wrap:balance}
+p{margin:0}
+a{color:inherit}
+button,input,select,textarea{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.wrap{max-width:1120px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.eyebrow{font-family:var(--font-mono);font-size:.75rem;letter-spacing:.12em;text-transform:uppercase;color:var(--accent)}
+.sec{padding-block:clamp(56px,9vw,104px)}
+.lead{color:var(--muted);font-size:1.08rem;max-width:56ch}
+
+/* buttons */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:.5rem;border:1.5px solid transparent;border-radius:10px;padding:.8rem 1.25rem;font-weight:600;cursor:pointer;text-decoration:none;line-height:1.2;transition:transform .15s,background .15s}
+.btn-cta{background:var(--cta);color:var(--cta-fg)}
+.btn-cta:hover{transform:translateY(-1px)}
+.btn.is-loading{cursor:progress}
+.btn.is-loading::before{content:"";width:1.05em;height:1.05em;flex:none;border-radius:50%;border:2.5px solid currentColor;border-right-color:transparent;animation:rm-spin .75s linear infinite}
+.btn.is-loading[disabled]{opacity:.92;cursor:progress;transform:none}
+@keyframes rm-spin{to{transform:rotate(360deg)}}
+@media (prefers-reduced-motion:reduce){.btn.is-loading::before{animation-duration:2.4s}}
+.btn-ghost{border-color:var(--line);background:var(--surface)}
+.btn-ghost:hover{border-color:var(--accent)}
+.btn[disabled]{opacity:.45;cursor:not-allowed;transform:none}
+
+/* header */
+.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:var(--bg);border-bottom:1px solid var(--line)}
+.top .wrap{display:flex;align-items:center;justify-content:space-between;gap:16px;min-height:64px}
+.brand{display:flex;flex-direction:column;gap:.15rem;text-decoration:none;line-height:1.1}
+.brand b{font-family:var(--font-display);font-size:1.5rem;letter-spacing:-.03em}
+.brand .logo{height:38px;width:auto;display:block;padding:3px 6px;margin-left:-6px;border-radius:6px;background:var(--logo-plate)}
+.brand span{font-family:var(--font-mono);font-size:.6rem;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.nav{display:flex;align-items:center;gap:1.6rem}
+.nav a.l{text-decoration:none;color:var(--muted);font-weight:500;font-size:.95rem}
+.nav a.l:hover{color:var(--fg)}
+.top .btn{padding:.6rem 1rem;font-size:.92rem}
+@media (max-width:760px){.nav a.l{display:none}}
+.menu{position:relative}
+.menu summary{list-style:none;display:inline-flex;align-items:center;gap:.4rem;cursor:pointer;color:var(--muted);font-weight:500;font-size:.95rem;padding:.35rem .2rem;border-radius:8px}
+.menu summary::-webkit-details-marker{display:none}
+.menu summary:hover,.menu[open] summary{color:var(--fg)}
+.menu summary:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.menu summary svg{width:1.1rem;height:1.1rem;flex:none;transition:transform .2s ease}
+.menu[open] summary .chev{transform:rotate(180deg)}
+.menu summary .ham{display:none}
+.menu-list{position:absolute;left:0;top:calc(100% + 12px);z-index:30;width:min(340px,calc(100vw - 32px));display:grid;gap:.15rem;padding:.5rem;border:1px solid var(--line);border-radius:14px;background:var(--surface);box-shadow:0 12px 32px rgba(0,0,0,.16)}
+.menu-list a{display:grid;gap:.1rem;padding:.65rem .8rem;border-radius:10px;text-decoration:none;color:var(--fg)}
+.menu-list a b{font-family:var(--font-display);font-size:1rem}
+.menu-list a span{font-size:.82rem;color:var(--muted)}
+.menu-list a:hover,.menu-list a:focus-visible{background:var(--accent-soft)}
+@media (max-width:760px){.menu{position:static}.menu-list{left:max(16px,env(safe-area-inset-left,0px));right:max(16px,env(safe-area-inset-right,0px));width:auto;top:calc(100% + 8px)}.menu summary .txt,.menu summary .chev{display:none}.menu summary .ham{display:block}.menu summary{padding:.5rem;border:1px solid var(--line);color:var(--fg)}.menu summary svg{width:1.3rem;height:1.3rem}}
+
+
+/* hero */
+.hero{padding-block:clamp(40px,7vw,88px)}
+.hero-grid{display:grid;grid-template-columns:minmax(0,1.35fr) minmax(0,.85fr);gap:clamp(28px,5vw,72px);align-items:end}
+@media (max-width:860px){.hero-grid{grid-template-columns:minmax(0,1fr)}}
+.hero h1{font-size:clamp(2.35rem,6.4vw,4.7rem);font-weight:700;margin-top:1rem}
+.hero h1 em{font-style:normal;color:var(--accent)}
+.hero .lead{margin-top:1.4rem}
+.hero .actions{display:flex;flex-wrap:wrap;gap:.75rem;margin-top:2rem}
+.strips{display:grid;gap:.75rem;margin-top:1.6rem;max-width:540px}
+.implant{display:flex;align-items:center;gap:1rem;padding:.9rem 1.1rem .9rem .9rem;border:1px solid var(--line);border-radius:12px;background:var(--surface);text-decoration:none;transition:border-color .15s}
+.implant:hover{border-color:var(--accent)}
+.implant .ic{flex:none;width:2.8rem;height:2.8rem;border-radius:50%;background:var(--accent-soft);color:var(--accent);display:grid;place-items:center}
+.implant .ic svg{width:1.4rem;height:1.4rem}
+.implant .tx{min-width:0;flex:1;display:grid;gap:.1rem}
+.implant b{font-family:var(--font-display);font-size:1.05rem;letter-spacing:-.01em}
+.implant .tx span{color:var(--muted);font-size:.9rem;line-height:1.4}
+.implant .go{color:var(--accent);font-size:1.2rem}
+.next{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:1.4rem}
+.next .t{font-family:var(--font-display);font-size:1.9rem;font-weight:700;letter-spacing:-.02em;margin-top:.5rem;line-height:1.1}
+.next .s{color:var(--muted);font-size:.92rem;margin-top:.35rem}
+.next .btn{margin-top:1.1rem;width:100%}
+.hours{margin:1.2rem 0 0;padding:1.1rem 0 0;border-top:1px solid var(--line);display:grid;gap:.35rem;font-size:.9rem;color:var(--muted)}
+.hours div{display:flex;justify-content:space-between;gap:1rem}
+.hours dt,.hours dd{margin:0}
+.hours dd{font-family:var(--font-mono);color:var(--fg);font-size:.85rem}
+
+/* stats */
+.band{background:var(--band);color:var(--band-fg)}
+.band .wrap{padding-block:clamp(40px,6vw,72px)}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:0}
+.stat{padding:1rem clamp(16px,3vw,36px);border-left:1px solid color-mix(in srgb,var(--band-fg) 22%,transparent);min-width:0}
+.stat:first-child{border-left:0;padding-left:0}
+@media (max-width:700px){.stat{border-left:0;border-top:1px solid color-mix(in srgb,var(--band-fg) 22%,transparent);padding-left:0}.stat:first-child{border-top:0}}
+.stat .n{display:flex;align-items:baseline;gap:.35rem;font-family:var(--font-display);font-weight:700;letter-spacing:-.04em;line-height:1;font-variant-numeric:tabular-nums}
+.stat .pre{font-family:var(--font-mono);font-weight:500;font-size:1rem;letter-spacing:0;color:var(--band-accent)}
+.stat .num{font-size:clamp(3.8rem,9.5vw,6.6rem)}
+.stat .lab{margin-top:.6rem;font-size:1.02rem;color:color-mix(in srgb,var(--band-fg) 82%,transparent)}
+
+
+
+/* professional cards + dialog */
+.pro{cursor:pointer;transition:border-color .15s}
+.pro:hover{border-color:var(--accent)}
+.pro-btn{padding:.5rem .9rem;font-size:.88rem;margin-top:.7rem}
+.pro .soc{margin-top:.6rem}
+dialog{border:1px solid var(--line);background:var(--surface);color:var(--fg);padding:0;border-radius:16px;width:min(940px,calc(100% - 32px));max-height:calc(100dvh - 32px);overflow:auto;margin:auto;box-shadow:0 30px 80px -20px rgba(0,0,0,.5)}
+dialog::backdrop{background:rgba(6,18,22,.62)}
+.pd{position:relative;padding:clamp(20px,3.4vw,40px)}
+.pd-close{position:absolute;top:14px;right:14px;width:2.4rem;height:2.4rem;border:1px solid var(--line);border-radius:50%;background:var(--bg);color:var(--fg);display:grid;place-items:center;cursor:pointer}
+.pd-close:hover{border-color:var(--accent);color:var(--accent)}
+.pd-close svg{width:1.1rem;height:1.1rem}
+.pd-head{display:flex;align-items:center;gap:1.2rem;padding-right:2.8rem;flex-wrap:wrap}
+.pd-av{width:6.5rem;height:6.5rem;border-radius:50%;overflow:hidden;flex:none;background:var(--accent-soft)}
+.pd-av img{width:100%;height:100%;object-fit:cover;display:block}
+.pd-head h3{font-size:clamp(1.6rem,3.6vw,2.3rem);margin-top:.3rem}
+.pd-title{color:var(--muted);margin-top:.3rem}
+.pd-body{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.05fr);gap:clamp(24px,4vw,48px);margin-top:clamp(22px,3vw,34px);padding-top:clamp(22px,3vw,34px);border-top:1px solid var(--line)}
+@media (max-width:760px){.pd-body{grid-template-columns:minmax(0,1fr)}}
+.pd-col{min-width:0}
+.pd-label{font-family:var(--font-mono);font-size:.75rem;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);margin-bottom:.8rem}
+.cv{list-style:none;margin:0 0 1.8rem;padding:0;display:grid;gap:.9rem}
+.cv li{display:grid;gap:.15rem;padding-left:1rem;border-left:2px solid var(--accent-soft)}
+.cv b{font-weight:600}
+.cv span{color:var(--muted);font-size:.95rem}
+.pd-quote{margin:0;font-family:var(--font-display);font-weight:600;font-size:clamp(1.15rem,2.4vw,1.45rem);line-height:1.3;letter-spacing:-.01em;text-wrap:balance}
+.pd-book{background:var(--bg);border:1px solid var(--line);border-radius:14px;padding:clamp(16px,2.4vw,24px)}
+
+/* results: instax prints */
+.results{background:var(--surface);border-block:1px solid var(--line)}
+.results h2{font-size:clamp(1.9rem,4.6vw,3.2rem);font-weight:700;margin-top:.8rem}
+.results .lead{margin-top:1.1rem}
+.prints{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:clamp(20px,4vw,52px);margin-top:clamp(36px,5vw,60px);padding:12px 8px 8px;align-items:start}
+.print{position:relative;margin:0;background:var(--print);padding:12px 12px 0;border:1px solid rgba(0,0,0,.1);border-radius:3px;box-shadow:0 2px 3px rgba(0,0,0,.12),0 14px 28px -10px rgba(0,0,0,.28);transform:rotate(var(--r,0deg));transition:transform .25s ease,box-shadow .25s ease}
+.print::before{content:"";position:absolute;top:-11px;left:50%;width:88px;height:22px;margin-left:-44px;background:color-mix(in srgb,var(--accent) 30%,transparent);transform:rotate(-3deg)}
+.print:nth-child(2)::before{transform:rotate(2deg)}
+.print .ph{aspect-ratio:5/4;overflow:hidden;background:var(--field);box-shadow:inset 0 0 0 1px rgba(0,0,0,.1)}
+.print img{width:100%;height:100%;object-fit:cover;display:block}
+.print figcaption{font-family:var(--font-hand);font-size:1.9rem;line-height:1;color:var(--print-ink);padding:1rem .4rem 1.3rem}
+.print.p1{--r:-2.5deg}
+.print.p2{--r:1.8deg;margin-top:1.6rem}
+.print.p3{--r:-1.2deg;margin-top:.5rem}
+@media (hover:hover) and (prefers-reduced-motion:no-preference){
+  .print:hover{transform:rotate(0deg) translateY(-6px);box-shadow:0 3px 4px rgba(0,0,0,.12),0 22px 36px -12px rgba(0,0,0,.34)}
+}
+@media (max-width:820px){
+  .prints{grid-template-columns:minmax(0,1fr);max-width:380px;margin-inline:auto}
+  .print.p2,.print.p3{margin-top:0}
+}
+
+/* budget */
+.budget-grid{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,.9fr);gap:clamp(28px,5vw,72px);align-items:start}
+@media (max-width:860px){.budget-grid{grid-template-columns:minmax(0,1fr)}}
+.budget h2,.agenda h2,.about h2{font-size:clamp(1.9rem,4.6vw,3.2rem);font-weight:700;margin-top:.8rem}
+.budget .lead{margin-top:1.1rem}
+.budget .btn{margin-top:1.8rem}
+.steps{list-style:none;margin:0;padding:0;display:grid;gap:0;counter-reset:s}
+.steps li{counter-increment:s;display:grid;grid-template-columns:auto minmax(0,1fr);gap:1rem;padding:1.1rem 0;border-top:1px solid var(--line)}
+.steps li:last-child{border-bottom:1px solid var(--line)}
+.steps li::before{content:counter(s);font-family:var(--font-mono);font-size:.85rem;color:var(--accent);background:var(--accent-soft);width:1.9rem;height:1.9rem;border-radius:50%;display:grid;place-items:center}
+.steps b{display:block;font-weight:600}
+.steps span{color:var(--muted);font-size:.95rem}
+
+/* forms */
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:clamp(18px,3vw,32px)}
+.form-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:1rem}
+@media (max-width:640px){.form-grid{grid-template-columns:minmax(0,1fr)}}
+.field{display:grid;gap:.4rem;min-width:0}
+.field.full{grid-column:1/-1}
+.field label{font-size:.85rem;font-weight:600}
+.field .opt{font-weight:400;color:var(--muted)}
+.field input,.field select,.field textarea{width:100%;background:var(--field);border:1px solid var(--line);border-radius:10px;padding:.7rem .85rem}
+.field textarea{min-height:96px;resize:vertical}
+.field input:focus-visible,.field select:focus-visible,.field textarea:focus-visible{border-color:var(--accent)}
+.err{color:var(--cta);font-size:.85rem;min-height:1.2em}
+.done{display:grid;gap:.9rem;justify-items:start}
+.done h3{font-size:1.5rem}
+.done p{color:var(--muted);max-width:60ch}
+#budget-panel{margin-top:clamp(28px,4vw,48px)}
+
+/* agenda */
+.agenda{background:var(--surface);border-block:1px solid var(--line)}
+.agenda .head{display:grid;gap:.9rem;margin-bottom:2rem}
+.agenda .panel{background:var(--bg)}
+.pick-label{font-size:.85rem;font-weight:600;margin:1.4rem 0 .6rem}
+.days{display:flex;gap:.55rem;overflow-x:auto;padding-bottom:.5rem;scrollbar-width:thin}
+.day{flex:0 0 auto;min-width:68px;display:grid;justify-items:center;gap:.1rem;padding:.6rem .5rem;border:1px solid var(--line);border-radius:12px;background:var(--surface);cursor:pointer}
+.day .w{font-family:var(--font-mono);font-size:.7rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.day .d{font-family:var(--font-display);font-size:1.45rem;font-weight:700;line-height:1.1}
+.day .m{font-size:.75rem;color:var(--muted)}
+.day[aria-pressed="true"]{background:var(--fg);color:var(--bg);border-color:var(--fg)}
+.day[aria-pressed="true"] .w,.day[aria-pressed="true"] .m{color:inherit;opacity:.8}
+.times{display:grid;grid-template-columns:repeat(auto-fill,minmax(84px,1fr));gap:.5rem}
+.time{font-family:var(--font-mono);font-size:.92rem;padding:.6rem .4rem;border:1px solid var(--line);border-radius:10px;background:var(--surface);cursor:pointer}
+.time:hover:not([disabled]){border-color:var(--accent)}
+.time[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:var(--bg)}
+.time[disabled]{color:var(--taken);text-decoration:line-through;cursor:not-allowed;background:transparent}
+.promo{display:flex;align-items:center;justify-content:space-between;gap:.8rem;flex-wrap:wrap;margin-top:.8rem;padding:.9rem 1rem;border:1px solid var(--line);border-radius:10px;background:var(--surface)}
+.promo-t{font-weight:600}
+.promo-p{font-family:var(--font-display);font-size:1.3rem;color:var(--accent)}
+.sum{margin-top:1.4rem;padding:.9rem 1rem;border-radius:10px;background:var(--accent-soft);font-size:.95rem}
+.agenda .form-grid{margin-top:1.4rem}
+.agenda-info{display:grid;gap:.5rem;margin:1.2rem 0 0;padding:1rem 1.2rem;border:1px solid var(--accent);border-radius:12px;background:var(--accent-soft);max-width:60ch}
+.agenda-info p{margin:0;font-size:.95rem;color:var(--fg)}
+.agenda-info b{color:var(--accent)}
+.submit-row{margin-top:1.4rem;display:flex;flex-wrap:wrap;gap:.8rem;align-items:center}
+.submit-row small{color:var(--muted);max-width:46ch}
+
+/* about */
+.about-top{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:clamp(28px,5vw,72px);align-items:start}
+@media (max-width:860px){.about-top{grid-template-columns:minmax(0,1fr)}}
+.about .lead{margin-top:1.1rem}
+.pros{display:grid;gap:1rem;margin-top:1.8rem}
+.pro{display:grid;grid-template-columns:auto minmax(0,1fr);gap:1rem;align-items:center;padding:1rem;border:1px solid var(--line);border-radius:14px;background:var(--surface)}
+.pro .av{width:4.2rem;height:4.2rem;overflow:hidden;flex:none;border-radius:50%;background:var(--accent-soft);color:var(--accent);display:grid;place-items:center;font-family:var(--font-display);font-weight:700;font-size:1.15rem}
+.pro .av img{width:100%;height:100%;object-fit:cover;display:block}
+.pro b{font-family:var(--font-display);font-size:1.1rem;display:block}
+.pro span{color:var(--muted);font-size:.9rem;display:block}
+.soc{display:flex;gap:.5rem;margin-top:.7rem}
+.soc a{width:2.2rem;height:2.2rem;border:1px solid var(--line);border-radius:50%;display:grid;place-items:center;color:var(--muted);background:var(--bg);transition:color .15s,border-color .15s}
+.soc a:hover{color:var(--accent);border-color:var(--accent)}
+.soc svg{width:1rem;height:1rem}
+.mail-out{margin-top:.5rem;font-family:var(--font-mono);font-size:.8rem;color:var(--fg);word-break:break-all;user-select:all}
+.vow{font-family:var(--font-display);font-weight:700;font-size:clamp(1.7rem,3.6vw,2.6rem);line-height:1.12;letter-spacing:-.02em;text-wrap:balance}
+.vow em{font-style:normal;color:var(--accent)}
+.vow-note{margin-top:1.1rem;color:var(--muted)}
+.principles{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:0;margin-top:clamp(36px,6vw,64px);border-top:1px solid var(--line)}
+.principle{padding:1.4rem 1.4rem 1.4rem 0;min-width:0}
+.principle h3{font-size:1.15rem;margin-bottom:.4rem;letter-spacing:-.01em}
+.principle p{color:var(--muted);font-size:.95rem}
+.creds{margin-top:1.4rem;display:flex;flex-wrap:wrap;gap:.5rem}
+.chip{font-family:var(--font-mono);font-size:.72rem;letter-spacing:.04em;padding:.35rem .65rem;border:1px solid var(--line);border-radius:999px;color:var(--muted)}
+
+/* footer */
+.foot{border-top:1px solid var(--line);padding-block:36px;color:var(--muted);font-size:.92rem}
+.foot .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;gap:1.5rem}
+.foot b{color:var(--fg)}
+.foot .mono{font-family:var(--font-mono);color:var(--fg)}
+
+.mailfb{width:100%;border:1px dashed var(--line);border-radius:12px;padding:.8rem 1rem;margin-top:.3rem}
+.mailfb summary{cursor:pointer;font-size:.88rem;font-weight:700;color:var(--muted)}
+.mailfb[open] summary{margin-bottom:.7rem}
+.mailfb p{font-size:.88rem;color:var(--muted)}
+.mailfb b{color:var(--fg);word-break:break-all}
+.mailfb textarea{width:100%;min-height:7.5rem;margin-top:.6rem;background:var(--field);border:1px solid var(--line);border-radius:10px;padding:.7rem;font:inherit;font-size:.85rem;resize:vertical}
+.mrow{display:flex;flex-wrap:wrap;gap:.6rem;margin-top:.6rem}
+.mrow .btn{padding:.5rem .9rem;font-size:.85rem}
+[hidden]{display:none!important}
+.contact{background:var(--surface);border-top:1px solid var(--line)}
+#consulta{scroll-margin-top:72px}
+.c-grid{display:grid;grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr);gap:clamp(24px,5vw,64px);align-items:start}
+@media (max-width:860px){.c-grid{grid-template-columns:minmax(0,1fr)}}
+.contact h2{font-size:clamp(1.8rem,4.2vw,2.8rem);font-weight:700;margin-top:.8rem}
+.contact .lead{margin-top:1rem}
+.c-form{display:grid;gap:1rem}
+.c-row{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:1rem}
+@media (max-width:560px){.c-row{grid-template-columns:minmax(0,1fr)}}
+.contact .field{display:grid;gap:.4rem;min-width:0}
+.contact .field label{font-size:.85rem;font-weight:700}
+.contact .field input,.contact .field textarea{width:100%;background:var(--field);border:1px solid var(--line);border-radius:10px;padding:.75rem .85rem;font:inherit;color:inherit}
+.contact .field textarea{min-height:130px;resize:vertical}
+.contact .field input:focus-visible,.contact .field textarea:focus-visible{border-color:var(--accent)}
+.contact .opt{font-weight:400;color:var(--muted)}
+.contact .err{color:var(--cta);font-size:.85rem;min-height:1.2em;margin:0}
+.contact .fine{color:var(--muted);font-size:.8rem;margin:0}
+</style>
+<link rel="stylesheet" href="tema.css">
+<link rel="stylesheet" href="reserva.css">
+<script src="rut.js" defer></script>
+<script src="reserva.js" defer></script>
 </head>
-<body class="bg-slate-50 text-slate-800 antialiased selection:bg-rmd-500 selection:text-white">
-
-    <!-- TOP ANNOUNCEMENT BAR WITH CALL CENTER -->
-    <div class="bg-rmd-900 text-white text-xs sm:text-sm py-2 px-4">
-        <div class="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-2">
-            <div class="flex items-center gap-2">
-                <span class="bg-rmd-600 text-white text-[10px] uppercase font-bold px-2 py-0.5 rounded-full">Call Center</span>
-                <a href="tel:6008003400" class="font-bold hover:text-rmd-300 transition-colors flex items-center gap-1">
-                    <i class="fa-solid fa-phone text-xs"></i> 600 800 3400
-                </a>
-                <span class="hidden md:inline text-slate-400">| Atención Lunes a Sábado</span>
-            </div>
-            <div class="flex items-center gap-3">
-                <i class="fa-solid fa-sparkles text-amber-300"></i>
-                <span>Evaluación clínica: <strong>$10.000</strong> con Cirujano Dentista Acreditado</span>
-                <button onclick="openBookingModal()" class="underline hover:text-rmd-200 font-semibold ml-1">Agendar</button>
-            </div>
-        </div>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+  <symbol id="i-tooth" viewBox="0 0 24 24"><path d="M8 3.5c-2.2 0-4 1.8-4 4.4 0 2 .8 3.3 1.3 5 .6 2 .6 4.6 1.4 6.6.4 1 1.5 1.1 1.9.1.5-1.6.7-4.1 2.4-4.1 1.7 0 1.9 2.5 2.4 4.1.4 1 1.5.9 1.9-.1.8-2 .8-4.6 1.4-6.6.5-1.7 1.3-3 1.3-5 0-2.6-1.8-4.4-4-4.4-1.5 0-2.1.8-3.1.8S9.5 3.5 8 3.5z"/></symbol>
+  <symbol id="i-users" viewBox="0 0 24 24"><circle cx="12" cy="8" r="3"/><circle cx="5.5" cy="10" r="2.2"/><circle cx="18.5" cy="10" r="2.2"/><path d="M6.5 19c0-3 2.5-5 5.5-5s5.5 2 5.5 5"/><path d="M2.5 17c0-1.8 1.3-3 3-3M21.5 17c0-1.8-1.3-3-3-3"/></symbol>
+  <symbol id="i-shield" viewBox="0 0 24 24"><path d="M12 3l7 3v5.5c0 4.5-3 8-7 9.5-4-1.5-7-5-7-9.5V6z"/><path d="M8.8 12l2.2 2.2 4.2-4.4"/></symbol>
+  <symbol id="i-cal" viewBox="0 0 24 24"><rect x="3.5" y="5" width="17" height="15" rx="3"/><path d="M8 3v4M16 3v4M3.5 10h17M8 14h.01M12 14h.01M16 14h.01M8 17h.01M12 17h.01"/></symbol>
+  <symbol id="i-chat" viewBox="0 0 24 24"><path d="M5 5.5h14a2.5 2.5 0 012.5 2.5v7a2.5 2.5 0 01-2.5 2.5h-6.2L8.5 21v-3.5H5A2.5 2.5 0 012.5 15V8A2.5 2.5 0 015 5.5z"/><path d="M8 10.5h.01M12 10.5h.01M16 10.5h.01"/></symbol>
+  <symbol id="i-send" viewBox="0 0 24 24"><path d="M21 3L10.5 13.5M21 3l-6.5 18-4-7.5L3 9.5z"/></symbol>
+  <symbol id="i-spark" viewBox="0 0 24 24" fill="currentColor" stroke="none"><path d="M10 3l1.8 5.2L17 10l-5.2 1.8L10 17l-1.8-5.2L3 10l5.2-1.8zM18 14l.9 2.6 2.6.9-2.6.9L18 21l-.9-2.6-2.6-.9 2.6-.9z"/></symbol>
+  <symbol id="i-search" viewBox="0 0 24 24"><circle cx="10.5" cy="10.5" r="6.5"/><path d="M15.5 15.5L21 21"/></symbol>
+  <symbol id="i-pin" viewBox="0 0 24 24"><path d="M12 22s7-6.2 7-12a7 7 0 10-14 0c0 5.8 7 12 7 12z"/><circle cx="12" cy="10" r="2.6" fill="#fff"/></symbol>
+  <symbol id="i-hand" viewBox="0 0 24 24"><path d="M2.5 11l4.5-4 4 1.5 3-1.5 4 3.5 3-1.5v6l-3 1.5-4.5 3.5-3-2-3.5 1-3-2z"/><path d="M8 14l3 2M11 12.5l3 2.5"/></symbol>
+  <symbol id="i-smile" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M8 14c1 1.8 2.5 2.6 4 2.6s3-.8 4-2.6M9 9.5h.01M15 9.5h.01"/></symbol>
+  <symbol id="i-star" viewBox="0 0 24 24"><path d="M12 2.5l2.9 6 6.6.9-4.8 4.6 1.2 6.5L12 17.3 6.1 20.5l1.2-6.5L2.5 9.4l6.6-.9z"/></symbol>
+  <symbol id="i-chev" viewBox="0 0 24 24"><path d="M9 5l7 7-7 7"/></symbol>
+</svg>
+<!--rm-shell-->
+<div class="rm-topbar">
+  <div class="wrap">
+    <div class="tb-l">
+      <span class="tb-i tb-hrs"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>Lun · Mié · Vie 09:00–15:00 · Sáb 09:00–13:00</span>
+      <a class="tb-mail" href="mailto:contacto@rmdental.cl"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2.5"/><path d="m3.5 7 8.5 6 8.5-6"/></svg>contacto@rmdental.cl</a>
     </div>
-
-    <!-- NAVIGATION HEADER -->
-    <header class="sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-slate-100 transition-all">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
-            <!-- LOGO FIEL CON COLOR ORIGINAL Y DENTISTA -->
-            <a href="#" class="flex items-center gap-2 group">
-                <div class="flex items-center gap-1.5">
-                    <span class="text-2xl sm:text-3xl font-extrabold text-rmd-600 tracking-tight leading-none">Red</span>
-                    <span class="text-2xl sm:text-3xl font-light text-slate-700 tracking-tight leading-none">Metropolitana</span>
-                    <span class="text-2xl sm:text-3xl font-extrabold text-rmd-500 tracking-tight leading-none">Dental</span>
-                </div>
-            </a>
-
-            <!-- DESKTOP MENU EXACTO SOLICITADO -->
-            <nav class="hidden lg:flex items-center gap-7 text-sm font-medium text-slate-600">
-                <!-- Dropdown Servicios -->
-                <div class="relative group py-2">
-                    <button class="flex items-center gap-1 hover:text-rmd-600 transition-colors">
-                        Servicios <i class="fa-solid fa-chevron-down text-xs opacity-60"></i>
-                    </button>
-                    <div class="absolute top-full left-0 w-64 bg-white rounded-2xl shadow-xl border border-slate-100 p-3 hidden group-hover:block transition-all opacity-0 group-hover:opacity-100">
-                        <a href="#servicios" class="block px-3 py-2 rounded-lg hover:bg-rmd-50 text-slate-700 hover:text-rmd-600 font-medium">Ortodoncia e Invisal</a>
-                        <a href="#servicios" class="block px-3 py-2 rounded-lg hover:bg-rmd-50 text-slate-700 hover:text-rmd-600 font-medium">Implantes Dentales</a>
-                        <a href="#servicios" class="block px-3 py-2 rounded-lg hover:bg-rmd-50 text-slate-700 hover:text-rmd-600 font-medium">Estética Dental</a>
-                        <a href="#servicios" class="block px-3 py-2 rounded-lg hover:bg-rmd-50 text-slate-700 hover:text-rmd-600 font-medium">Endodoncia</a>
-                        <a href="#servicios" class="block px-3 py-2 rounded-lg hover:bg-rmd-50 text-slate-700 hover:text-rmd-600 font-medium">Limpieza Profunda</a>
-                    </div>
-                </div>
-                <a href="#dentistas" class="hover:text-rmd-600 transition-colors">Encuentra un dentista</a>
-                <a href="#presupuestos" class="hover:text-rmd-600 transition-colors">Presupuestos</a>
-                <a href="#nosotros" class="hover:text-rmd-600 transition-colors">Nosotros</a>
-                <a href="#contacto" class="hover:text-rmd-600 transition-colors">Contacto</a>
-                <a href="#ia-assistant" class="text-rmd-600 hover:text-rmd-700 font-semibold flex items-center gap-1.5 bg-rmd-50 px-3 py-1.5 rounded-full border border-rmd-100">
-                    <i class="fa-solid fa-robot"></i> Consulta IA
-                </a>
-            </nav>
-
-            <!-- RIGHT CTA & USER -->
-            <div class="hidden sm:flex items-center gap-3">
-                <a href="https://wa.me/56912345678?text=Hola,%20quiero%20agendar%20una%20hora%20con%20el%20asistente%20automatizado" target="_blank" class="text-xs font-semibold text-emerald-600 bg-emerald-50 hover:bg-emerald-100 border border-emerald-200 px-3 py-2 rounded-full flex items-center gap-1.5 transition-colors">
-                    <i class="fa-brands fa-whatsapp text-sm text-emerald-500"></i> WhatsApp
-                </a>
-                <a href="#" class="text-sm font-semibold text-slate-700 hover:text-rmd-600 px-2 py-2">
-                    Mi cuenta
-                </a>
-                
-                <!-- BOTÓN AGENDAR HORA CON LUZ VERDE PARPADEANTE -->
-                <div class="relative inline-block">
-                    <!-- Luz parpadeante verde (efecto halo/ping + punto sólido) -->
-                    <span class="absolute -top-1 -right-1 flex h-4 w-4 z-10 pointer-events-none">
-                        <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-                        <span class="relative inline-flex rounded-full h-4 w-4 bg-emerald-500 border-2 border-white shadow-sm"></span>
-                    </span>
-
-                    <button onclick="openBookingModal()" class="bg-rmd-600 hover:bg-rmd-700 text-white text-sm font-semibold px-5 py-2.5 rounded-full shadow-lg shadow-rmd-600/25 transition-all transform hover:-translate-y-0.5 active:translate-y-0">
-                        Agendar hora
-                    </button>
-                </div>
-            </div>
-
-            <!-- MOBILE MENU BUTTON -->
-            <button onclick="toggleMobileMenu()" class="lg:hidden p-2 text-slate-600 hover:text-rmd-600 focus:outline-none">
-                <i class="fa-solid fa-bars text-2xl"></i>
-            </button>
+    <div class="tb-r">
+      <a class="tb-ai" href="#rm-search" data-ai><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M10 3l1.8 5.2L17 10l-5.2 1.8L10 17l-1.8-5.2L3 10l5.2-1.8zM18 14l.9 2.6 2.6.9-2.6.9L18 21l-.9-2.6-2.6-.9 2.6-.9z"/></svg>Pregúntale a RMDental (IA)</a>
+      <span class="sep" aria-hidden="true">|</span>
+      <a href="portal-pacientes.html">Portal pacientes</a>
+    </div>
+  </div>
+</div>
+<header class="top">
+  <div class="wrap">
+    <a class="brand" href="#inicio" aria-label="RM Dental, inicio"><img class="logo" src="logo.png" alt="Red Metropolitana Dental" width="640" height="99"></a>
+    <nav class="nav" aria-label="Principal">
+      <details class="menu" id="svc-menu">
+        <summary aria-label="Servicios y páginas"><span class="txt">Servicios</span><svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg><svg class="ham" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg></summary>
+        <div class="menu-list">
+          <a class="ml" href="#dentistas"><b>Encuentra un dentista</b></a>
+          <a class="ml" href="#asistente-ia"><b>Consultas IA</b></a>
+          <a class="ml" href="#presupuesto"><b>Presupuestos</b></a>
+          <a class="ml" href="#nosotros"><b>Nosotros</b></a>
+          <a class="ml" href="#consulta"><b>Contacto</b></a>
+          <a class="ml" href="portal-pacientes.html"><b>Mi cuenta</b></a>
+          <p class="ml-sep ml">Servicios</p>
+          <a href="mantencion-implantes.html"><b>Mantención de implantes</b><span>Limpieza y control periódico para tus implantes</span></a>
+          <a href="mejora-presupuesto.html"><b>Segunda opinión y presupuesto</b><span>Te entregamos una oferta por escrito</span></a>
+          <a href="cambio-amalgamas.html"><b>Cambio de amalgamas</b><span>Evaluación para renovar por resinas estéticas</span></a>
+          <a href="controles-infantiles.html"><b>Controles infantiles</b><span>Control dental sano para tus hijos</span></a>
+          <a href="profesionales.html"><b>Para profesionales</b><span>Evaluación desde las 7:00 am, antes de tu jornada</span></a>
         </div>
+      </details>
+      <a class="l" href="#dentistas">Encuentra un dentista</a>
+      <a class="l ai" href="#asistente-ia"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M10 3l1.8 5.2L17 10l-5.2 1.8L10 17l-1.8-5.2L3 10l5.2-1.8zM18 14l.9 2.6 2.6.9-2.6.9L18 21l-.9-2.6-2.6-.9 2.6-.9z"/></svg>Consultas IA</a>
+      <a class="l" href="#presupuesto">Presupuestos</a>
+      <a class="l" href="#nosotros">Nosotros</a>
+      <a class="l" href="#consulta">Contacto</a>
+      <a class="btn btn-cta" href="#agenda">Agendar hora<i class="live" role="img" aria-label="En línea"></i></a>
+    </nav>
+  </div>
+</header>
+<script>(function(){var m=document.getElementById("svc-menu");if(!m)return;m.addEventListener("click",function(e){if(e.target.closest(".menu-list a"))m.removeAttribute("open")})})();</script>
 
-        <!-- MOBILE MENU DROPDOWN -->
-        <div id="mobileMenu" class="hidden lg:hidden border-t border-slate-100 bg-white px-4 pt-3 pb-6 space-y-3">
-            <a href="#servicios" class="block py-2 text-slate-700 font-medium">Servicios</a>
-            <a href="#dentistas" class="block py-2 text-slate-700 font-medium">Encuentra un dentista</a>
-            <a href="#presupuestos" class="block py-2 text-slate-700 font-medium">Presupuestos</a>
-            <a href="#nosotros" class="block py-2 text-slate-700 font-medium">Nosotros</a>
-            <a href="#contacto" class="block py-2 text-slate-700 font-medium">Contacto</a>
-            <a href="tel:6008003400" class="block py-2 text-rmd-600 font-bold"><i class="fa-solid fa-phone mr-2"></i>Call Center: 600 800 3400</a>
-            <div class="pt-3 border-t border-slate-100 flex flex-col gap-3">
-                <a href="#" class="text-center py-2 text-slate-700 font-medium">Mi cuenta</a>
-                <a href="https://wa.me/56912345678" target="_blank" class="w-full bg-emerald-600 text-white font-semibold py-2.5 rounded-full text-center flex items-center justify-center gap-2">
-                    <i class="fa-brands fa-whatsapp text-lg"></i> Agenda Automática WhatsApp
-                </a>
-                <button onclick="openBookingModal()" class="w-full bg-rmd-600 text-white font-semibold py-3 rounded-full text-center shadow-md">
-                    Agendar hora
-                </button>
-            </div>
+<main id="inicio">
+  <section class="hero">
+    <div class="wrap hero-grid">
+      <div class="hero-copy">
+        <p class="eyebrow">Una red, más sonrisas</p>
+        <h1>Dentistas independientes,<br><em>más cerca de ti</em></h1>
+        <p class="lead">Conectamos a pacientes con dentistas independientes de confianza en la Región Metropolitana.</p>
+        <form class="rm-search" id="rm-search" role="search" aria-label="Pregúntale a RMDental">
+          <svg class="ico chat" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-chat"/></svg>
+          <textarea id="rm-q" rows="2" maxlength="300" placeholder="Pregúntale a RMDental: busca un dentista, tratamiento o disponibilidad…" aria-label="Pregúntale a RMDental: busca un dentista, tratamiento o disponibilidad" autocomplete="off" spellcheck="false"></textarea>
+          <button type="submit" aria-label="Enviar consulta"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-send"/></svg></button>
+        </form>
+        <p class="rm-ai"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-spark"/></svg><span>Búsqueda inteligente con IA</span></p>
+        <div class="rm-ans" id="rm-ans" aria-live="polite" hidden></div>
+        <div class="rm-chips">
+          <a class="rm-chip" id="agenda-link" href="#agenda" data-reason="Evaluación y presupuesto personalizado">Limpieza dental</a>
+          <a class="rm-chip" href="#agenda" data-reason="Otro">Ortodoncia</a>
+          <a class="rm-chip" id="implant-link" href="#agenda">Implantes</a>
+          <a class="rm-chip" href="cambio-amalgamas.html">Estética dental</a>
         </div>
-    </header>
+        <p class="rm-ex">Ej.: <button type="button" id="rm-ex">Busco un endodoncista en Providencia para el sábado</button></p>
+        <p class="rm-note"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="m8 12.5 3 3 5-6"/></svg><span><b>Evaluación: $10.000.</b> La realiza un cirujano dentista.</span></p>
+      </div>
+      <div class="rm-art">
+        <div class="blob" aria-hidden="true"></div>
+        <div class="photo"><img src="hero.jpg" alt="Paciente sonriendo durante una consulta dental" width="439" height="328"></div>
+        <aside class="next" aria-live="polite">
+          <p class="eyebrow">Agenda en línea</p>
+          <p class="s" id="next-s">Primera fecha disponible</p>
+          <p class="t" id="next-when" data-proxima-fecha>Reserva tu hora en línea</p>
+          <p class="s">Atención de 30 minutos</p>
+          <button class="btn btn-cta" id="next-btn" type="button">Tomar esta hora</button>
+          <dl class="hours">
+            <div><dt>Lunes, miércoles y viernes</dt><dd>09:00–15:00</dd></div>
+            <div><dt>Sábado</dt><dd>09:00–13:00</dd></div>
+          </dl>
+        </aside>
+      </div>
+    </div>
+  </section>
 
-    <!-- HERO SECTION DE DESTACADO DE CONSULTAS IA -->
-    <section class="relative hero-bg overflow-hidden pt-8 pb-16 lg:py-20">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="grid lg:grid-cols-12 gap-12 items-center">
-                
-                <!-- LEFT CONTENT -->
-                <div class="lg:col-span-7 space-y-6 text-left">
-                    
-                    <div class="inline-flex items-center gap-2 bg-gradient-to-r from-rmd-500 to-teal-600 text-white px-4 py-1.5 rounded-full text-xs sm:text-sm font-bold tracking-wide uppercase shadow-md shadow-rmd-500/20">
-                        <i class="fa-solid fa-sparkles animate-spin"></i>
-                        Potenciado con Inteligencia Artificial
-                    </div>
-
-                    <h1 class="text-4xl sm:text-5xl lg:text-6xl font-black text-slate-900 tracking-tight leading-[1.15]">
-                        Dentistas independientes, <br class="hidden sm:inline"/>
-                        <span class="text-transparent bg-clip-text bg-gradient-to-r from-rmd-600 via-rmd-500 to-teal-500">
-                            más cerca de ti
-                        </span>
-                    </h1>
-
-                    <p class="text-lg text-slate-600 max-w-2xl leading-relaxed">
-                        Conectamos a pacientes con cirujanos dentistas independientes de confianza en toda la Región Metropolitana. Haz tu consulta con nuestra **IA Clínica** o agendamiento directo.
-                    </p>
-
-                    <!-- BUSCADOR E INTERACCIÓN DESTACADA DE IA -->
-                    <div id="ia-assistant" class="bg-white p-4 sm:p-5 rounded-3xl shadow-2xl border-2 border-rmd-200 relative overflow-hidden">
-                        <div class="flex items-center justify-between mb-2">
-                            <span class="text-xs font-bold text-rmd-700 flex items-center gap-2 uppercase tracking-wider">
-                                <span class="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-ping"></span>
-                                RMDental IA: Asistente Clínico 24/7
-                            </span>
-                            <span class="text-[11px] text-slate-400 bg-slate-100 px-2 py-0.5 rounded-md font-medium">Búsqueda Inteligente</span>
-                        </div>
-
-                        <form onsubmit="handleAISearch(event)" class="relative flex items-center">
-                            <div class="absolute left-4 text-rmd-600 text-xl">
-                                <i class="fa-solid fa-robot"></i>
-                            </div>
-                            <input type="text" id="aiSearchInput" 
-                                placeholder="Escribe tu síntoma o búsqueda (ej: 'Tengo dolor de muela en Providencia')..." 
-                                class="w-full pl-12 pr-28 py-4 bg-slate-50 border border-slate-200 focus:bg-white rounded-2xl text-slate-800 placeholder-slate-400 text-sm focus:outline-none focus:ring-2 focus:ring-rmd-500 transition-all"
-                            >
-                            <button type="submit" class="absolute right-2 bg-gradient-to-r from-rmd-600 to-rmd-500 hover:from-rmd-700 hover:to-rmd-600 text-white px-4 py-2.5 rounded-xl text-xs font-bold flex items-center gap-1.5 shadow-md">
-                                <span>Preguntar</span> <i class="fa-solid fa-sparkles"></i>
-                            </button>
-                        </form>
-
-                        <!-- Panel de Respuesta Simulado de la IA -->
-                        <div id="aiResponsePanel" class="hidden mt-4 p-3.5 bg-rmd-50/80 rounded-2xl border border-rmd-100 text-xs text-slate-700 space-y-2 animate-fade-in">
-                            <div class="flex items-center gap-2 font-bold text-rmd-700">
-                                <i class="fa-solid fa-user-doctor"></i> Recomendación RMDental IA:
-                            </div>
-                            <p id="aiResponseText" class="leading-relaxed">Analizando tu consulta...</p>
-                            <div class="pt-2 flex justify-end gap-2">
-                                <button onclick="openBookingModal('Recomendado por IA')" class="bg-rmd-600 text-white px-3 py-1.5 rounded-lg text-xs font-bold">Agendar este tratamiento</button>
-                            </div>
-                        </div>
-
-                        <!-- Quick tags de sugerencia -->
-                        <div class="flex flex-wrap items-center gap-2 pt-3 text-xs">
-                            <span class="text-slate-400 font-medium flex items-center gap-1">
-                                <i class="fa-solid fa-bolt text-amber-500"></i> Ejemplos:
-                            </span>
-                            <button onclick="fillSearch('Necesito urgencia por dolor de muela en Providencia')" class="px-3 py-1 bg-slate-100 hover:bg-rmd-100 hover:text-rmd-700 text-slate-600 rounded-full font-medium transition-colors">Dolor de muela</button>
-                            <button onclick="fillSearch('Limpieza dental para este sábado')" class="px-3 py-1 bg-slate-100 hover:bg-rmd-100 hover:text-rmd-700 text-slate-600 rounded-full font-medium transition-colors">Limpieza profilaxis</button>
-                            <button onclick="fillSearch('Evaluación ortodoncia brackets invisibles')" class="px-3 py-1 bg-slate-100 hover:bg-rmd-100 hover:text-rmd-700 text-slate-600 rounded-full font-medium transition-colors">Brackets / Invisal</button>
-                        </div>
-                    </div>
-
-                    <!-- Evaluation Badge -->
-                    <div class="inline-flex items-center gap-3 bg-white/90 border border-rmd-200 rounded-full px-5 py-2.5 shadow-sm text-sm font-medium text-slate-700">
-                        <div class="w-6 h-6 rounded-full bg-rmd-100 text-rmd-600 flex items-center justify-center font-bold text-xs">
-                            <i class="fa-solid fa-circle-check"></i>
-                        </div>
-                        <span><strong>Evaluación: $10.000.</strong> La realiza un cirujano dentista. Call Center: <strong>600 800 3400</strong></span>
-                    </div>
-
-                </div>
-
-                <!-- RIGHT GRAPHIC & QUICK BOOKING CARD -->
-                <div class="lg:col-span-5 relative">
-                    <div class="relative mx-auto max-w-md lg:max-w-none rounded-3xl overflow-hidden shadow-2xl border-4 border-white">
-                        <img src="https://images.unsplash.com/photo-1588776814546-1ffcf47267a5?auto=format&fit=crop&w=800&q=80" 
-                             alt="Paciente sonriendo en atención dental" 
-                             class="w-full h-[440px] object-cover"
-                             onerror="this.src='https://placehold.co/800x800/00A99D/FFFFFF?text=RMDental+Paciente'">
-                        
-                        <div class="absolute inset-0 bg-gradient-to-t from-slate-900/40 via-transparent to-transparent"></div>
-                    </div>
-
-                    <!-- Floating Booking Card -->
-                    <div class="glass-card absolute -bottom-8 -left-4 sm:left-4 right-4 sm:right-auto p-5 rounded-3xl custom-shadow max-w-xs border border-white/80">
-                        <div class="flex items-center justify-between border-b border-slate-100 pb-3 mb-3">
-                            <div>
-                                <span class="text-[10px] font-bold tracking-wider text-rmd-600 uppercase block">AGENDA EN LÍNEA / IA</span>
-                                <span class="text-xs text-slate-500 font-medium">Primera fecha disponible</span>
-                            </div>
-                            <span class="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-ping"></span>
-                        </div>
-
-                        <div class="space-y-1 mb-4">
-                            <h4 class="text-lg font-bold text-slate-900 leading-tight">Miércoles 11 de noviembre</h4>
-                            <p class="text-xs text-slate-500 font-medium"><i class="fa-regular fa-clock mr-1 text-rmd-500"></i> Atención de 30 minutos</p>
-                        </div>
-
-                        <button onclick="openBookingModal()" class="w-full bg-rmd-600 hover:bg-rmd-700 text-white text-sm font-semibold py-2.5 rounded-xl transition-all shadow-md">
-                            Agendar hora ahora
-                        </button>
-
-                        <div class="mt-3 pt-3 border-t border-slate-100 text-[11px] text-slate-500 space-y-1">
-                            <div class="flex justify-between">
-                                <span>Lunes a Viernes</span>
-                                <span class="font-semibold text-slate-700">09:00 - 19:00</span>
-                            </div>
-                            <div class="flex justify-between">
-                                <span>Call Center Central</span>
-                                <span class="font-semibold text-rmd-600">600 800 3400</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-            </div>
+  <section class="rm-aisec" id="asistente-ia" aria-labelledby="ai-h">
+    <div class="wrap ai-grid">
+      <div>
+        <span class="rm-aibadge"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M10 3l1.8 5.2L17 10l-5.2 1.8L10 17l-1.8-5.2L3 10l5.2-1.8zM18 14l.9 2.6 2.6.9-2.6.9L18 21l-.9-2.6-2.6-.9 2.6-.9z"/></svg>Tecnología RMDental IA</span>
+        <h2 id="ai-h">Consultas dentales guiadas por inteligencia artificial</h2>
+        <p class="lead">Cuéntanos qué necesitas con tus palabras. El asistente te orienta en segundos, te sugiere la especialidad y la comuna adecuadas y te muestra dentistas con las próximas horas disponibles.</p>
+        <ul class="rm-aiul">
+          <li><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="m8 12.5 3 3 5-6"/></svg><span>Recomienda especialidad y dentista según lo que buscas (endodoncia, ortodoncia, implantes y más).</span></li>
+          <li><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="m8 12.5 3 3 5-6"/></svg><span>Muestra horas disponibles y te lleva directo a la agenda en línea, sin esperas al teléfono.</span></li>
+          <li><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="m8 12.5 3 3 5-6"/></svg><span>Si describes una urgencia, te lo advierte y te orienta a atención inmediata.</span></li>
+        </ul>
+        <div class="ai-cta">
+          <a class="btn btn-cta" href="#rm-search" data-ai>Probar el asistente</a>
+          <a class="btn btn-ghost" href="#agenda">Agendar sin asistente</a>
         </div>
-    </section>
-
-    <!-- TESTIMONIALS & BENEFITS -->
-    <section id="nosotros" class="py-20 bg-gradient-to-b from-slate-50 to-white">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center max-w-2xl mx-auto mb-14">
-                <span class="text-xs font-bold text-rmd-600 uppercase tracking-widest bg-rmd-50 px-3 py-1 rounded-full border border-rmd-100">Testimonios Reales</span>
-                <h2 class="text-3xl sm:text-4xl font-extrabold text-slate-900 mt-3">Lo que dicen nuestros pacientes</h2>
-                <p class="text-slate-600 text-sm mt-2">Transparencia y atención humana garantizada en cada consulta dental.</p>
-            </div>
-
-            <div class="grid md:grid-cols-3 gap-8">
-                
-                <!-- Testimonial 1 -->
-                <div class="bg-white p-8 rounded-3xl border border-slate-100 shadow-sm relative space-y-4">
-                    <div class="flex text-amber-400 text-sm gap-1">
-                        <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i>
-                    </div>
-                    <p class="text-slate-600 text-sm italic">
-                        "La atención fue impecable. Pude agendar por la web fácilmente por $10.000 para mi evaluación inicial en Providencia. Totalmente recomendado por la transparencia."
-                    </p>
-                    <div class="flex items-center gap-3 pt-2">
-                        <div class="w-10 h-10 rounded-full bg-rmd-100 text-rmd-600 font-bold flex items-center justify-center text-sm">
-                            VT
-                        </div>
-                        <div>
-                            <h4 class="font-bold text-slate-900 text-sm">Valentina Torres</h4>
-                            <p class="text-xs text-slate-400">Paciente en Providencia</p>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Testimonial 2 -->
-                <div class="bg-white p-8 rounded-3xl border border-slate-100 shadow-sm relative space-y-4">
-                    <div class="flex text-amber-400 text-sm gap-1">
-                        <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i>
-                    </div>
-                    <p class="text-slate-600 text-sm italic">
-                        "Me preocupaba el costo del tratamiento de ortodoncia, pero en Red Metropolitana Dental me dieron un presupuesto claro desde la primera sesión sin sorpresas."
-                    </p>
-                    <div class="flex items-center gap-3 pt-2">
-                        <div class="w-10 h-10 rounded-full bg-rmd-100 text-rmd-600 font-bold flex items-center justify-center text-sm">
-                            CP
-                        </div>
-                        <div>
-                            <h4 class="font-bold text-slate-900 text-sm">Cristóbal Peña</h4>
-                            <p class="text-xs text-slate-400">Paciente en Santiago Centro</p>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Testimonial 3 -->
-                <div class="bg-white p-8 rounded-3xl border border-slate-100 shadow-sm relative space-y-4">
-                    <div class="flex text-amber-400 text-sm gap-1">
-                        <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i>
-                    </div>
-                    <p class="text-slate-600 text-sm italic">
-                        "Encontré a un especialista excelente cerca de mi casa en Las Condes. El sistema de búsqueda inteligente me ayudó muchísimo a filtrar lo que necesitaba."
-                    </p>
-                    <div class="flex items-center gap-3 pt-2">
-                        <div class="w-10 h-10 rounded-full bg-rmd-100 text-rmd-600 font-bold flex items-center justify-center text-sm">
-                            AM
-                        </div>
-                        <div>
-                            <h4 class="font-bold text-slate-900 text-sm">Andrea Morales</h4>
-                            <p class="text-xs text-slate-400">Paciente en Las Condes</p>
-                        </div>
-                    </div>
-                </div>
-
-            </div>
+      </div>
+      <div class="rm-chat" aria-label="Ejemplo de conversación con el asistente">
+        <div class="rm-chat-h">
+          <span class="rm-chat-av"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M10 3l1.8 5.2L17 10l-5.2 1.8L10 17l-1.8-5.2L3 10l5.2-1.8zM18 14l.9 2.6 2.6.9-2.6.9L18 21l-.9-2.6-2.6-.9 2.6-.9z"/></svg></span>
+          <div><b>Asistente RMDental IA</b><span>En línea</span></div>
+          <em class="rm-chat-tag" style="font-style:normal">Ejemplo</em>
         </div>
-    </section>
-
-    <!-- FOOTER -->
-    <footer id="contacto" class="bg-slate-900 text-slate-400 pt-16 pb-12 border-t border-slate-800">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="grid grid-cols-1 md:grid-cols-4 gap-10 pb-12 border-b border-slate-800">
-                
-                <!-- Col 1 -->
-                <div class="space-y-4">
-                    <div class="flex items-center gap-2">
-                        <div class="w-8 h-8 rounded-lg bg-rmd-600 flex items-center justify-center text-white text-base font-bold">
-                            <i class="fa-solid fa-tooth"></i>
-                        </div>
-                        <span class="text-xl font-bold text-white tracking-tight">Red<span class="text-rmd-400">Metropolitana</span></span>
-                    </div>
-                    <p class="text-xs leading-relaxed">
-                        Conectamos pacientes con cirujanos dentistas independientes en la Región Metropolitana de Chile. Atención humana, transparente y profesional.
-                    </p>
-                </div>
-
-                <!-- Col 2 -->
-                <div class="space-y-3">
-                    <h4 class="text-white text-sm font-bold uppercase tracking-wider">Servicios</h4>
-                    <ul class="space-y-2 text-xs">
-                        <li><a href="#servicios" class="hover:text-white transition-colors">Ortodoncia e Invisal</a></li>
-                        <li><a href="#servicios" class="hover:text-white transition-colors">Implantes Dentales</a></li>
-                        <li><a href="#servicios" class="hover:text-white transition-colors">Estética Dental</a></li>
-                        <li><a href="#servicios" class="hover:text-white transition-colors">Endodoncia y Profilaxis</a></li>
-                    </ul>
-                </div>
-
-                <!-- Col 3 -->
-                <div class="space-y-3">
-                    <h4 class="text-white text-sm font-bold uppercase tracking-wider">Enlaces Rápidos</h4>
-                    <ul class="space-y-2 text-xs">
-                        <li><a href="#dentistas" class="hover:text-white transition-colors">Encuentra un Dentista</a></li>
-                        <li><a href="#" class="hover:text-white transition-colors">Presupuesto Estimado</a></li>
-                        <li><a href="#" class="hover:text-white transition-colors">Portal de Odontólogos</a></li>
-                        <li><a href="#" class="hover:text-white transition-colors">Preguntas Frecuentes</a></li>
-                    </ul>
-                </div>
-
-                <!-- Col 4 -->
-                <div class="space-y-3">
-                    <h4 class="text-white text-sm font-bold uppercase tracking-wider">Contacto</h4>
-                    <div class="space-y-2 text-xs">
-                        <p><i class="fa-solid fa-envelope mr-2 text-rmd-400"></i> contacto@rmdental.cl</p>
-                        <p><i class="fa-solid fa-phone mr-2 text-rmd-400"></i> +56 2 2345 6789</p>
-                        <p><i class="fa-solid fa-location-dot mr-2 text-rmd-400"></i> Región Metropolitana, Chile</p>
-                    </div>
-                </div>
-
-            </div>
-
-            <div class="pt-8 flex flex-col sm:flex-row items-center justify-between text-xs text-slate-500 gap-4">
-                <p>&copy; 2026 Red Metropolitana Dental (rmdental.cl). Todos los derechos reservados.</p>
-                <div class="flex gap-4">
-                    <a href="#" class="hover:text-slate-400">Términos y Condiciones</a>
-                    <a href="#" class="hover:text-slate-400">Política de Privacidad</a>
-                </div>
-            </div>
+        <div class="rm-msgs">
+          <div class="rm-msg">Hola 👋 ¿En qué te puedo ayudar hoy? Cuéntame qué necesitas o en qué comuna buscas atención.</div>
+          <div class="rm-msg me">Necesito una evaluación cerca de Providencia para este fin de semana.</div>
+          <div class="rm-msg">Te muestro dentistas en Providencia y sus próximas horas disponibles.
+            <div class="pf"><i>CB</i><div><b>Dra. Catalina Bravo</b><small>Odontología general · Providencia</small></div></div>
+          </div>
         </div>
-    </footer>
+      </div>
+    </div>
+  </section>
 
-    <!-- BOOKING MODAL -->
-    <div id="bookingModal" class="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm hidden items-center justify-center p-4">
-        <div class="bg-white rounded-3xl max-w-md w-full p-6 shadow-2xl relative space-y-5 animate-fade-in">
-            <button onclick="closeBookingModal()" class="absolute top-5 right-5 text-slate-400 hover:text-slate-700 text-lg">
-                <i class="fa-solid fa-xmark"></i>
-            </button>
+  <section class="rm-benefits" aria-label="Beneficios">
+    <div class="wrap">
+      <div class="rm-bene"><span class="rm-bubble"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-tooth"/></svg></span><div><h3>Profesionales independientes</h3><p>Dentistas verificados y con experiencia.</p></div></div>
+      <div class="rm-bene"><span class="rm-bubble"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-users"/></svg></span><div><h3>Atención cercana</h3><p>Encuentra un dentista en tu comuna.</p></div></div>
+      <div class="rm-bene"><span class="rm-bubble"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-shield"/></svg></span><div><h3>Atención segura</h3><p>Ambientes seguros y de calidad.</p></div></div>
+      <div class="rm-bene"><span class="rm-bubble"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-cal"/></svg></span><div><h3>Reserva fácil</h3><p>Agenda tu hora en pocos minutos.</p></div></div>
+    </div>
+  </section>
 
-            <div class="text-center space-y-1">
-                <div class="w-12 h-12 bg-rmd-100 text-rmd-600 rounded-full flex items-center justify-center mx-auto text-xl mb-2">
-                    <i class="fa-regular fa-calendar-check"></i>
-                </div>
-                <h3 class="text-xl font-bold text-slate-900">Agendar Evaluación Dental</h3>
-                <p class="text-xs text-slate-500">Valor consulta inicial: <strong>$10.000</strong></p>
-            </div>
+  <section class="sec rm-why" id="nosotros">
+    <div class="wrap rm-why-grid">
+      <div>
+        <p class="eyebrow">¿Por qué elegirnos?</p>
+        <h2>Una red que impulsa<br>la odontología independiente</h2>
+        <p class="lead">Creemos en el talento local y en una odontología más humana, accesible y de calidad. Si algo no es necesario, te lo decimos.</p>
+        <a class="btn btn-cta" href="#dentistas">Conoce más <svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-chev"/></svg></a>
+      </div>
+      <div class="rm-cards">
+        <article class="rm-card"><span class="rm-bubble"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-tooth"/></svg></span><h3>Gran variedad de tratamientos</h3><p>Desde controles hasta especialidades avanzadas.</p></article>
+        <article class="rm-card up"><span class="rm-bubble"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-shield"/></svg></span><h3>Dentistas verificados</h3><p>Revisamos títulos, experiencia y buenas prácticas.</p></article>
+        <article class="rm-card"><span class="rm-bubble"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-hand"/></svg></span><h3>Apoyo al profesional local</h3><p>Impulsamos el trabajo de dentistas independientes en la región.</p></article>
+      </div>
+      <div class="rm-vision"><p class="eyebrow">Nuestra visión</p><p>Ser la red de odontología independiente de referencia en Chile: una atención humana, accesible y de calidad, donde cada paciente recibe solo el tratamiento que realmente necesita. Para lograrlo, seleccionamos a nuestros profesionales por su experiencia comprobada y sus altos estándares éticos.</p></div>
+    </div>
+  </section>
 
-            <form onsubmit="submitBooking(event)" class="space-y-4">
-                <div>
-                    <label class="block text-xs font-semibold text-slate-700 mb-1">Dentista Seleccionado</label>
-                    <input type="text" id="selectedDentistInput" readonly value="Cualquier dentista disponible" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs text-slate-700 font-semibold focus:outline-none">
-                </div>
+  <section class="sec rm-how">
+    <div class="wrap">
+      <p class="eyebrow">¿Cómo funciona?</p>
+      <h2>Encuentra tu dentista en 3 simples pasos</h2>
+      <div class="rm-how-row">
+        <div class="rm-step"><span class="rm-num">1</span><span class="rm-bubble"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-search"/></svg></span><div><h3>Busca</h3><p>Filtra por comuna.</p></div></div>
+        <div class="rm-step"><span class="rm-num">2</span><span class="rm-bubble"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-cal"/></svg></span><div><h3>Elige tu horario</h3><p>Elige la franja horaria que te acomode.</p></div></div>
+        <div class="rm-step"><span class="rm-num">3</span><span class="rm-bubble"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-smile"/></svg></span><div><h3>Te contactamos</h3><p>Nosotros te contactamos y acordamos la hora.</p></div></div>
+      </div>
+    </div>
+  </section>
 
-                <div class="grid grid-cols-2 gap-3">
-                    <div>
-                        <label class="block text-xs font-semibold text-slate-700 mb-1">Nombre Completo</label>
-                        <input type="text" required placeholder="Tu nombre" class="w-full border border-slate-200 rounded-xl px-3 py-2 text-xs focus:ring-2 focus:ring-rmd-500 focus:outline-none">
-                    </div>
-                    <div>
-                        <label class="block text-xs font-semibold text-slate-700 mb-1">Teléfono RUT</label>
-                        <input type="tel" required placeholder="+56 9..." class="w-full border border-slate-200 rounded-xl px-3 py-2 text-xs focus:ring-2 focus:ring-rmd-500 focus:outline-none">
-                    </div>
-                </div>
-
-                <div>
-                    <label class="block text-xs font-semibold text-slate-700 mb-1">Correo Electrónico</label>
-                    <input type="email" required placeholder="tu@email.com" class="w-full border border-slate-200 rounded-xl px-3 py-2 text-xs focus:ring-2 focus:ring-rmd-500 focus:outline-none">
-                </div>
-
-                <div>
-                    <label class="block text-xs font-semibold text-slate-700 mb-1">Fecha de Preferencia</label>
-                    <select class="w-full border border-slate-200 rounded-xl px-3 py-2 text-xs focus:ring-2 focus:ring-rmd-500 focus:outline-none">
-                        <option>Miércoles 11 de Noviembre - 10:00 hrs</option>
-    <!-- FLOATING WHATSAPP BUTTON WITH AUTOMATED IA BOT DIRECT -->
-    <a href="https://wa.me/56912345678?text=Hola!%20Quiero%20agendar%20una%20hora%20con%20el%20asistente%20automatizado%20de%20RMDental" 
-       target="_blank" 
-       class="fixed bottom-6 right-6 z-50 flex items-center gap-3 bg-emerald-500 hover:bg-emerald-600 text-white p-3.5 sm:px-5 sm:py-3.5 rounded-full shadow-2xl transition-all transform hover:scale-105 pulse-whatsapp">
-        <i class="fa-brands fa-whatsapp text-2xl sm:text-3xl"></i>
-        <div class="hidden sm:flex flex-col text-left">
-            <span class="text-xs font-bold leading-tight">Agenda Automatizada</span>
-            <span class="text-[10px] text-emerald-100 font-medium">WhatsApp 24/7 con IA</span>
+  <section class="sec rm-team" id="dentistas">
+    <!-- EJEMPLO: nombres, especialidades y fotos de la maqueta. Reemplazar por los profesionales reales. -->
+    <div class="wrap rm-team-grid">
+      <div>
+        <p class="eyebrow">Dentistas en tu comuna</p>
+        <h2>Profesionales de excelencia cerca de ti</h2>
+        <p class="lead">Encuentra dentistas independientes en toda la Región Metropolitana.</p>
+      </div>
+      <div class="rm-mapwrap">
+        <div class="rm-dlist">
+          <a class="rm-dent" href="dentista-catalina-bravo.html" style="color:inherit;text-decoration:none"><img src="catalina-bravo.jpg" alt="Dra. Catalina Bravo" width="66" height="66"><div><h3>Dra. Catalina Bravo</h3><span>Odontología General<br>La Florida · Providencia</span></div><span class="go"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-chev"/></svg></span></a>
+          <article class="rm-dent"><img src="d2.jpg" alt="Dra. Camila Rojas" width="66" height="66"><div><h3>Dra. Camila Rojas</h3><span>Ortodoncia<br>Providencia</span></div><span class="go"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-chev"/></svg></span></article>
+          <article class="rm-dent"><img src="d3.jpg" alt="Dr. Ignacio Pérez" width="66" height="66"><div><h3>Dr. Ignacio Pérez</h3><span>Implantología<br>Ñuñoa</span></div><span class="go"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-chev"/></svg></span></article>
         </div>
-    </a>
+      </div>
+    </div>
+  </section>
 
-    <!-- JAVASCRIPT LOGIC UPDATED -->
-    <script>
-        // Mobile menu toggle
-        function toggleMobileMenu() {
-            const menu = document.getElementById('mobileMenu');
-            menu.classList.toggle('hidden');
+  <section class="sec rm-testi" id="testimonios">
+    <!-- EJEMPLO: testimonios de la maqueta. Reemplazar por opiniones reales de pacientes con su autorización. -->
+    <img class="rm-smile" src="smile.jpg" alt="" aria-hidden="true" width="179" height="199">
+    <div class="wrap">
+      <p class="eyebrow">Lo que dicen nuestros pacientes</p>
+      <h2>Historias reales, sonrisas reales</h2>
+      <div class="rm-tgrid">
+        <figure class="rm-tcard"><blockquote>Encontré un excelente dentista en mi comuna. La atención fue muy cercana y profesional.”</blockquote><figcaption class="rm-who"><img src="t1.jpg" alt="" width="42" height="42"><div>Valentina S.<span class="rm-stars" role="img" aria-label="5 de 5 estrellas"><svg viewBox="0 0 24 24"><use href="#i-star"/></svg><svg viewBox="0 0 24 24"><use href="#i-star"/></svg><svg viewBox="0 0 24 24"><use href="#i-star"/></svg><svg viewBox="0 0 24 24"><use href="#i-star"/></svg><svg viewBox="0 0 24 24"><use href="#i-star"/></svg></span></div></figcaption></figure>
+        <figure class="rm-tcard"><blockquote>Me encantó la facilidad para agendar y la calidad de la atención. 100% recomendado.”</blockquote><figcaption class="rm-who"><img src="t2.jpg" alt="" width="42" height="42"><div>Diego M.<span class="rm-stars" role="img" aria-label="5 de 5 estrellas"><svg viewBox="0 0 24 24"><use href="#i-star"/></svg><svg viewBox="0 0 24 24"><use href="#i-star"/></svg><svg viewBox="0 0 24 24"><use href="#i-star"/></svg><svg viewBox="0 0 24 24"><use href="#i-star"/></svg><svg viewBox="0 0 24 24"><use href="#i-star"/></svg></span></div></figcaption></figure>
+        <figure class="rm-tcard"><blockquote>Una plataforma confiable, con grandes profesionales. Muy buena experiencia.”</blockquote><figcaption class="rm-who"><img src="t3.jpg" alt="" width="42" height="42"><div>Carolina R.<span class="rm-stars" role="img" aria-label="5 de 5 estrellas"><svg viewBox="0 0 24 24"><use href="#i-star"/></svg><svg viewBox="0 0 24 24"><use href="#i-star"/></svg><svg viewBox="0 0 24 24"><use href="#i-star"/></svg><svg viewBox="0 0 24 24"><use href="#i-star"/></svg><svg viewBox="0 0 24 24"><use href="#i-star"/></svg></span></div></figcaption></figure>
+      </div>
+    </div>
+  </section>
+
+  <section class="band" aria-label="Resultados">
+    <div class="wrap">
+      <div class="stats" id="stats">
+        <div class="stat"><div class="n"><span class="pre">+de</span><span class="num" data-to="100">100</span></div><p class="lab">presupuestos mejorados</p></div>
+        <div class="stat"><div class="n"><span class="pre">+</span><span class="num" data-to="500">500</span></div><p class="lab">tratamientos terminados</p></div>
+        <div class="stat"><div class="n"><span class="pre">+</span><span class="num" data-to="250">250</span></div><p class="lab">sonrisas rehabilitadas</p></div>
+      </div>
+    </div>
+  </section>
+
+
+  <section class="sec budget" id="presupuesto">
+    <div class="wrap">
+      <div class="budget-grid">
+        <div>
+          <p class="eyebrow">Segunda mirada</p>
+          <h2>¿Tienes un presupuesto? Te lo mejoramos.</h2>
+          <p class="lead">Si nos indicas tu presupuesto y la radiografía que te entregaron, un cirujano dentista te da una segunda opinión. Te explicamos qué es necesario, qué puede esperar y si hay una forma más conveniente de resolverlo. Sin compromiso.</p>
+          <button class="btn btn-cta" type="button" id="open-budget" aria-expanded="false" aria-controls="budget-panel">Quiero recibir una oferta</button>
+        </div>
+        <ol class="steps">
+          <li><div><b>Nos envías tu presupuesto y tu radiografía</b><span>El tratamiento y el valor que te propusieron, más la radiografía que te dieron.</span></div></li>
+          <li><div><b>Lo revisamos con criterio clínico</b><span>Evaluamos cada etapa y cada costo.</span></div></li>
+          <li><div><b>Recibes una oferta por escrito</b><span>Detallada, clara y sin letra chica.</span></div></li>
+        </ol>
+      </div>
+
+      <div class="panel" id="budget-panel" hidden>
+        <form id="budget-form" novalidate>
+          <div class="form-grid">
+            <div class="field"><label for="b-name">Nombre</label><input id="b-name" name="name" autocomplete="name" placeholder="Tu nombre y apellido"></div>
+            <div class="field"><label for="b-phone">Teléfono o WhatsApp</label><input id="b-phone" name="phone" type="tel" autocomplete="tel" placeholder="+56 9 ..."></div>
+            <div class="field full"><label for="b-detail">¿Qué te propusieron y cuánto te cobraron?</label><textarea id="b-detail" name="detail" placeholder="Ej: 2 implantes y 6 coronas por $4.800.000"></textarea></div>
+          </div>
+          <div class="submit-row">
+            <button class="btn btn-cta" type="submit">Preparar mi solicitud</button>
+            <small>Después te llevamos a tu correo para que adjuntes una foto del presupuesto y tu radiografía.</small>
+          </div>
+          <p class="err" id="b-err" role="alert"></p>
+        </form>
+        <div class="done" id="budget-done" hidden>
+          <h3 data-h>Solicitud lista</h3>
+          <p data-p></p>
+          <a class="btn btn-cta" data-mail href="#">Enviar por correo</a>
+          <details class="mailfb" data-fb>
+            <summary>¿No se abrió tu programa de correo?</summary>
+            <p>Escribe a <b data-addr></b> y pega este mensaje.</p>
+            <textarea readonly rows="6" aria-label="Mensaje para copiar"></textarea>
+            <div class="mrow"><button type="button" class="btn btn-ghost" data-copy="addr">Copiar dirección</button><button type="button" class="btn btn-ghost" data-copy="msg">Copiar mensaje</button></div>
+          </details>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="sec agenda" id="agenda">
+    <div class="wrap">
+      <div class="head">
+        <p class="eyebrow">Agenda en línea</p>
+        <h2>Elige tu día y tu hora.</h2>
+        <div class="agenda-info"><p><b>La evaluación tiene un valor de $10.000</b> y la realiza un cirujano dentista.</p></div>
+        <div class="agenda-info"><p><b>Limpieza + evaluación: 20.000 pesos</b></p></div>
+        <p class="lead">Ingresa tu RUT, elige tu clínica y reserva en pocos minutos. Te confirmamos por WhatsApp y correo.</p>
+        <div class="agenda-info agenda-next"><p>Primera fecha disponible: <b data-proxima-fecha>en 7 días</b></p></div>
+        <div class="submit-row"><button type="button" class="btn btn-cta" data-agendar>Agendar hora</button></div>
+      </div>
+      <div class="panel" hidden>
+        <form id="book-form" novalidate>
+          <div class="field" style="max-width:420px">
+            <label for="reason">Motivo</label>
+            <select id="reason">
+              <option>Evaluación y presupuesto personalizado</option>
+              <option>Segunda opinión con un especialista</option>
+              <option>Otro</option>
+            </select>
+          </div>
+          <p class="pick-label" id="day-label">Día</p>
+          <div class="days cal" id="days" role="group" aria-labelledby="day-label"></div>
+          <p class="pick-label" id="band-label">¿En qué horario te acomoda?</p>
+          <div class="bands" id="bands" role="group" aria-labelledby="band-label"></div>
+          </div>
+          <p class="sum" id="sum">Selecciona un día y una hora.</p>
+          <p class="fine" id="cal-status" hidden style="color:var(--muted);font-size:.8rem"></p>
+          <div class="form-grid">
+            <div class="field"><label for="k-name">Nombre</label><input id="k-name" autocomplete="name" placeholder="Tu nombre y apellido"></div>
+            <div class="field"><label for="k-rut">RUT</label><input id="k-rut" data-rut inputmode="text" autocomplete="off" placeholder="12.345.678-5" maxlength="12"></div>
+            <div class="field"><label for="k-phone">Teléfono o WhatsApp</label><input id="k-phone" type="tel" autocomplete="tel" placeholder="+56 9 ..."></div>
+            <div class="field"><label for="k-email">Correo</label><input id="k-email" type="email" inputmode="email" autocomplete="email" placeholder="tu@correo.cl"></div>
+          </div>
+          <div class="submit-row">
+            <button class="btn btn-cta" type="submit">Solicitar esta hora</button>
+          </div>
+          <p class="err" id="k-err" role="alert"></p>
+        </form>
+        <div class="done" id="book-done" hidden>
+          <h3 data-h>Solicitud lista</h3>
+          <p data-p></p>
+          <a class="btn btn-cta" data-mail href="#">Enviar por correo</a>
+          <details class="mailfb" data-fb>
+            <summary>¿No se abrió tu programa de correo?</summary>
+            <p>Escribe a <b data-addr></b> y pega este mensaje.</p>
+            <textarea readonly rows="6" aria-label="Mensaje para copiar"></textarea>
+            <div class="mrow"><button type="button" class="btn btn-ghost" data-copy="addr">Copiar dirección</button><button type="button" class="btn btn-ghost" data-copy="msg">Copiar mensaje</button></div>
+          </details>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="final rm-cta" aria-label="Reserva tu hora">
+    <div class="wrap">
+      <h2>La odontología independiente también es una gran red.</h2>
+      <div class="right">
+        <a class="btn btn-cta" href="#agenda">Reservar hora <svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-chev"/></svg></a>
+        <p>Sé parte de Red Metropolitana Dental y llega a más pacientes.</p>
+      </div>
+    </div>
+  </section>
+  <section class="sec contact" id="consulta" aria-labelledby="c-h">
+    <div class="wrap c-grid">
+      <div>
+        <p class="eyebrow">Escríbenos</p>
+        <h2 id="c-h">¿Tienes alguna consulta?</h2>
+        <p class="lead">Cuéntanos qué necesitas y te respondemos lo antes posible. Tu mensaje llega directo al equipo de RM Dental.</p>
+      </div>
+      <div>
+        <form id="c-form" class="c-form" novalidate>
+          <div class="field"><label for="c-msg">Tu consulta</label><textarea id="c-msg" maxlength="1500" placeholder="Escribe aquí tu consulta"></textarea></div>
+          <div class="c-row">
+            <div class="field"><label for="c-phone">Teléfono</label><input id="c-phone" type="tel" inputmode="tel" autocomplete="tel" placeholder="+56 9 1234 5678"></div>
+            <div class="field"><label for="c-email">Email <span class="opt">(opcional)</span></label><input id="c-email" type="email" autocomplete="email" placeholder="tu@correo.cl"></div>
+          </div>
+          <div class="field"><label for="c-name">Nombre <span class="opt">(opcional)</span></label><input id="c-name" type="text" autocomplete="name"></div>
+          <button class="btn btn-cta" type="submit">Enviar consulta</button>
+          <p class="err" id="c-err" role="alert"></p>
+          <p class="fine">Usaremos tus datos solo para responder a tu consulta.</p>
+        </form>
+        <div class="done" id="c-done" hidden>
+          <h3 data-h>Consulta lista</h3>
+          <p data-p></p>
+          <a class="btn btn-cta" data-mail href="#">Enviar por correo</a>
+          <details class="mailfb" data-fb>
+            <summary>¿No se abrió tu programa de correo?</summary>
+            <p>Escribe a <b data-addr></b> y pega este mensaje.</p>
+            <textarea readonly rows="6" aria-label="Mensaje para copiar"></textarea>
+            <div class="mrow"><button type="button" class="btn btn-ghost" data-copy="addr">Copiar dirección</button><button type="button" class="btn btn-ghost" data-copy="msg">Copiar mensaje</button></div>
+          </details>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="foot">
+  <div class="wrap">
+    <div><b>RM Dental</b> · Red Metropolitana Dental<br>La Concepción 81, Providencia, Santiago</div>
+    <div><span class="mono">contacto@rmdental.cl</span><br>Lun · Mié · Vie 09:00–15:00 · Sáb 09:00–13:00</div>
+  </div>
+</footer>
+
+
+
+
+<script>
+(function(){
+  var CFG={clinic:"RM Dental (Red Metropolitana Dental)"};
+  var DOW=["domingo","lunes","martes","miércoles","jueves","viernes","sábado"];
+  var DOWS=["dom","lun","mar","mié","jue","vie","sáb"];
+  var MON=["enero","febrero","marzo","abril","mayo","junio","julio","agosto","septiembre","octubre","noviembre","diciembre"];
+  var $=function(id){return document.getElementById(id)};
+
+  function pad(n){return n<10?"0"+n:""+n}
+  function fmt(m){return pad(Math.floor(m/60))+":"+pad(m%60)}
+  function slotsFor(d){
+    var w=d.getDay();if(w===0||w===2||w===4)return[]; /* domingo, martes y jueves sin atención */
+    var t=[];
+    function add(a,b){for(var m=a*60;m<b*60;m+=30)t.push(m)}
+    if(w===6){add(9,13)}else{add(9,15)}
+    return t;
+  }
+  var CAL_URL="https://script.google.com/macros/s/AKfycbzLgH3RpwsWgI6PYc9_LBGC6hWgk_qmBcvTMjpqpm12vkbMAzET9SUNI4gEtbG9WIscaA/exec"; /* URL /exec del script de Google Calendar (ver calendario-rm-dental.gs). Vacío = todas las horas libres. */
+  var busy={};
+  function dkey(d){return d.getFullYear()+"-"+pad(d.getMonth()+1)+"-"+pad(d.getDate())}
+  function isTaken(d,m){
+    var a=busy[dkey(d)]||[];
+    for(var i=0;i<a.length;i++){if(a[i][0]<m+30&&a[i][1]>m)return true}
+    return false;
+  }
+  function freeTimes(d,isToday,nowMin){
+    return slotsFor(d).filter(function(m){
+      if(isToday&&m<nowMin+30)return false;
+      return !isTaken(d,m);
+    });
+  }
+  function longDate(d){return DOW[d.getDay()]+" "+d.getDate()+" de "+MON[d.getMonth()]}
+
+  /* build days */
+  var now=new Date();
+  var nowMin=now.getHours()*60+now.getMinutes();
+  var days=[],selDay=null,selTime=null,selBand=null,animNext=false;
+  var BANDS=[{k:"manana",n:"Mañana",a:0,b:720},{k:"mediodia",n:"Mediodía",a:720,b:840},{k:"tarde",n:"Tarde",a:840,b:1441}];
+  function bandWhen(k){return k==="manana"?"en la mañana":k==="mediodia"?"al mediodía":"en la tarde"}
+  function bandOf(m){for(var i=0;i<BANDS.length;i++){if(m>=BANDS[i].a&&m<BANDS[i].b)return BANDS[i].k}return null}
+  var MIN_DAYS=3; /* anticipación mínima, en días, para reservar */
+  function buildDays(){
+    days=[];
+    for(var i=MIN_DAYS;i<MIN_DAYS+28&&days.length<14;i++){
+      var d=new Date(now.getFullYear(),now.getMonth(),now.getDate()+i);
+      var free=freeTimes(d,i===0,nowMin);
+      if(d.getDay()===0||free.length===0)continue;
+      days.push({date:d,isToday:i===0,free:free});
+    }
+    selDay=days.length?0:null;selTime=null;selBand=null;calView=null;
+  }
+  buildDays();
+
+  var daysEl=$("days"),timesEl=$("times"),sumEl=$("sum");
+  var calView=null;
+  var MN=["enero","febrero","marzo","abril","mayo","junio","julio","agosto","septiembre","octubre","noviembre","diciembre"];
+  function drawCal(el,list,selDate,pick){
+    el.innerHTML="";
+    var map={};list.forEach(function(o,i){map[dkey(o.date)]=i});
+    var s0=list[0].date,sN=list[list.length-1].date;
+    var minM=s0.getFullYear()*12+s0.getMonth(),maxM=sN.getFullYear()*12+sN.getMonth();
+    if(calView===null)calView=(selDate||s0).getFullYear()*12+(selDate||s0).getMonth();
+    var y=Math.floor(calView/12),m=calView%12;
+    var head=document.createElement("div");head.className="cal-head";
+    function nav(dir,label,dis){var b=document.createElement("button");b.type="button";b.className="cal-nav";b.textContent=dir<0?"‹":"›";b.setAttribute("aria-label",label);b.disabled=dis;b.addEventListener("click",function(){calView+=dir;drawCal(el,list,selDate,pick)});return b}
+    var t=document.createElement("strong");t.className="cal-title";t.setAttribute("aria-live","polite");t.textContent=MN[m]+" "+y;
+    head.appendChild(nav(-1,"Mes anterior",calView<=minM));head.appendChild(t);head.appendChild(nav(1,"Mes siguiente",calView>=maxM));
+    el.appendChild(head);
+    var grid=document.createElement("div");grid.className="cal-grid";
+    ["L","M","M","J","V","S","D"].forEach(function(w){var s=document.createElement("span");s.className="cal-w";s.setAttribute("aria-hidden","true");s.textContent=w;grid.appendChild(s)});
+    var first=new Date(y,m,1),off=(first.getDay()+6)%7,n=new Date(y,m+1,0).getDate();
+    for(var i=0;i<off;i++){grid.appendChild(document.createElement("span"))}
+    for(var d=1;d<=n;d++){
+      var dt=new Date(y,m,d),k=dkey(dt),idx=map[k],c;
+      if(idx===undefined){c=document.createElement("span");c.className="cal-d off";c.textContent=d}
+      else{c=document.createElement("button");c.type="button";c.className="cal-d";c.textContent=d;
+        c.setAttribute("aria-label",longDate(dt));
+        c.setAttribute("aria-pressed",selDate&&dkey(selDate)===k?"true":"false");
+        (function(i){c.addEventListener("click",function(){pick(i)})})(idx)}
+      grid.appendChild(c);
+    }
+    el.appendChild(grid);
+  }
+  function renderDays(){
+    if(!days.length){daysEl.innerHTML="";var p=document.createElement("p");p.style.color="var(--muted)";p.textContent="No hay horas disponibles por ahora. Escríbenos y te ayudamos.";daysEl.appendChild(p);return}
+    drawCal(daysEl,days,selDay!==null?days[selDay].date:null,function(i){selDay=i;selTime=null;selBand=null;renderDays();renderTimes();renderSum()});
+  }
+  function slotOk(o,m){return !(isTaken(o.date,m)||(o.isToday&&m<nowMin+30))}
+  function renderBands(){
+    var be=$("bands");be.innerHTML="";
+    if(selDay===null){var p=document.createElement("p");p.style.color="var(--muted)";p.textContent="Primero elige un día.";be.appendChild(p);return}
+    var o=days[selDay],all=slotsFor(o.date);
+    BANDS.forEach(function(B){
+      var inB=all.filter(function(m){return m>=B.a&&m<B.b});
+      if(!inB.length)return;
+      var free=inB.filter(function(m){return slotOk(o,m)});
+      var b=document.createElement("button");b.type="button";b.className="band";
+      b.setAttribute("aria-pressed",selBand===B.k?"true":"false");
+      var n=document.createElement("b");n.textContent=B.n;
+      b.appendChild(n);
+      if(!free.length){var sp=document.createElement("span");sp.textContent="Sin horas";b.appendChild(sp)}
+      if(!free.length)b.disabled=true;
+      b.addEventListener("click",function(){selBand=B.k;selTime=null;renderTimes();renderSum()});
+      be.appendChild(b);
+    });
+  }
+  function renderTimes(){renderBands()}
+  function renderSum(){
+    if(selDay===null||selBand===null){
+      sumEl.textContent=selDay===null?"Selecciona un día y un horario.":"Elige en qué horario te acomoda el "+longDate(days[selDay].date)+".";
+      return;
+    }
+    sumEl.textContent=$("reason").value+" · "+longDate(days[selDay].date)+", "+bandWhen(selBand);
+  }
+  $("reason").addEventListener("change",renderSum);
+  
+
+  function renderNext(){$("next-btn").hidden=false} /* la fecha de la tarjeta la pone reserva.js (hoy + 7 días) */
+  /* La tarjeta de la portada ya no usa el calendario antiguo: abre el agendador nuevo, que lee la agenda real de la clínica */
+  $("next-btn").textContent="Agendar hora";$("next-btn").onclick=function(){if(window.RMReserva)RMReserva.open()};
+  renderDays();renderTimes();renderSum();
+  /* Calendario: fetch y, si falla, JSONP. Agrega ?debug a la URL del sitio para ver el estado. */
+  var dbg=/[?&]debug/.test(location.search),stEl=$("cal-status");
+  function setSt(t){try{console.log("[calendario] "+t)}catch(e){}if(dbg&&stEl){stEl.hidden=false;stEl.textContent="Calendario: "+t}}
+  function applyBusy(j){
+    busy=(j&&j.busy)||{};buildDays();renderNext();renderDays();renderTimes();renderSum();
+    setSt("conectado, "+Object.keys(busy).length+" día(s) con eventos");
+  }
+  function calJsonp(){
+    var cb="__cal"+Date.now(),sc=document.createElement("script");
+    window[cb]=function(j){applyBusy(j)};
+    sc.onerror=function(){setSt("no se pudo leer (revisa la implementación del script)")};
+    sc.src=CAL_URL+"?callback="+cb+"&t="+Date.now();document.head.appendChild(sc);
+  }
+  if(CAL_URL){
+    try{fetch(CAL_URL+"?t="+Date.now()).then(function(r){return r.text()}).then(function(t){applyBusy(JSON.parse(t))}).catch(function(err){setSt("fetch falló ("+err+"), probando otro método");calJsonp()})}catch(e){calJsonp()}
+  }else{setSt("sin URL configurada")}
+
+  var MAIL="contacto@rmdental.cl";
+  /* Envío automático: pega aquí la dirección de tu servicio de formularios (Formspree, Web3Forms, Netlify Forms u otro) configurado para entregar en contacto@rmdental.cl.
+     Si queda vacío, la persona envía el correo desde su programa de correo, con el mensaje ya escrito. */
+  var FORM_ENDPOINT="https://formsubmit.co/ajax/contacto@rmdental.cl";
+  function mailHref(subject,body){return "mailto:"+MAIL+"?subject="+encodeURIComponent(subject)+"&body="+encodeURIComponent(body)}
+  /* Meta Pixel: pega aquí el ID del píxel (15-16 dígitos). Vacío = no se carga nada. */
+  var META_PIXEL_ID="";
+  (function(){
+    if(!META_PIXEL_ID)return;
+    try{
+      !function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version="2.0";n.queue=[];t=b.createElement(e);t.async=!0;t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,document,"script","https://connect.facebook.net/en_US/fbevents.js");
+      window.fbq("init",META_PIXEL_ID);window.fbq("track","PageView");
+    }catch(e){}
+  })();
+  /* Se avisa a Meta solo cuando la solicitud se envió. No se manda ningún dato personal ni el motivo de consulta. */
+  function metaTrack(p){
+    try{
+      if(!META_PIXEL_ID||!window.fbq)return;
+      var id="rm"+Date.now()+Math.random().toString(36).slice(2,8);
+      window.fbq("track","Lead",{},{eventID:id});
+      if(/^Solicitud de hora/.test((p&&p.subject)||""))window.fbq("track","Schedule",{},{eventID:id+"s"});
+    }catch(e){}
+  }
+  function setBusy(b,on){
+    if(on){b.dataset.label=b.textContent;b.textContent="Enviando solicitud…";b.classList.add("is-loading");b.setAttribute("aria-busy","true");b.disabled=true}
+    else{if(b.dataset.label)b.textContent=b.dataset.label;b.classList.remove("is-loading");b.removeAttribute("aria-busy");b.disabled=false}
+  }
+  function sendLead(payload){
+    if(!FORM_ENDPOINT)return Promise.resolve(false);
+    return fetch(FORM_ENDPOINT,{method:"POST",headers:{"Content-Type":"application/json","Accept":"application/json"},body:JSON.stringify(Object.assign({_subject:payload.subject,_template:"table",_captcha:"false"},payload))}).then(function(r){if(r.ok)metaTrack(payload);return r.ok}).catch(function(){return false});
+  }
+  function renderDone(box,ok,subject,body,okMsg,mailMsg){
+    box.querySelector("[data-h]").textContent=ok?"Solicitud enviada":"Solicitud lista";
+    box.querySelector("[data-p]").textContent=ok?okMsg:mailMsg;
+    var a=box.querySelector("[data-mail]"),fb=box.querySelector("[data-fb]");
+    a.hidden=ok;fb.hidden=ok;
+    if(!ok){a.href=mailHref(subject,body);fb.querySelector("[data-addr]").textContent=MAIL;fb.querySelector("textarea").value=body}
+    box.hidden=false;
+  }
+  [].slice.call(document.querySelectorAll(".mailfb")).forEach(function(fb){
+    fb.addEventListener("click",function(e){
+      var btn=e.target.closest("[data-copy]");if(!btn)return;
+      var ta=fb.querySelector("textarea"),isAddr=btn.getAttribute("data-copy")==="addr",text=isAddr?MAIL:ta.value,old=btn.textContent;
+      function ok(){btn.textContent="Copiado";setTimeout(function(){btn.textContent=old},1600)}
+      function fail(){if(!isAddr){ta.focus();ta.select()}}
+      try{navigator.clipboard.writeText(text).then(ok,fail)}catch(x){fail()}
+    });
+  });
+  function validPhone(v){return v.replace(/\D/g,"").length>=8}
+
+  /* booking submit */
+  $("book-form").addEventListener("submit",function(e){
+    e.preventDefault();
+    var name=$("k-name").value.trim(),phone=$("k-phone").value.trim(),email=$("k-email").value.trim(),err=$("k-err");
+    if(selDay===null||selBand===null){err.textContent="Elige un día y un horario.";return}
+    if(!name){err.textContent="Escribe tu nombre.";$("k-name").focus();return}
+    var rut=RMRut.format($("k-rut").value);if(!RMRut.valid(rut)){err.textContent="Escribe un RUT válido (con dígito verificador).";$("k-rut").focus();return}
+    if(!validPhone(phone)){err.textContent="Escribe un teléfono válido para confirmarte la hora.";$("k-phone").focus();return}
+    if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){err.textContent="Escribe un correo válido (debe llevar @).";$("k-email").focus();return}
+    err.textContent="";
+    var when=longDate(days[selDay].date)+", "+bandWhen(selBand);
+    var msg="Hola, soy "+name+". Quiero reservar una hora en "+CFG.clinic+".\nMotivo: "+$("reason").value+"\nFecha: "+when+"\nMi RUT: "+rut+"\nMi teléfono: "+phone+"\nMi correo: "+email;
+    var subject="Solicitud de hora · "+$("reason").value;
+    var detail=$("reason").value+", "+when+".";
+    var sbtn=$("book-form").querySelector("button[type=submit]");setBusy(sbtn,true);
+    var payload={subject:subject,message:msg,name:name,phone:phone,rut:rut,email:email};
+    sendLead(payload).then(function(ok){
+      setBusy(sbtn,false);
+      renderDone($("book-done"),ok,subject,msg,detail+" Recibimos tu solicitud. La clínica te contactará para confirmar la hora e indicarte cómo pagar para reservarla.",detail+" Envía el correo y la clínica te confirma la hora e indica cómo pagar para reservarla.");
+      $("book-form").hidden=true;
+    });
+  });
+
+  /* budget */
+  var bBtn=$("open-budget"),bPanel=$("budget-panel");
+  bBtn.addEventListener("click",function(){
+    var open=bPanel.hidden;
+    bPanel.hidden=!open;
+    bBtn.setAttribute("aria-expanded",open?"true":"false");
+    if(open){bPanel.scrollIntoView({block:"center"});setTimeout(function(){$("b-name").focus({preventScroll:true})},250)}
+  });
+  $("budget-form").addEventListener("submit",function(e){
+    e.preventDefault();
+    var name=$("b-name").value.trim(),phone=$("b-phone").value.trim(),detail=$("b-detail").value.trim(),err=$("b-err");
+    if(!name){err.textContent="Escribe tu nombre.";$("b-name").focus();return}
+    if(!validPhone(phone)){err.textContent="Escribe un teléfono válido para enviarte la oferta.";$("b-phone").focus();return}
+    if(!detail){err.textContent="Cuéntanos qué te propusieron.";$("b-detail").focus();return}
+    err.textContent="";
+    var msg="Hola, soy "+name+". Tengo un presupuesto y quiero recibir una oferta de "+CFG.clinic+".\nMe propusieron: "+detail+"\nMi teléfono: "+phone+"\n(Adjunto foto del presupuesto y mi radiografía)";
+    var subject="Solicitud de oferta · revisión de presupuesto";
+    var sbtn=$("budget-form").querySelector("button[type=submit]");sbtn.disabled=true;
+    sendLead({subject:subject,message:msg,name:name,phone:phone}).then(function(ok){
+      sbtn.disabled=false;
+      renderDone($("budget-done"),ok,subject,msg,"Recibimos tu solicitud. Un cirujano dentista te responderá con una oferta por escrito y te pedirá una foto de tu presupuesto y tu radiografía.","Envía el correo y adjunta la foto de tu presupuesto y tu radiografía. Un cirujano dentista te responde con una oferta por escrito.");
+      $("budget-form").hidden=true;
+    });
+  });
+
+
+  /* correo: muestra y copia la dirección (el enlace mailto puede no abrir un programa) */
+  [].slice.call(document.querySelectorAll(".soc a.mail")).forEach(function(a){
+    a.addEventListener("click",function(){
+      var addr=a.getAttribute("data-mail"),out=a.parentNode.nextElementSibling;
+      if(out){out.hidden=false;out.textContent=addr}
+      try{navigator.clipboard.writeText(addr).then(function(){if(out)out.textContent=addr+" · copiado"},function(){})}catch(e){}
+    });
+  });
+
+  /* counters */
+  var nums=[].slice.call(document.querySelectorAll(".num"));
+  var reduce=window.matchMedia&&window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  if(!reduce&&"IntersectionObserver" in window){
+    var io=new IntersectionObserver(function(entries){
+      entries.forEach(function(en){
+        if(!en.isIntersecting)return;
+        io.unobserve(en.target);
+        var el=en.target,to=+el.getAttribute("data-to"),dur=1700,t0=null;
+        function step(ts){
+          if(t0===null)t0=ts;
+          var p=Math.min((ts-t0)/dur,1),e=1-Math.pow(1-p,3);
+          el.textContent=Math.round(to*e);
+          if(p<1)requestAnimationFrame(step);else el.textContent=to;
         }
+        el.textContent="0";
+        requestAnimationFrame(step);
+      });
+    },{threshold:0.6});
+    nums.forEach(function(n){io.observe(n)});
+  }
 
-        // Fill search tag
-        function fillSearch(text) {
-            document.getElementById('aiSearchInput').value = text;
-            handleAISearch(new Event('submit'));
-        }
+  /* consulta libre */
+  (function(){
+    var cf=document.getElementById("c-form");if(!cf)return;
+    var G=function(i){return document.getElementById(i)};
+    ["wa-top","wa-end"].forEach(function(i){var a=G(i);if(a)a.setAttribute("href","#consulta")});
+    [].slice.call(document.querySelectorAll('a[href="#consulta"]')).forEach(function(a){
+      a.addEventListener("click",function(){setTimeout(function(){try{G("c-msg").focus({preventScroll:true})}catch(e){}},400)});
+    });
+    cf.addEventListener("submit",function(e){
+      e.preventDefault();
+      var q=G("c-msg").value.trim(),phone=G("c-phone").value.trim(),email=G("c-email").value.trim(),name=G("c-name").value.trim(),err=G("c-err");
+      if(q.length<5){err.textContent="Escribe tu consulta.";G("c-msg").focus();return}
+      if(phone.replace(/\D/g,"").length<8){err.textContent="Escribe un teléfono válido para responderte.";G("c-phone").focus();return}
+      if(email&&!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){err.textContent="Revisa el email o déjalo en blanco.";G("c-email").focus();return}
+      err.textContent="";
+      var subject="Consulta desde la web · Página principal";
+      var msg="Consulta desde la web (Página principal)\n"+(name?"Nombre: "+name+"\n":"")+"Teléfono: "+phone+"\n"+(email?"Email: "+email+"\n":"")+"\nConsulta:\n"+q;
+      var btn=cf.querySelector("button[type=submit]");btn.disabled=true;
+      var payload={subject:subject,message:msg,phone:phone};if(name)payload.name=name;if(email)payload.email=email;
+      sendLead(payload).then(function(ok){
+        btn.disabled=false;
+        renderDone(G("c-done"),ok,subject,msg,"Recibimos tu consulta. Te responderemos lo antes posible.","Envía el correo y te responderemos lo antes posible.");
+        cf.hidden=true;
+        G("c-done").scrollIntoView({block:"nearest"});
+      });
+    });
+  })();
+})();
 
-        // AI Search handler simulation
-        function handleAISearch(event) {
-            event.preventDefault();
-            const input = document.getElementById('aiSearchInput');
-            const query = input.value.trim();
-            if (!query) return;
-
-            const responsePanel = document.getElementById('aiResponsePanel');
-            const responseText = document.getElementById('aiResponseText');
-
-            responsePanel.classList.remove('hidden');
-            responseText.innerHTML = `<i class="fa-solid fa-spinner fa-spin text-rmd-600 mr-2"></i> Procesando tu requerimiento con IA RMDental...`;
-
-            setTimeout(() => {
-                if (query.toLowerCase().includes('dolor') || query.toLowerCase().includes('urgencia')) {
-                    responseText.innerHTML = `Detectamos posible <strong>urgencia o tratamiento endodóntico/restaurativo</strong>. Te recomendamos reservar con la <strong>Dra. Catalina Bravo</strong> o llamar a nuestro Call Center <strong>600 800 3400</strong>.`;
-                } else if (query.toLowerCase().includes('limpieza') || query.toLowerCase().includes('profilaxis')) {
-                    responseText.innerHTML = `Para profilaxis preventiva tenemos disponibilidad hoy mismo por <strong>$10.000</strong>. Puedes agendar vía WhatsApp automatizado o en nuestro calendario.`;
-                } else {
-                    responseText.innerHTML = `Para "${query}", hemos seleccionado 3 cirujanos dentistas independientes en la Región Metropolitana con disponibilidad esta semana.`;
-                }
-            }, 1000);
-        }
-
-        // Fill search tag
-        function fillSearch(text) {
-            document.getElementById('aiSearchInput').value = text;
-        }
-
-        // AI Search handler simulation
-        function handleAISearch(event) {
-            event.preventDefault();
-            const query = document.getElementById('aiSearchInput').value.trim();
-            if (!query) return;
-
-            showNotification(`Buscando dentistas para: "${query}"...`);
-            
-            // Scroll to dentists grid
-            const dentistasSection = document.getElementById('dentistas');
-            if(dentistasSection) {
-                dentistasSection.scrollIntoView({ behavior: 'smooth' });
-            }
-        }
-
-        // Commune filter logic
-        function filterDentists(commune) {
-            const cards = document.querySelectorAll('.dentist-card');
-            const buttons = document.querySelectorAll('.filter-btn');
-
-            buttons.forEach(btn => {
-                btn.classList.remove('bg-rmd-600', 'text-white', 'active');
-                btn.classList.add('bg-slate-100', 'text-slate-600');
-            });
-
-            event.target.classList.remove('bg-slate-100', 'text-slate-600');
-            event.target.classList.add('bg-rmd-600', 'text-white', 'active');
-
-            cards.forEach(card => {
-                if (commune === 'todas' || card.getAttribute('data-commune') === commune) {
-                    card.style.display = 'block';
-                } else {
-                    card.style.display = 'none';
-                }
-            });
-        }
-
-        // Modal Controls
-        function openBookingModal(dentistName = 'Cualquier dentista disponible') {
-            document.getElementById('selectedDentistInput').value = dentistName;
-            const modal = document.getElementById('bookingModal');
-            modal.classList.remove('hidden');
-            modal.classList.add('flex');
-        }
-
-        function closeBookingModal() {
-            const modal = document.getElementById('bookingModal');
-            modal.classList.add('hidden');
-            modal.classList.remove('flex');
-        }
-
-        function showDetailsModal(name, commune, spec, rating) {
-            document.getElementById('modalDentistName').innerText = name;
-            document.getElementById('modalDentistSpec').innerText = `${spec} - ${commune}`;
-            document.getElementById('modalDentistRating').innerText = rating;
-
-            const modal = document.getElementById('detailsModal');
-            modal.classList.remove('hidden');
-            modal.classList.add('flex');
-        }
-
-        function closeDetailsModal() {
-            const modal = document.getElementById('detailsModal');
-            modal.classList.add('hidden');
-            modal.classList.remove('flex');
-        }
-
-        // Submit Booking Simulation
-        function submitBooking(event) {
-            event.preventDefault();
-            closeBookingModal();
-            showNotification('¡Reserva registrada con éxito! Te enviamos un correo de confirmación.');
-        }
-
-        // Custom Notification Toast
-        function showNotification(msg) {
-            const box = document.getElementById('notificationBox');
-            const msgEl = document.getElementById('notificationMessage');
-            msgEl.innerText = msg;
-
-            box.classList.remove('translate-y-20', 'opacity-0', 'pointer-events-none');
-            
-            setTimeout(() => {
-                box.classList.add('translate-y-20', 'opacity-0', 'pointer-events-none');
-            }, 4000);
-        }
-    </script>
+  /* menú de servicios: se cierra al tocar fuera o con Escape */
+  (function(){
+    var m=document.getElementById("svc-menu");if(!m)return;
+    document.addEventListener("click",function(e){if(m.open&&!m.contains(e.target))m.open=false});
+    document.addEventListener("keydown",function(e){if(e.key==="Escape"&&m.open){m.open=false;var sm=m.querySelector("summary");if(sm)sm.focus()}});
+  })();
+</script>
+<script>
+/* Buscador inteligente con conversación (DeepSeek vía api.rmdental.cl). Todo el texto se inserta con textContent. */
+(function(){
+  var f=document.getElementById("rm-search");if(!f)return;
+  var q=document.getElementById("rm-q"),ans=document.getElementById("rm-ans"),sel=document.getElementById("reason");
+  var API=(window.RM_API_URL||"https://api.rmdental.cl").replace(/\/+$/,"");
+  var busy=false,hist=[],turns=null,reply=null,rin=null;
+  function pick(t){
+    t=(t||"").toLowerCase();var v="Otro";
+    if(/implant/.test(t))v="Mantención profesional de implantes";
+    else if(/amalgam|resina|estétic|estetic|blanque/.test(t))v="Renovación de amalgamas por resinas estéticas";
+    else if(/segunda|opini/.test(t))v="Segunda opinión con un especialista";
+    else if(/presupuest|evalua|limpie|control|profilax/.test(t))v="Evaluación y presupuesto personalizado";
+    return v;
+  }
+  function setReason(v){if(!sel)return;var ok=[].some.call(sel.options,function(o){return o.value===v});sel.value=ok?v:"Otro";sel.dispatchEvent(new Event("change"))}
+  function agendar(motivo){
+    setReason(motivo);
+    if(window.RMReserva){RMReserva.open();return}
+    var a=document.getElementById("agenda");if(a)a.scrollIntoView({behavior:"smooth"});
+  }
+  function el(tag,cls,txt){var n=document.createElement(tag);if(cls)n.className=cls;if(txt)n.textContent=txt;return n}
+  function setBusy(v){busy=v;f.classList.toggle("busy",v);if(rin){rin.disabled=v;reply.classList.toggle("busy",v)}}
+  function scrollEnd(n){if(!turns)return;turns.scrollTop=n?Math.max(0,n.offsetTop-4):turns.scrollHeight}
+  /* panel de conversación: turnos + cuadro para responder */
+  function abrir(){
+    ans.textContent="";ans.hidden=false;ans.classList.remove("urgent");
+    turns=el("div","rm-turns");ans.appendChild(turns);
+    reply=el("form","rm-reply");reply.setAttribute("aria-label","Responder a RMDental");
+    rin=el("input");rin.type="text";rin.maxLength=300;rin.placeholder="Responde a RMDental…";rin.setAttribute("aria-label","Responder a RMDental");rin.autocomplete="off";
+    var rb=el("button");rb.type="submit";rb.setAttribute("aria-label","Enviar respuesta");
+    rb.innerHTML='<svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-send"/></svg>';
+    reply.appendChild(rin);reply.appendChild(rb);ans.appendChild(reply);
+    reply.addEventListener("submit",function(e){e.preventDefault();var t=rin.value.replace(/\s+/g," ").trim();if(!t||busy)return;rin.value="";consultar(t,true)});
+  }
+  function cargando(){
+    var ld=el("div","rm-load");ld.setAttribute("role","status");
+    var d=el("span","rm-dots");for(var i=0;i<3;i++)d.appendChild(document.createElement("i"));
+    ld.appendChild(d);ld.appendChild(el("span","rm-load-t","RMDental está buscando para ti…"));
+    return ld;
+  }
+  function boton(motivo){
+    var b=el("button","rm-ans-b","Agendar hora");b.type="button";
+    b.addEventListener("click",function(){agendar(motivo)});return b;
+  }
+  function quitarBotones(){[].slice.call(turns.querySelectorAll(".rm-ans-b")).forEach(function(b){b.remove()})}
+  function iniciales(n){var p=String(n).replace(/^\s*(dr|dra)\.?\s+/i,"").split(/\s+/).filter(Boolean);return((p[0]||"").charAt(0)+(p.length>1?p[p.length-1].charAt(0):"")).toUpperCase()}
+  /* tarjeta de perfil: foto (o iniciales), nombre, especialidad y comunas; enlaza a su página si existe */
+  function perfil(p){
+    var card=el(p.url?"a":"div","rm-pf");
+    if(p.url)card.href=p.url;
+    var av=el("span","rm-pf-av",iniciales(p.nombre));
+    if(p.foto){
+      var im=document.createElement("img");im.alt="";im.width=44;im.height=44;im.loading="lazy";im.src=p.foto;
+      im.addEventListener("load",function(){av.textContent="";av.appendChild(im)});
+    }
+    card.appendChild(av);
+    var t=el("span","rm-pf-t");
+    t.appendChild(el("b","",p.nombre));
+    var sub=[p.especialidad].concat((p.comunas||[]).length?[p.comunas.join(" · ")]:[]).filter(Boolean).join(" — ");
+    if(sub)t.appendChild(el("small","",sub));
+    card.appendChild(t);
+    if(p.url){var go=el("span","rm-pf-go");go.innerHTML='<svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-chev"/></svg>';card.appendChild(go)}
+    return card;
+  }
+  function bloque(r,motivo){
+    var w=el("div","rm-bot"+(r.urgente?" urgent":""));
+    w.appendChild(el("p","rm-ans-t",r.respuesta));
+    if(r.charla)return w;
+    var pf=r.perfiles||[];
+    if(pf.length){
+      var cards=el("div","rm-pfs");
+      pf.forEach(function(p){cards.appendChild(perfil(p))});
+      w.appendChild(cards);
+    }
+    var chips=el("div","rm-ans-l");
+    if(!pf.length)(r.profesionales||[]).forEach(function(p){chips.appendChild(el("span","rm-tag",p.nombre+(p.especialidad?" · "+p.especialidad:"")))});
+    (r.clinicas||[]).forEach(function(c){chips.appendChild(el("span","rm-tag",c.nombre+" · "+(c.direccion?(c.direccion.indexOf(c.comuna)>-1?c.direccion:c.direccion+", "+c.comuna):c.comuna)))});
+    if(chips.children.length)w.appendChild(chips);
+    if((r.horas||[]).length){
+      var h=el("div","rm-ans-h");h.appendChild(el("span","rm-ans-k","Próximas horas"));
+      r.horas.forEach(function(x){h.appendChild(el("span","rm-tag rm-hr",x.texto))});
+      w.appendChild(h);
+    }
+    if(!r.urgente)w.appendChild(boton(r.motivo||motivo));
+    return w;
+  }
+  function consultar(t,esRespuesta){
+    if(busy)return;
+    if(!esRespuesta){hist=[];abrir()}
+    else turns.appendChild(el("div","rm-me",t));
+    setBusy(true);
+    var ld=cargando();turns.appendChild(ld);scrollEnd();
+    var ctl=window.AbortController?new AbortController():null,timer=setTimeout(function(){if(ctl)ctl.abort()},15000);
+    fetch(API+"/buscador/consulta",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({q:t,historial:hist.slice(-6)}),signal:ctl?ctl.signal:undefined})
+      .then(function(r){if(!r.ok)throw new Error("http "+r.status);return r.json()})
+      .then(function(r){
+        if(!r||!r.ok)throw new Error("resp");
+        quitarBotones();var bl=bloque(r,pick(t));ld.replaceWith(bl);scrollEnd(bl);
+        hist.push({role:"user",content:t},{role:"assistant",content:r.respuesta});
+        ans.classList.toggle("urgent",!!r.urgente);
+      })
+      .catch(function(err){
+        if(window.console)console.warn("Buscador IA:",err&&err.message);
+        var w=el("div","rm-bot");w.appendChild(el("p","rm-ans-t","No pude responder en este momento. Puedes intentarlo de nuevo o agendar tu hora directamente."));w.appendChild(boton(pick(t)));
+        quitarBotones();ld.replaceWith(w);scrollEnd(w);
+      })
+      .then(function(){clearTimeout(timer);setBusy(false);if(rin){rin.focus({preventScroll:true})}});
+  }
+  /* La foto de la derecha conserva su altura original: no se estira cuando la conversación crece */
+  var art=document.querySelector(".rm-art");
+  function fijarFoto(){
+    if(!art||!ans.hidden)return;
+    art.style.maxHeight="";
+    if(window.innerWidth>860)art.style.maxHeight=Math.round(art.getBoundingClientRect().height)+"px";
+  }
+  fijarFoto();window.addEventListener("load",fijarFoto);window.addEventListener("resize",fijarFoto);
+  if(document.fonts&&document.fonts.ready)document.fonts.ready.then(fijarFoto);
+  f.addEventListener("submit",function(e){e.preventDefault();var t=q.value.replace(/\s+/g," ").trim();if(!t){q.focus();return}consultar(t,false)});
+  q.addEventListener("keydown",function(e){if(e.key==="Enter"&&!e.shiftKey&&!e.isComposing){e.preventDefault();f.requestSubmit()}});
+  var ex=document.getElementById("rm-ex");
+  if(ex)ex.addEventListener("click",function(){q.value=ex.textContent;q.focus();f.requestSubmit()});
+  [].slice.call(document.querySelectorAll(".rm-chip[data-reason]")).forEach(function(c){
+    c.addEventListener("click",function(){setReason(c.getAttribute("data-reason"))});
+  });
+})();
+</script>
+<!--rm-shell-->
+<a class="rm-fab" href="#rm-search" data-ai aria-label="Pregúntale a RMDental (asistente con IA)"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M10 3l1.8 5.2L17 10l-5.2 1.8L10 17l-1.8-5.2L3 10l5.2-1.8zM18 14l.9 2.6 2.6.9-2.6.9L18 21l-.9-2.6-2.6-.9 2.6-.9z"/></svg><span>Pregúntale a RMDental</span></a>
+<script src="rm-shell.js" defer></script>
 </body>
 </html>
