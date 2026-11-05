@@ -236,50 +236,20 @@ h2.section .ico{color:var(--teal-text)}
   </defs>
 </svg>
 
-<!--rm-shell-->
-<div class="rm-topbar">
-  <div class="wrap">
-    <div class="tb-l">
-      <span class="tb-i tb-hrs"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>Lun · Mié · Vie 09:00–15:00 · Sáb 09:00–13:00</span>
-      <a class="tb-mail" href="mailto:contacto@rmdental.cl"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2.5"/><path d="m3.5 7 8.5 6 8.5-6"/></svg>contacto@rmdental.cl</a>
-    </div>
-    <div class="tb-r">
-      <a class="tb-ai" href="index.html#rm-search" data-ai><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M10 3l1.8 5.2L17 10l-5.2 1.8L10 17l-1.8-5.2L3 10l5.2-1.8zM18 14l.9 2.6 2.6.9-2.6.9L18 21l-.9-2.6-2.6-.9 2.6-.9z"/></svg>Pregúntale a RMDental (IA)</a>
-      <span class="sep" aria-hidden="true">|</span>
-      <a href="portal-pacientes.html">Portal pacientes</a>
-    </div>
-  </div>
-</div>
 <header class="top">
   <div class="wrap">
-    <a class="brand" href="index.html" aria-label="RM Dental, inicio"><img class="logo" src="logo.png" alt="Red Metropolitana Dental" width="640" height="99"></a>
+    <a class="brand" href="index.html"><img class="logo" src="logo.png" alt="Red Metropolitana Dental" width="900" height="141"></a>
     <nav class="nav" aria-label="Principal">
-      <details class="menu" id="svc-menu">
-        <summary aria-label="Servicios y páginas"><span class="txt">Servicios</span><svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg><svg class="ham" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg></summary>
-        <div class="menu-list">
-          <a class="ml" href="index.html#dentistas"><b>Encuentra un dentista</b></a>
-          <a class="ml" href="index.html#asistente-ia"><b>Consultas IA</b></a>
-          <a class="ml" href="index.html#presupuesto"><b>Presupuestos</b></a>
-          <a class="ml" href="index.html#nosotros"><b>Nosotros</b></a>
-          <a class="ml" href="index.html#consulta"><b>Contacto</b></a>
-          <a class="ml" href="portal-pacientes.html"><b>Mi cuenta</b></a>
-          <p class="ml-sep ml">Servicios</p>
-          <a href="mantencion-implantes.html"><b>Mantención de implantes</b><span>Limpieza y control periódico para tus implantes</span></a>
-          <a href="mejora-presupuesto.html"><b>Segunda opinión y presupuesto</b><span>Te entregamos una oferta por escrito</span></a>
-          <a href="cambio-amalgamas.html"><b>Cambio de amalgamas</b><span>Evaluación para renovar por resinas estéticas</span></a>
-          <a href="controles-infantiles.html"><b>Controles infantiles</b><span>Control dental sano para tus hijos</span></a>
-          <a href="profesionales.html"><b>Para profesionales</b><span>Evaluación desde las 7:00 am, antes de tu jornada</span></a>
-        </div>
-      </details>
       <a class="l" href="index.html#dentistas">Encuentra un dentista</a>
-      <a class="l ai" href="index.html#asistente-ia"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M10 3l1.8 5.2L17 10l-5.2 1.8L10 17l-1.8-5.2L3 10l5.2-1.8zM18 14l.9 2.6 2.6.9-2.6.9L18 21l-.9-2.6-2.6-.9 2.6-.9z"/></svg>Consultas IA</a>
       <a class="l" href="index.html#presupuesto">Presupuestos</a>
       <a class="l" href="index.html#nosotros">Nosotros</a>
       <a class="l" href="index.html#consulta">Contacto</a>
+      <a class="l" href="portal-pacientes.html">Mi cuenta</a>
       <a class="btn btn-cta" href="index.html#agenda" data-agendar>Agendar hora<i class="live" role="img" aria-label="En línea"></i></a>
     </nav>
   </div>
 </header>
+
 <main>
 <section class="hero">
   <div class="wrap">
@@ -505,8 +475,5 @@ fetch(API + "/opiniones/profesional/" + encodeURIComponent(SLUG))
   Object.keys(map).forEach(function(id){ var el = document.getElementById(id); if (el) io.observe(el); });
 })();
 </script>
-<!--rm-shell-->
-<a class="rm-fab" href="index.html#rm-search" data-ai aria-label="Pregúntale a RMDental (asistente con IA)"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M10 3l1.8 5.2L17 10l-5.2 1.8L10 17l-1.8-5.2L3 10l5.2-1.8zM18 14l.9 2.6 2.6.9-2.6.9L18 21l-.9-2.6-2.6-.9 2.6-.9z"/></svg><span>Pregúntale a RMDental</span></a>
-<script src="rm-shell.js" defer></script>
 </body>
 </html>

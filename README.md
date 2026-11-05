@@ -39,16 +39,3 @@ La carpeta `img/` tiene las fotos del inicio (son de ejemplo, tomadas de la maqu
 
 ## Panel profesional: odontograma y planes de tratamiento
 La ficha profesional usa `panel-profesionales.html`, `odontograma.css` y `odontograma-ui.js`. Mantén estos tres archivos juntos en la raíz publicada por Netlify. La API requiere la migración `migracion-odontograma-planes.sql` y el archivo `odontograma-route.js` en el servidor; sigue las instrucciones del ZIP de la API.
-
-
-## Estructura compartida (barra superior, encabezado, "Consultas IA" y botón flotante)
-Todas las páginas públicas (inicio, las 5 landings, ficha del dentista, portal de pacientes, opinión, términos y 404) comparten:
-- **Barra superior oscura** (`.rm-topbar`): horario, correo, acceso al asistente IA y Portal pacientes. Los datos son los del pie de página; si cambias horarios o correo, edítalos también en esa barra.
-- **Encabezado con menú** (`.top` / `.nav`): Servicios, Encuentra un dentista, Consultas IA, Presupuestos, Nosotros, Contacto y el botón de reserva propio de cada página.
-- **Botón flotante** (`.rm-fab`): lleva al buscador "Pregúntale a RMDental" del inicio (`index.html#rm-search`) y lo enfoca.
-- **Sección "Consultas IA"** (`#asistente-ia`) en `index.html`: usa el mismo buscador real conectado a `api.rmdental.cl`.
-
-Los estilos están al final de `tema.css` y el comportamiento (cerrar el menú, enfocar el buscador) en `rm-shell.js`. Suban `rm-shell.js` junto con los `.html`.
-Si agregas una página nueva, copia el bloque `<!--rm-shell-->` (barra + encabezado) de otra página, enlaza `tema.css` y agrega `<script src="rm-shell.js" defer></script>` antes de `</body>`.
-
-Pendiente: la barra superior no muestra teléfono ni WhatsApp porque el sitio aún no tiene un número real. Cuando lo tengan, agréguenlo en `.rm-topbar` de cada página.
