@@ -343,6 +343,7 @@ html{scroll-behavior:smooth}
   <aside class="side-nav noprint" aria-label="Navegación principal">
     <div class="side-label">Espacio de trabajo</div>
     <button class="side-link" type="button" data-go="agenda"><span class="side-ic">▦</span>Agenda</button>
+    <button class="side-link" type="button" data-go="derivaciones"><span class="side-ic">⇄</span>Derivaciones</button>
     <button class="side-link" type="button" data-go="pacientes"><span class="side-ic">♟</span>Pacientes<span class="pinc-badge" data-pinc-badge hidden title="Pacientes con anamnesis o ficha pendiente"></span></button>
     <button class="side-link" type="button" data-go="profesionales"><span class="side-ic">✚</span>Profesionales</button>
     <button class="side-link" type="button" data-go="horarios"><span class="side-ic">◷</span>Horarios</button>
@@ -800,6 +801,35 @@ html{scroll-behavior:smooth}
   </form>
 </section>
 
+  <!-- DERIVACIONES -->
+  <section id="v-derivaciones" hidden class="noprint">
+    <div class="head"><div><h1>Derivaciones</h1><p class="lead">Envía pacientes a otros profesionales de la red y coordina la atención desde una conversación centralizada.</p></div><button class="btn" type="button" id="d-nueva">＋ Nueva derivación</button></div>
+    <div class="split" style="grid-template-columns:minmax(280px,.9fr) minmax(0,1.3fr)">
+      <div class="card">
+        <h2 style="margin-top:0">Nueva derivación</h2>
+        <label for="d-paciente-q">Paciente en curso o buscar paciente</label>
+        <button class="btn sec" type="button" id="d-current-patient" hidden style="margin:4px 0 8px">Usar paciente seleccionado actualmente</button>
+        <input id="d-paciente-q" autocomplete="off" placeholder="Ingrese RUT o nombre completo">
+        <div class="res" id="d-pacientes-resultados"></div>
+        <div id="d-paciente-elegido" class="chip" hidden></div>
+        <label for="d-prof-q">Profesional receptor</label>
+        <input id="d-prof-q" autocomplete="off" placeholder="Buscar profesional o especialidad">
+        <div class="res" id="d-prof-resultados"></div>
+        <div id="d-prof-elegido" class="chip" hidden></div>
+        <label for="d-especialidad">Especialidad de destino</label><input id="d-especialidad" maxlength="120" placeholder="Ej. Endodoncia">
+        <label for="d-motivo">Motivo de derivación</label><textarea id="d-motivo" maxlength="500" placeholder="Describe brevemente el motivo de la derivación"></textarea>
+        <label for="d-antecedentes">Antecedentes relevantes (opcional)</label><textarea id="d-antecedentes" maxlength="6000" placeholder="Información clínica estrictamente necesaria para la derivación"></textarea>
+        <button class="btn" type="button" id="d-enviar" style="margin-top:14px;width:100%">Enviar derivación</button>
+        <p class="msg" id="d-nueva-msg" role="status"></p>
+      </div>
+      <div class="card">
+        <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap"><h2 style="margin:0">Mis derivaciones</h2><select id="d-filtro" style="width:auto"><option value="">Todos los estados</option><option value="enviada">Enviadas</option><option value="aceptada">Aceptadas</option><option value="en_coordinacion">En coordinación</option><option value="hora_confirmada">Hora confirmada</option><option value="atendida">Atendidas</option><option value="rechazada">Rechazadas</option></select></div>
+        <div id="d-lista" style="margin-top:14px"><span class="empty">Cargando derivaciones…</span></div>
+        <div id="d-detalle" hidden style="margin-top:18px;border-top:1px solid var(--line);padding-top:16px"></div>
+      </div>
+    </div>
+  </section>
+
   </main>
 </div>
 
@@ -838,7 +868,7 @@ function rutOk(r){
 /* Vistas */
 let pacientesTimer=null, agendaTimer=null;
 function show(v){
-  ["login","menu","pacientes","paciente","profesionales","horarios","admin","docs","ficha","agenda","trat","trib","fin","aten","usu","clave"].forEach(n=>{const el=$("v-"+n);if(el)el.hidden=n!==v;});
+  ["login","menu","pacientes","paciente","profesionales","horarios","admin","docs","ficha","agenda","derivaciones","trat","trib","fin","aten","usu","clave"].forEach(n=>{const el=$("v-"+n);if(el)el.hidden=n!==v;});
   const loggedIn=v!=="login";
   const workspace=$("workspace"),loginWrap=$("login-wrap");
   if(workspace)workspace.hidden=!loggedIn;
@@ -860,6 +890,7 @@ function show(v){
   }else if(loggedIn&&typeof cargarIncompletos==="function"){
     cargarIncompletos({throttle:true});
   }
+  if(v==="derivaciones"){dActualizarPacienteActual();cargarDerivaciones();}
   if(v==="agenda"){
     if(typeof initAgenda==="function")initAgenda();
     else {if(typeof cargarAgendaDia==="function")cargarAgendaDia();if(typeof cargarPendientesAgenda==="function")cargarPendientesAgenda();}
@@ -1336,6 +1367,28 @@ $("f-rx").addEventListener("submit",async e=>{
   if(!r.ok){m.className="msg err";m.textContent=r.d.error||"No se pudo subir.";return}
   m.className="msg ok";m.textContent="Radiografía subida. El paciente ya la ve en su perfil.";$("x-file").value="";$("x-desc").value="";tLoad();
 });
+// ===== Derivaciones entre profesionales =====
+let dPaciente=null,dProfesional=null,dDetalleId=null,dTimer=null;
+const dEstadoLabel={enviada:'Enviada',aceptada:'Aceptada',en_coordinacion:'En coordinación',hora_confirmada:'Hora confirmada',atendida:'Atendida',rechazada:'Rechazada',cancelada:'Cancelada',requiere_informacion:'Requiere información'};
+function dPacienteActual(){return (typeof selPac!=='undefined'&&selPac)||(typeof tPac!=='undefined'&&tPac)||(typeof bPac!=='undefined'&&bPac)||(typeof fPac!=='undefined'&&fPac)||(typeof hPac!=='undefined'&&hPac)||null;}
+function dActualizarPacienteActual(){const p=dPacienteActual(),b=$('d-current-patient');if(!b)return;b.hidden=!p||!!dPaciente;b.textContent=p?'Usar paciente en curso: '+(p.nombre||p.rut||'Paciente'):'';}
+function dSetPaciente(p){dPaciente=p;dActualizarPacienteActual();$('d-paciente-q').value='';$('d-pacientes-resultados').innerHTML='';$('d-paciente-elegido').hidden=!p;$('d-paciente-elegido').innerHTML=p?'<span>'+esc(p.nombre)+' · '+esc(p.rut)+'</span><button type="button" id="d-pac-clear">Cambiar</button>':'';}
+function dSetProfesional(p){dProfesional=p;$('d-prof-q').value='';$('d-prof-resultados').innerHTML='';$('d-prof-elegido').hidden=!p;$('d-prof-elegido').innerHTML=p?'<span>'+esc(p.nombre)+' · '+esc(p.especialidad||'Profesional')+'</span><button type="button" id="d-prof-clear">Cambiar</button>':'';if(p&&!$('d-especialidad').value)$('d-especialidad').value=p.especialidad||'';}
+$('d-current-patient').addEventListener('click',()=>{const p=dPacienteActual();if(p&&p.id)dSetPaciente({id:p.id,nombre:p.nombre||p.paciente_nombre||'Paciente',rut:p.rut||p.paciente_rut||''});});
+$('d-paciente-q').addEventListener('input',async()=>{const q=$('d-paciente-q').value.trim(),box=$('d-pacientes-resultados');if(q.length<2){box.innerHTML='';return}const r=await api('/pro/derivaciones/pacientes?q='+encodeURIComponent(q));box.innerHTML='';if(!r.ok){box.textContent=r.d.error||'No se pudo buscar';return}(r.d.pacientes||[]).forEach(p=>{const b=document.createElement('button');b.type='button';b.textContent=p.nombre+' · '+p.rut;b.onclick=()=>dSetPaciente(p);box.appendChild(b)});if(!box.children.length)box.innerHTML='<span class="empty">Sin resultados.</span>';});
+$('d-prof-q').addEventListener('input',async()=>{const q=$('d-prof-q').value.trim(),box=$('d-prof-resultados');if(q.length<2){box.innerHTML='';return}const r=await api('/pro/derivaciones/profesionales?q='+encodeURIComponent(q));box.innerHTML='';if(!r.ok){box.textContent=r.d.error||'No se pudo buscar';return}(r.d.profesionales||[]).forEach(p=>{const b=document.createElement('button');b.type='button';b.textContent=p.nombre+' · '+(p.especialidad||'Sin especialidad')+(p.comuna?' · '+p.comuna:'');b.onclick=()=>dSetProfesional(p);box.appendChild(b)});if(!box.children.length)box.innerHTML='<span class="empty">Sin profesionales disponibles.</span>';});
+document.addEventListener('click',e=>{if(e.target.id==='d-pac-clear')dSetPaciente(null);if(e.target.id==='d-prof-clear')dSetProfesional(null)});
+$('d-enviar').addEventListener('click',async()=>{const m=$('d-nueva-msg'),b=$('d-enviar');if(!dPaciente||!dProfesional||!$('d-especialidad').value.trim()||!$('d-motivo').value.trim()){m.className='msg err';m.textContent='Selecciona paciente, profesional, especialidad y motivo.';return}b.disabled=true;m.className='msg';m.textContent='Enviando…';const r=await api('/pro/derivaciones',{paciente_id:dPaciente.id,profesional_destino_id:dProfesional.id,especialidad_destino:$('d-especialidad').value,motivo:$('d-motivo').value,antecedentes_relevantes:$('d-antecedentes').value});b.disabled=false;if(!r.ok){m.className='msg err';m.textContent=r.d.error||'No se pudo enviar.';return}m.className='msg ok';m.textContent='Derivación enviada correctamente.';dSetPaciente(null);dSetProfesional(null);$('d-especialidad').value='';$('d-motivo').value='';$('d-antecedentes').value='';cargarDerivaciones();});
+$('d-filtro').addEventListener('change',cargarDerivaciones);$('d-nueva').addEventListener('click',()=>$('d-paciente-q').focus());
+async function cargarDerivaciones(){const box=$('d-lista');if(!box)return;box.innerHTML='<span class="empty">Cargando…</span>';const f=$('d-filtro').value,r=await api('/pro/derivaciones'+(f?'?estado='+encodeURIComponent(f):''));if(!r.ok){box.innerHTML='<span class="msg err">'+esc(r.d.error||'No se pudieron cargar las derivaciones.')+'</span>';return}const arr=r.d.derivaciones||[];if(!arr.length){box.innerHTML='<span class="empty">No hay derivaciones para mostrar.</span>';return}box.innerHTML='';arr.forEach(d=>{const el=document.createElement('button');el.type='button';el.className='opt';el.style.cssText='padding:14px;margin:0 0 9px;display:block';const soyOrigen=ME&&d.profesional_origen_id===ME.id;el.innerHTML='<div style="display:flex;justify-content:space-between;gap:10px;align-items:start"><b style="margin:0;font-size:15px">'+esc(d.paciente_nombre)+'</b><span class="badge">'+esc(dEstadoLabel[d.estado]||d.estado)+'</span></div><span style="display:block;color:var(--mut);font-size:13px;margin-top:5px">'+(soyOrigen?'Para: '+esc(d.profesional_destino):'De: '+esc(d.profesional_origen))+' · '+esc(d.especialidad_destino)+'</span><span style="display:block;color:var(--mut);font-size:13px">'+esc(d.motivo)+' · '+Number(d.mensajes||0)+' mensajes</span>';el.onclick=()=>verDerivacion(d.id);box.appendChild(el)});}
+async function verDerivacion(id){dDetalleId=id;const box=$('d-detalle');box.hidden=false;box.innerHTML='<span class="empty">Cargando conversación…</span>';const r=await api('/pro/derivaciones/'+id);if(!r.ok){box.textContent=r.d.error||'No se pudo abrir';return}const d=r.d.derivacion;let html='<h2 style="margin:0 0 6px">'+esc(d.paciente_nombre)+' · '+esc(d.paciente_rut)+'</h2><p class="lead">'+esc(d.profesional_origen)+' → '+esc(d.profesional_destino)+' · '+esc(d.especialidad_destino)+'</p><p><b>Motivo:</b> '+esc(d.motivo)+'</p>'+(d.antecedentes_relevantes?'<p><b>Antecedentes:</b> '+esc(d.antecedentes_relevantes)+'</p>':'')+'<p><b>Estado:</b> '+esc(dEstadoLabel[d.estado]||d.estado)+'</p><div style="max-height:260px;overflow:auto;border:1px solid var(--line);border-radius:10px;padding:12px;margin:12px 0">';(r.d.mensajes||[]).forEach(m=>{html+='<p style="margin:0 0 10px"><b>'+esc(m.remitente_nombre||m.remitente_tipo)+'</b> <small style="color:var(--mut)">'+new Date(m.creado_en).toLocaleString('es-CL')+'</small><br>'+esc(m.mensaje)+'</p>'});html+='</div><label for="d-respuesta">Mensaje</label><textarea id="d-respuesta" placeholder="Escribe una respuesta para el otro profesional"></textarea><button class="btn" id="d-enviar-msg" type="button" style="margin-top:8px">Enviar mensaje</button>';
+const receptor=ME&&Number(d.profesional_destino_id)===Number(ME.id);if(receptor&&['enviada','requiere_informacion'].includes(d.estado))html+='<div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:14px"><button class="btn" id="d-aceptar" type="button">Aceptar derivación</button><button class="btn sec" id="d-info" type="button">Solicitar información</button><button class="btn sec" id="d-rechazar" type="button">Rechazar</button></div>';
+if(receptor&&d.estado==='aceptada')html+='<button class="btn sec" id="d-iniciar-coord" type="button" style="margin-top:12px">Iniciar coordinación</button>';
+if(receptor&&d.estado==='hora_confirmada')html+='<button class="btn" id="d-marcar-atendida" type="button" style="margin-top:12px">Marcar como atendida</button>';
+if(receptor&&['aceptada','en_coordinacion'].includes(d.estado))html+='<label for="d-fecha-hora">Proponer / confirmar fecha y hora</label><input type="datetime-local" id="d-fecha-hora"><button class="btn" id="d-confirmar-hora" type="button" style="margin-top:8px">Confirmar hora</button>';
+box.innerHTML=html;$('d-enviar-msg').onclick=async()=>{const v=$('d-respuesta').value.trim();if(!v)return;const q=await api('/pro/derivaciones/'+id+'/mensajes',{mensaje:v});if(!q.ok)return alert(q.d.error||'No se pudo enviar');verDerivacion(id);cargarDerivaciones()};[['d-aceptar','aceptada'],['d-info','requiere_informacion'],['d-rechazar','rechazada']].forEach(([bid,estado])=>{const el=$(bid);if(el)el.onclick=async()=>{const q=await api('/pro/derivaciones/'+id+'/estado',{estado},'PUT');if(!q.ok)alert(q.d.error||'No se pudo actualizar');else{verDerivacion(id);cargarDerivaciones()}}});[['d-iniciar-coord','en_coordinacion'],['d-marcar-atendida','atendida']].forEach(([bid,estado])=>{const el=$(bid);if(el)el.onclick=async()=>{const q=await api('/pro/derivaciones/'+id+'/estado',{estado},'PUT');if(!q.ok)alert(q.d.error||'No se pudo actualizar');else{verDerivacion(id);cargarDerivaciones()}}});const ch=$('d-confirmar-hora');if(ch)ch.onclick=async()=>{const fecha=$('d-fecha-hora').value;if(!fecha)return alert('Selecciona fecha y hora');const q=await api('/pro/derivaciones/'+id+'/cita',{fecha_hora:fecha},'PUT');if(!q.ok)alert(q.d.error||'No se pudo confirmar');else{alert('Hora registrada en la derivación.');verDerivacion(id);cargarDerivaciones()}};
+}
+
 boot();
 
 /* Documentos tributarios */
