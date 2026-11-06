@@ -653,6 +653,18 @@ html{scroll-behavior:smooth}
     </form>
     <p class="msg" id="rm-c-msg" role="status"></p><div id="rm-config-list"></div>
   </div>
+  <div class="card" id="rm-com-config-card" style="margin:14px 0">
+    <h2 style="margin-top:0">Comisión por derivación</h2>
+    <p class="sub">Porcentaje que gana el dentista que deriva al paciente. Una regla "General" aplica a todos; una regla por dentista tiene prioridad. Cada pago conserva el porcentaje vigente al momento de registrarlo.</p>
+    <form id="rm-com-form" class="grid-form">
+      <div><label for="rm-com-prof">Dentista que deriva</label><select id="rm-com-prof"></select></div>
+      <div><label for="rm-com-pct">Comisión (%)</label><input id="rm-com-pct" type="number" min="0" max="100" step="0.01" value="10" required></div>
+      <div><label for="rm-com-base">Se calcula sobre</label><select id="rm-com-base"><option value="pago">Monto pagado por el paciente</option><option value="retencion_clinica">Retención de RMDental</option></select></div>
+      <div style="align-self:end"><button class="btn" type="submit">Guardar comisión</button></div>
+    </form>
+    <p class="msg" id="rm-com-msg" role="status"></p><div id="rm-com-config-list"></div>
+  </div>
+  <div class="card" id="rm-com-list-card" style="margin:14px 0"><div class="head"><h2>Comisiones por derivación</h2></div><div id="rm-com-list"><span class="empty">Cargando…</span></div></div>
   <div class="card" id="rm-register-card" style="margin:14px 0">
     <h2 style="margin-top:0">¿Cómo se registran los pagos?</h2>
     <p class="sub">Las remuneraciones se generan solas: al registrar un pago en <b>Finanzas</b> (ficha del paciente, pestaña Pagos) y elegir el profesional y la sucursal, aparece aquí al instante con su retención y líquido. Si se anula el pago en Finanzas, también se anula aquí.</p>
@@ -743,6 +755,9 @@ html{scroll-behavior:smooth}
           <div class="row2"><div><label for="fp-prof">Profesional que atendió *</label><select id="fp-prof" required></select></div>
           <div><label for="fp-suc">Sucursal *</label><select id="fp-suc" required></select></div></div>
           <p class="sub" id="fp-rm-hint" role="status"></p>
+          <div class="row2"><div><label for="fp-der">Dentista que derivó</label><select id="fp-der"></select></div>
+          <div id="fp-der-ext-w" hidden><label for="fp-der-ext">Nombre del dentista externo</label><input id="fp-der-ext" maxlength="120" placeholder="Ej. Dr. Juan Pérez"></div></div>
+          <p class="sub" id="fp-der-hint" role="status"></p>
           <label for="fp-pre">Prestación</label><input id="fp-pre" maxlength="180" placeholder="Ej. Restauración pieza 2.1 (si se deja vacío usa la nota)">
           <label for="fp-medio">Medio de pago *</label>
           <select id="fp-medio"><option>Efectivo</option><option>Transferencia</option><option>Débito</option><option>Crédito</option><option>Cheque</option><option>Otro</option></select>
@@ -940,7 +955,7 @@ function rmEsc(v){return String(v==null?"":v).replace(/[&<>"']/g,c=>({"&":"&amp;
 let rmProfesionales=[];
 async function cargarRemuneraciones(){
  const adminRM=ME&&["dueno","secretaria"].includes(ME.rol);
- ["rm-config-card","rm-register-card"].forEach(id=>{const e=$(id);if(e)e.hidden=!adminRM});
+ ["rm-config-card","rm-register-card","rm-com-config-card"].forEach(id=>{const e=$(id);if(e)e.hidden=!adminRM});
  const r=await api("/pro/remuneraciones/config");
  if(!r.ok){$("rm-pay-list").textContent=r.d.error||"No se pudo cargar remuneraciones";return}
  rmProfesionales=r.d.profesionales||[];
@@ -948,7 +963,20 @@ async function cargarRemuneraciones(){
  $("rm-c-prof").innerHTML=opts;
  $("rm-config-list").innerHTML=(r.d.config||[]).length?`<div class="table-wrap"><table><thead><tr><th>Profesional</th><th>Sucursal</th><th>Retención</th></tr></thead><tbody>${r.d.config.map(c=>`<tr><td>${rmEsc(c.profesional)}</td><td>${rmEsc(c.sucursal)}</td><td>${Number(c.porcentaje_retencion).toFixed(2)}%</td></tr>`).join("")}</tbody></table></div>`:'<p class="empty">Todavía no hay porcentajes configurados.</p>';
  await cargarPagosRM();
+ await cargarComisionesRM(adminRM);
 }
+async function cargarComisionesRM(adm){
+ if(adm){
+  $("rm-com-prof").innerHTML='<option value="0">General (cualquier derivador)</option>'+rmProfesionales.map(p=>`<option value="${p.id}">${rmEsc(p.nombre)}</option>`).join("");
+  const c=await api("/pro/comisiones/config");
+  $("rm-com-config-list").innerHTML=c.ok&&(c.d.config||[]).length?`<div class="table-wrap"><table><thead><tr><th>Dentista</th><th>Comisión</th><th>Sobre</th></tr></thead><tbody>${c.d.config.map(x=>`<tr><td>${rmEsc(x.profesional)}</td><td>${Number(x.porcentaje).toFixed(2)}%</td><td>${x.base==="retencion_clinica"?"Retención de RMDental":"Monto pagado"}</td></tr>`).join("")}</tbody></table></div>`:'<p class="empty">Todavía no hay comisiones configuradas.</p>';
+ }
+ const r=await api("/pro/comisiones");
+ if(!r.ok){$("rm-com-list").textContent=r.d.error||"No se pudo cargar";return}
+ const rows=r.d.comisiones||[];
+ $("rm-com-list").innerHTML=rows.length?`<div class="table-wrap"><table><thead><tr><th>Fecha</th><th>Dentista que derivó</th><th>Paciente</th><th>Base</th><th>%</th><th>Comisión</th></tr></thead><tbody>${rows.map(x=>`<tr><td>${rmEsc(x.fecha_pago)}</td><td>${rmEsc(x.derivador)}${Number(x.externo)?" (externo)":""}</td><td>${rmEsc(x.paciente||"—")}</td><td>${rmCL(x.base_monto)}</td><td>${Number(x.porcentaje).toFixed(2)}%</td><td><b>${rmCL(x.monto)}</b></td></tr>`).join("")}</tbody></table></div><p class="sub">Total comisiones: <b>${rmCL(r.d.total)}</b></p>`:'<p class="empty">No hay comisiones por derivación registradas.</p>';
+}
+$("rm-com-form").addEventListener("submit",async e=>{e.preventDefault();const m=$("rm-com-msg");m.textContent="Guardando…";const r=await api("/pro/comisiones/config",{profesional_id:$("rm-com-prof").value,porcentaje:$("rm-com-pct").value,base:$("rm-com-base").value});m.textContent=r.ok?"Comisión guardada.":(r.d.error||"No se pudo guardar");if(r.ok)cargarComisionesRM(true)});
 async function cargarPagosRM(){
  const r=await api("/pro/remuneraciones/pagos");if(!r.ok){$("rm-pay-list").textContent=r.d.error||"No se pudo cargar";return}
  const x=r.d.resumen||{};$("rm-kpis").innerHTML=[['Pagado por pacientes',x.pagado],['Retención RMDental',x.retencion],['Líquido profesionales',x.liquido]].map(a=>`<div class="card"><div class="sub">${a[0]}</div><strong style="font-size:22px">${rmCL(a[1])}</strong></div>`).join("");
@@ -1593,7 +1621,7 @@ async function enviarFin(form,msgId,btnId,path,body,limpiar){
   b.disabled=false;
   if(r.status===401)return sesionVencida();
   if(!r.ok){m.className="msg err";m.textContent=r.d.error||"No se pudo guardar.";return}
-  m.className="msg ok";m.textContent=path.endsWith("/pagos")?"Guardado. Ya figura en Remuneraciones.":"Guardado.";limpiar();fLoad();
+  m.className="msg ok";m.textContent=path.endsWith("/pagos")?"Guardado. Ya figura en Remuneraciones."+(r.d.comision?" Comisión por derivación: "+clp(r.d.comision.monto)+".":"")+(r.d.aviso?" "+r.d.aviso:""):"Guardado.";limpiar();fLoad();
 }
 $("f-cargo").addEventListener("submit",e=>{e.preventDefault();
   enviarFin("f-cargo","fc-msg","fc-btn","/pro/finanzas/cargos",{concepto:$("fc-conc").value,monto:$("fc-monto").value,fecha:$("fc-fecha").value},()=>{$("fc-conc").value="";$("fc-monto").value=""})});
@@ -1607,18 +1635,34 @@ async function fpCargarRM(){
   (r.d.config||[]).filter(c=>Number(c.activo)===1).forEach(c=>{
     if(!mapa.has(c.profesional_id))mapa.set(c.profesional_id,{nombre:c.profesional,sucs:[]});
     mapa.get(c.profesional_id).sucs.push(c.sucursal)});
-  fpCfg=mapa;
+  fpCfg=mapa;fpProfs=r.d.profesionales||[];
   $("fp-prof").innerHTML=mapa.size?[...mapa].map(([id,p])=>'<option value="'+Number(id)+'">'+esc(p.nombre)+'</option>').join(""):'<option value="">Sin porcentajes configurados</option>';
-  fpSucs();
+  fpSucs();fpDerOpciones();fpSugerirDer();
   hint.textContent=mapa.size?"El pago se refleja de inmediato en Remuneraciones del profesional elegido.":"Antes de registrar pagos, configura el porcentaje de cada profesional y sucursal en Remuneraciones.";
 }
 function fpSucs(){
   const p=fpCfg.get(Number($("fp-prof").value));
   $("fp-suc").innerHTML=p?p.sucs.map(s=>"<option>"+esc(s)+"</option>").join(""):"";
 }
+let fpProfs=[];
+function fpDerOpciones(){
+  const sel=$("fp-der"),prev=sel.value;
+  sel.innerHTML='<option value="">Sin derivador</option>'+fpProfs.map(p=>'<option value="'+Number(p.id)+'">'+esc(p.nombre)+'</option>').join("")+'<option value="externo">Dentista externo…</option>';
+  if(prev)sel.value=prev;fpDerExt();
+}
+function fpDerExt(){$("fp-der-ext-w").hidden=$("fp-der").value!=="externo"}
+async function fpSugerirDer(){
+  const h=$("fp-der-hint");h.textContent="";if(!fPac)return;
+  const r=await api("/pro/finanzas/derivador-sugerido/"+fPac.id+"?profesional_id="+encodeURIComponent($("fp-prof").value||""));
+  if(!r.ok||!r.d.fuente)return;
+  if(r.d.fuente==="derivacion"){$("fp-der").value=String(r.d.profesional_id);h.textContent="Sugerido desde la derivación registrada: "+r.d.nombre+". Puedes cambiarlo.";}
+  else{$("fp-der").value="externo";$("fp-der-ext").value=r.d.externo||"";h.textContent="Sugerido desde la anamnesis ("+(r.d.tipo||"derivador")+"). Revísalo antes de guardar."}
+  fpDerExt();
+}
+$("fp-der").addEventListener("change",fpDerExt);
 $("fp-prof").addEventListener("change",fpSucs);
 $("f-pago").addEventListener("submit",e=>{e.preventDefault();
-  enviarFin("f-pago","fp-msg","fp-btn","/pro/finanzas/pagos",{monto:$("fp-monto").value,fecha:$("fp-fecha").value,medio:$("fp-medio").value,nota:$("fp-nota").value,profesional_id:$("fp-prof").value,sucursal:$("fp-suc").value,prestacion:$("fp-pre").value},()=>{$("fp-monto").value="";$("fp-nota").value="";$("fp-pre").value=""})});
+  enviarFin("f-pago","fp-msg","fp-btn","/pro/finanzas/pagos",{monto:$("fp-monto").value,fecha:$("fp-fecha").value,medio:$("fp-medio").value,nota:$("fp-nota").value,profesional_id:$("fp-prof").value,sucursal:$("fp-suc").value,prestacion:$("fp-pre").value,derivador_profesional_id:/^\d+$/.test($("fp-der").value)?$("fp-der").value:"",derivador_externo:$("fp-der").value==="externo"?$("fp-der-ext").value:""},()=>{$("fp-monto").value="";$("fp-nota").value="";$("fp-pre").value=""})});
 
 /* ===== Finanzas de la clínica: donas, deudas y tratamientos pendientes ===== */
 const NARANJA="#ef8a2b",TEAL="#17a9b8",AZUL="#3a6fd8",GRIS="#9aa9ad",MORADO="#8a5cd0",ROJO_OSC="#9c2b2b";
