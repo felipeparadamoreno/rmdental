@@ -351,7 +351,8 @@ html{scroll-behavior:smooth}
     <div class="side-label">Gestión clínica</div>
     <button class="side-link" type="button" data-go="trat"><span class="side-ic">✧</span>Tratamientos</button>
     <button class="side-link" type="button" data-go="aten" id="m-aten"><span class="side-ic">▤</span>Atenciones</button>
-    <button class="side-link" type="button" data-go="fin"><span class="side-ic">＄</span>Finanzas</button>
+    <button class="side-link" type="button" data-go="rem"><span class="side-ic">＄</span>Remuneraciones</button>
+    <button class="side-link" type="button" data-go="fin"><span class="side-ic">▤</span>Finanzas</button>
     <button class="side-link" type="button" data-go="admin"><span class="side-ic">⚙</span>Administrativo</button>
     <div class="side-spacer"></div>
     <button class="side-link side-logout" type="button" id="b-out"><span class="side-ic">⇥</span>Cerrar sesión</button>
@@ -635,6 +636,42 @@ html{scroll-behavior:smooth}
     </div>
   </div>
 </section>
+<!-- REMUNERACIONES -->
+<section id="v-rem" hidden class="noprint">
+  <button class="back" data-go="agenda">← Volver al inicio</button>
+  <h1>Remuneraciones</h1>
+  <p class="lead">Liquidación de profesionales según pagos efectivamente recibidos. Cada operación conserva el porcentaje aplicado.</p>
+  <div class="kpis" id="rm-kpis"></div>
+  <div class="card" id="rm-config-card" style="margin:14px 0">
+    <h2 style="margin-top:0">Porcentajes por profesional y sucursal</h2>
+    <p class="sub">Configura cuánto retiene RMDental. El porcentaje se guarda por sucursal y no modifica operaciones anteriores.</p>
+    <form id="rm-config-form" class="grid-form">
+      <div><label for="rm-c-prof">Profesional</label><select id="rm-c-prof" required></select></div>
+      <div><label for="rm-c-suc">Sucursal</label><input id="rm-c-suc" maxlength="120" placeholder="Ej. Providencia" required></div>
+      <div><label for="rm-c-pct">Retención RMDental (%)</label><input id="rm-c-pct" type="number" min="0" max="100" step="0.01" value="25" required></div>
+      <div style="align-self:end"><button class="btn" type="submit">Guardar porcentaje</button></div>
+    </form>
+    <p class="msg" id="rm-c-msg" role="status"></p><div id="rm-config-list"></div>
+  </div>
+  <div class="card" id="rm-register-card" style="margin:14px 0">
+    <h2 style="margin-top:0">Registrar pago recibido</h2>
+    <p class="sub">Registra solo montos ya pagados por el paciente. El sistema calcula automáticamente retención y líquido.</p>
+    <form id="rm-pay-form" class="grid-form">
+      <div><label for="rm-p-prof">Profesional</label><select id="rm-p-prof" required></select></div>
+      <div><label for="rm-p-suc">Sucursal</label><input id="rm-p-suc" maxlength="120" required placeholder="Sucursal configurada"></div>
+      <div><label for="rm-p-pac">ID paciente (opcional)</label><input id="rm-p-pac" type="number" min="1" placeholder="ID interno"></div>
+      <div><label for="rm-p-pre">Prestación</label><input id="rm-p-pre" maxlength="180" required placeholder="Ej. Restauración pieza 2.1"></div>
+      <div><label for="rm-p-fecha">Fecha del pago</label><input id="rm-p-fecha" type="date" required></div>
+      <div><label for="rm-p-monto">Monto efectivamente pagado ($)</label><input id="rm-p-monto" type="number" min="1" step="1" required></div>
+      <div><label for="rm-p-medio">Medio de pago</label><select id="rm-p-medio"><option>Efectivo</option><option>Transferencia</option><option>Débito</option><option>Crédito</option><option>Otro</option></select></div>
+      <div><label for="rm-p-ref">Referencia (opcional)</label><input id="rm-p-ref" maxlength="120"></div>
+      <div style="grid-column:1/-1"><label for="rm-p-obs">Observación (opcional)</label><input id="rm-p-obs" maxlength="500"></div>
+      <div style="grid-column:1/-1"><button class="btn" type="submit">Registrar remuneración</button></div>
+    </form><p class="msg" id="rm-p-msg" role="status"></p>
+  </div>
+  <div class="card" style="margin-top:14px"><div class="head"><h2>Detalle de liquidaciones</h2><button class="btn sec" id="rm-refresh" type="button">Actualizar</button></div><div id="rm-pay-list"><span class="empty">Cargando…</span></div></div>
+</section>
+
 <!-- FINANZAS -->
 <section id="v-fin" hidden class="noprint">
   <button class="back" data-go="agenda">← Volver al inicio</button>
@@ -868,7 +905,7 @@ function rutOk(r){
 /* Vistas */
 let pacientesTimer=null, agendaTimer=null;
 function show(v){
-  ["login","menu","pacientes","paciente","profesionales","horarios","admin","docs","ficha","agenda","derivaciones","trat","trib","fin","aten","usu","clave"].forEach(n=>{const el=$("v-"+n);if(el)el.hidden=n!==v;});
+  ["login","menu","pacientes","paciente","profesionales","horarios","admin","docs","ficha","agenda","derivaciones","trat","trib","fin","rem","aten","usu","clave"].forEach(n=>{const el=$("v-"+n);if(el)el.hidden=n!==v;});
   const loggedIn=v!=="login";
   const workspace=$("workspace"),loginWrap=$("login-wrap");
   if(workspace)workspace.hidden=!loggedIn;
@@ -897,6 +934,7 @@ function show(v){
     agendaTimer=setInterval(()=>{if(!$('v-agenda').hidden){cargarAgendaDia();cargarPendientesAgenda();}},30000);
   }
   if(v==="profesionales"&&typeof cargarProfesionales==="function")cargarProfesionales();
+  if(v==="rem")cargarRemuneraciones();
   if(v==="horarios"&&typeof cargarHorarios==="function")cargarHorarios();
   window.scrollTo(0,0);
 }
@@ -905,6 +943,30 @@ function setMe(me){
   ME=me;aplicarRol();const w=$("who");
   if(me){w.hidden=false;w.innerHTML="<b>"+esc(me.nombre)+"</b><br>"+esc(me.especialidad||"")}else w.hidden=true;
 }
+function rmCL(n){return new Intl.NumberFormat("es-CL",{style:"currency",currency:"CLP",maximumFractionDigits:0}).format(Number(n)||0)}
+function rmEsc(v){return String(v==null?"":v).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]))}
+let rmProfesionales=[];
+async function cargarRemuneraciones(){
+ const adminRM=ME&&["dueno","secretaria"].includes(ME.rol);
+ ["rm-config-card","rm-register-card"].forEach(id=>{const e=$(id);if(e)e.hidden=!adminRM});
+ const r=await api("/pro/remuneraciones/config");
+ if(!r.ok){$("rm-pay-list").textContent=r.d.error||"No se pudo cargar remuneraciones";return}
+ rmProfesionales=r.d.profesionales||[];
+ const opts=rmProfesionales.map(p=>`<option value="${p.id}">${rmEsc(p.nombre)}${p.especialidad?" · "+rmEsc(p.especialidad):""}</option>`).join("");
+ ["rm-c-prof","rm-p-prof"].forEach(id=>$(id).innerHTML=opts);
+ $("rm-config-list").innerHTML=(r.d.config||[]).length?`<div class="table-wrap"><table><thead><tr><th>Profesional</th><th>Sucursal</th><th>Retención</th></tr></thead><tbody>${r.d.config.map(c=>`<tr><td>${rmEsc(c.profesional)}</td><td>${rmEsc(c.sucursal)}</td><td>${Number(c.porcentaje_retencion).toFixed(2)}%</td></tr>`).join("")}</tbody></table></div>`:'<p class="empty">Todavía no hay porcentajes configurados.</p>';
+ if(!$("rm-p-fecha").value)$("rm-p-fecha").value=new Date().toLocaleDateString("en-CA");
+ await cargarPagosRM();
+}
+async function cargarPagosRM(){
+ const r=await api("/pro/remuneraciones/pagos");if(!r.ok){$("rm-pay-list").textContent=r.d.error||"No se pudo cargar";return}
+ const x=r.d.resumen||{};$("rm-kpis").innerHTML=[['Pagado por pacientes',x.pagado],['Retención RMDental',x.retencion],['Líquido profesionales',x.liquido]].map(a=>`<div class="card"><div class="sub">${a[0]}</div><strong style="font-size:22px">${rmCL(a[1])}</strong></div>`).join("");
+ const rows=r.d.pagos||[];$("rm-pay-list").innerHTML=rows.length?`<div class="table-wrap"><table><thead><tr><th>Fecha</th><th>Profesional</th><th>Paciente</th><th>Sucursal</th><th>Prestación</th><th>Pagado</th><th>Retención</th><th>Líquido</th></tr></thead><tbody>${rows.map(p=>`<tr><td>${rmEsc(String(p.fecha_pago).slice(0,10))}</td><td>${rmEsc(p.profesional)}</td><td>${rmEsc(p.paciente||"—")}</td><td>${rmEsc(p.sucursal)}</td><td>${rmEsc(p.prestacion)}</td><td>${rmCL(p.monto_pagado)}</td><td>${Number(p.porcentaje_retencion).toFixed(2)}% · ${rmCL(p.monto_retencion)}</td><td><b>${rmCL(p.liquido_profesional)}</b></td></tr>`).join("")}</tbody></table></div>`:'<p class="empty">No hay pagos registrados en este período.</p>';
+}
+$("rm-config-form").addEventListener("submit",async e=>{e.preventDefault();const m=$("rm-c-msg");m.textContent="Guardando…";const r=await api("/pro/remuneraciones/config",{profesional_id:$('rm-c-prof').value,sucursal:$('rm-c-suc').value,porcentaje_retencion:$('rm-c-pct').value});m.textContent=r.ok?"Porcentaje guardado.":(r.d.error||"No se pudo guardar");if(r.ok)cargarRemuneraciones()});
+$("rm-pay-form").addEventListener("submit",async e=>{e.preventDefault();const m=$("rm-p-msg");m.textContent="Registrando…";const r=await api("/pro/remuneraciones/pagos",{profesional_id:$('rm-p-prof').value,sucursal:$('rm-p-suc').value,paciente_id:$('rm-p-pac').value||null,prestacion:$('rm-p-pre').value,fecha_pago:$('rm-p-fecha').value,monto_pagado:$('rm-p-monto').value,medio_pago:$('rm-p-medio').value,referencia_pago:$('rm-p-ref').value,observacion:$('rm-p-obs').value});m.textContent=r.ok?`Registrado. Retención: ${rmCL(r.d.monto_retencion)} · Líquido: ${rmCL(r.d.liquido_profesional)}`:(r.d.error||"No se pudo registrar");if(r.ok){$('rm-pay-form').reset();$('rm-p-fecha').value=new Date().toLocaleDateString("en-CA");cargarRemuneraciones()}});
+$("rm-refresh").addEventListener("click",cargarPagosRM);
+
 function boot(){
   const s=sesion();
   if(s){setMe(s.profesional||{nombre:"Profesional"});show("agenda")}else{setMe(null);show("login")}

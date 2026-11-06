@@ -1,0 +1,10 @@
+RMDental - Panel de profesionales actualizado
+
+Contenido:
+- panel-profesionales.html
+- odontograma.css
+- odontograma-ui.js
+
+Sube/reemplaza estos archivos en la misma carpeta raíz donde actualmente publicas el panel en Netlify.
+No borres el resto de archivos del sitio.
+El módulo de remuneraciones requiere que también despliegues el ZIP del servidor y ejecutes remuneraciones.sql en MySQL.
